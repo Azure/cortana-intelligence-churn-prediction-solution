@@ -1,0 +1,279 @@
+﻿DECLARE @ContrainerPath nvarchar(100), @StorageKey nvarchar(100); 
+SET @ContrainerPath='wasbs://data@ddchurn1.blob.core.windows.net/'
+SET @StorageKey='biv/PrHlzL9VR6ihK47ukJt8xNx2uW44xS4lm9JmKaYQxrsuuaLUl3CT/lWHdbchrYdgJq9j08xFWD4K1voAzA=='
+
+
+
+IF NOT EXISTS (SELECT * FROM sys.symmetric_keys WHERE symmetric_key_id = 101)
+BEGIN
+  PRINT 'Creating Database Master Key'
+  CREATE MASTER KEY
+END
+ELSE
+BEGIN
+ PRINT 'Database Master Key Alread Exists'
+END 
+
+
+
+-- B: Create a database scoped credential
+-- IDENTITY: Provide any string, it is not used for authentication to Azure storage.
+-- SECRET: Provide your Azure storage account key.
+--SELECT * FROM sys.external_data_sources; 
+--select * from sys.database_credentials
+
+IF EXISTS (SELECT * FROM sys.external_data_sources where name='AzureStorageHistoricalData')
+	DROP  EXTERNAL DATA SOURCE AzureStorageHistoricalData
+GO
+
+IF  EXISTS (SELECT * FROM sys.database_credentials where name='AzureStorageCredential')
+	DROP DATABASE SCOPED CREDENTIAL AzureStorageCredential
+GO
+
+
+CREATE DATABASE SCOPED CREDENTIAL AzureStorageCredential
+WITH
+	IDENTITY = 'churn',
+	SECRET = 'biv/PrHlzL9VR6ihK47ukJt8xNx2uW44xS4lm9JmKaYQxrsuuaLUl3CT/lWHdbchrYdgJq9j08xFWD4K1voAzA=='
+;
+GO
+
+
+CREATE EXTERNAL DATA SOURCE AzureStorageHistoricalData
+WITH 
+(  
+	TYPE = Hadoop,
+	LOCATION = 'wasbs://data@ddchurn1.blob.core.windows.net/',
+	CREDENTIAL = AzureStorageCredential
+); 
+GO
+
+
+
+IF  EXISTS (SELECT * FROM sys.external_file_formats where name='textdelimited')
+	DROP EXTERNAL FILE FORMAT textdelimited 
+GO
+
+
+
+
+CREATE EXTERNAL FILE FORMAT textdelimited 
+WITH (  
+    FORMAT_TYPE = DELIMITEDTEXT,  
+    FORMAT_OPTIONS (  
+        FIELD_TERMINATOR = ',' ,
+		DATE_FORMAT = 'yyyy-MM-dd HH:mm:ss', 
+		USE_TYPE_DEFAULT = TRUE  )
+);
+
+---------------------------------------------------------
+
+
+IF EXISTS (SELECT * FROM sys.external_tables where name='extActivities')
+  DROP EXTERNAL TABLE [dbo].extActivities
+GO
+
+CREATE EXTERNAL TABLE dbo.extActivities
+(
+       
+       TransactionId varchar(50),
+       TransactionTime datetime,
+       UserId varchar(50),
+	   ItemId bigint,
+	   Quantity bigint,
+	   Val real,
+	   ProductCategory varchar(10),
+	   Location varchar(10)
+)
+WITH
+(
+    LOCATION='/Activities.csv' 
+,   DATA_SOURCE = AzureStorageHistoricalData
+,   FILE_FORMAT = textdelimited
+,   REJECT_TYPE = VALUE
+,   REJECT_VALUE = 0
+)
+;
+GO
+
+IF OBJECT_ID(N'dbo.max_diff', N'U') IS NOT NULL
+  DROP TABLE [dbo].max_diff
+GO
+
+
+CREATE TABLE max_diff WITH (DISTRIBUTION = ROUND_ROBIN) AS
+	SELECT DATEADD(hh, DATEDIFF(hh, 0, max(TransactionTime))/24*24,0) maxTime,
+	DATEADD(hh, DATEDIFF(hh, 0, min(TransactionTime))/24*24,0) minTime,
+		   DATEADD(hh, DATEDIFF(hh,0,GETUTCDATE()) / 24 * 24, 0) currentTime
+   FROM dbo.extActivitiesint
+GO
+   
+IF OBJECT_ID(N'dbo.Activities', 'U') IS NOT NULL
+  DROP TABLE [dbo].Activities
+GO
+
+
+  
+CREATE TABLE dbo.Activities WITH (DISTRIBUTION = ROUND_ROBIN) AS
+ SELECT 
+ currentTime SysTime,
+ TransactionId,
+  convert(datetime,DATEADD(hh, DATEDIFF(hh,minTime,currentTime )+ DATEDIFF(hh,maxTime,minTime)/2, TransactionTime),120) AS [Timestamp],
+ UserId, 
+ ItemId, 
+ Quantity,
+  Val as Value, ProductCategory, Location FROM dbo.extActivities, max_diff
+ WHERE TransactionTime < DATEADD(hh,  DATEDIFF(hh,minTime,maxTime)/2, minTime)  
+ GO
+
+
+------------------------------------------------
+IF EXISTS (SELECT * FROM sys.external_tables where name='extAge')
+  DROP EXTERNAL TABLE [dbo].extAge
+GO
+
+create external table dbo.extAge
+(
+       Age varchar(1),       
+       AgeRange varchar(5)
+)
+WITH
+(
+    LOCATION='/age.csv' 
+,   DATA_SOURCE = AzureStorageHistoricalData
+,   FILE_FORMAT = textdelimited
+,   REJECT_TYPE = VALUE
+,   REJECT_VALUE = 0
+)
+;
+
+IF OBJECT_ID(N'dbo.Age', 'U') IS NOT NULL
+  DROP TABLE [dbo].Age
+GO
+
+create  table dbo.Age
+(
+       Age varchar(1),       
+       AgeRange varchar(5)
+)
+
+insert into dbo.Age select * from dbo.extAge
+
+
+
+------------------------------------
+IF EXISTS (SELECT * FROM sys.external_tables where name='extRegion')
+  DROP EXTERNAL TABLE [dbo].extRegion
+GO
+
+create external table dbo.extRegion
+(
+       Address varchar(1),       
+       Region varchar(20),
+       Latitude float,
+	   Longitude float
+)
+WITH
+(
+    LOCATION='/region.csv' 
+,   DATA_SOURCE = AzureStorageHistoricalData
+,   FILE_FORMAT = textdelimited
+,   REJECT_TYPE = VALUE
+,   REJECT_VALUE = 0
+)
+;
+
+IF OBJECT_ID(N'dbo.Region', 'U') IS NOT NULL
+  DROP TABLE [dbo].Region
+GO
+
+create  table dbo.Region
+(
+       Address varchar(1),       
+       Region varchar(20),
+       Latitude float,
+	   Longitude float
+)
+
+insert into dbo.Region select * from dbo.extRegion
+
+
+select * from dbo.Region
+------------------------------
+IF EXISTS (SELECT * FROM sys.external_tables where name='extUsers')
+  DROP EXTERNAL TABLE [dbo].extUsers
+GO
+
+create external table dbo.extUser
+(
+       UserId varchar(50),
+	   Age varchar(1),
+	   Address varchar(1),
+	   Gender varchar(10),       
+       UserType varchar(10)
+)
+WITH
+(
+    LOCATION='/Users.csv' 
+,   DATA_SOURCE = AzureStorageHistoricalData
+,   FILE_FORMAT = textdelimited
+,   REJECT_TYPE = VALUE
+,   REJECT_VALUE = 0
+)
+;
+
+
+IF OBJECT_ID(N'dbo.Users', 'U') IS NOT NULL
+  DROP TABLE [dbo].Users
+GO
+
+create table dbo.Users
+(
+       UserId varchar(50),
+	   Age varchar(1),
+	   Address varchar(1),
+	   Gender varchar(10),       
+       UserType varchar(10)
+)
+
+
+insert into dbo.Users select * from dbo.extUsers
+
+
+select * from dbo.Users
+
+
+---------------------------------------
+
+drop table dbo.Prediction
+
+create  table dbo.NewPrediction
+(
+       UserId varchar(50),
+       ScoredLabel varchar(50),
+       ScoredProbability real,
+	    PredictionDate datetime,
+		Total_Quantity numeric,
+        Total_Value numeric,
+	StDev_Quantity numeric,
+	StDev_Value numeric,
+	AvgTimeDelta numeric,
+	Recency numeric,
+	Unique_TransactionId numeric,
+	Unique_ItemId numeric,
+	Unique_Location numeric,
+	Unique_ProductCategory numeric,
+	Total_Quantity_per_Unique_TransactionId numeric,
+	Total_Quantity_per_Unique_ItemId numeric,
+	Total_Quantity_per_Unique_Location numeric,
+	Total_Quantity_per_Unique_ProductCategory numeric,
+	Total_Value_per_Unique_TransactionId numeric,
+	Total_Value_per_Unique_ItemId numeric,
+	Total_Value_per_Unique_Location numeric,
+	Total_Value_per_Unique_ProductCategory numeric
+)
+
+
+select distinct PredictionDate from dbo.Prediction order by PredictionDate
+
+select distinct  * from dbo.Prediction
