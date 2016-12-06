@@ -40,10 +40,7 @@ following prerequisites:
 4)  Power BI Desktop installation
     (https://powerbi.microsoft.com/en-us/desktop/?gated=0&number=0)
 
-5) Microsoft Azure Storage Explorer
-    (http://storageexplorer.com/)
-
-6)  A local installation of <a href="https://azure.microsoft.com/en-us/documentation/articles/sql-data-warehouse-install-visual-studio/">Visual Studio with SQL Server Data Tools (SSDT)</a>
+5)  A local installation of <a href="https://azure.microsoft.com/en-us/documentation/articles/sql-data-warehouse-install-visual-studio/">Visual Studio with SQL Server Data Tools (SSDT)</a>
 
 
 ##Architecture
@@ -303,6 +300,7 @@ Note that the input alias and output alias are used in the query, and the select
     2. Choose **64-bit** for the Platform
     3. Toggle **On** for "Always on"
     4. In the "App Setting", add the following key-value pair:
+
     | **Azure App Service Settings** |             |
         |------------------------|---------------------|
         | Key                    | Value               |
