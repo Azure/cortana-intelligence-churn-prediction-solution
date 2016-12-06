@@ -1,0 +1,11 @@
+{
+  "name": "AzureSqlDWLinkedService",
+  "properties": {
+    "description": "",
+    "hubName": "daden1churn2_hub",
+    "type": "AzureSqlDW",
+    "typeProperties": {
+      "connectionString": "Data Source=tcp:[unique].database.windows.net,1433;Initial Catalog=[unique];Integrated Security=False;User ID=[User];Password=[password];Connect Timeout=30;Encrypt=True"
+    }
+  }
+}

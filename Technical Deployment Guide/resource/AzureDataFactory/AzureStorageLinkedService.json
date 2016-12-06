@@ -1,0 +1,10 @@
+{
+  "name": "AzureStorageLinkedService",
+  "properties": {
+    "description": "",
+    "type": "AzureStorage",
+    "typeProperties": {
+      "connectionString": "DefaultEndpointsProtocol=https;AccountName=[unique];AccountKey=[key]"
+    }
+  }
+}

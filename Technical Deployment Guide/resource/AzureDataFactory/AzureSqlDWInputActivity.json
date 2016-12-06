@@ -1,0 +1,17 @@
+{
+  "name": "AzureSqlDWInputActivity",
+  "properties": {
+    "published": false,
+    "type": "AzureSqlDWTable",
+    "linkedServiceName": "AzureSqlDWLinkedService",
+    "typeProperties": {
+      "tableName": "Activities"
+    },
+    "availability": {
+      "frequency": "Minute",
+      "interval": 15
+    },
+    "external": true,
+    "policy": { }
+  }
+}

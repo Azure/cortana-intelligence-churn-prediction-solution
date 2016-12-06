@@ -1,0 +1,15 @@
+{
+  "name": "AzureSqlDWOutputPrediction",
+  "properties": {
+    "published": false,
+    "type": "AzureSqlDWTable",
+    "linkedServiceName": "AzureSqlDWLinkedService",
+    "typeProperties": {
+      "tableName": "Prediction"
+    },
+    "availability": {
+      "frequency": "Minute",
+      "interval": 15
+    }
+  }
+}

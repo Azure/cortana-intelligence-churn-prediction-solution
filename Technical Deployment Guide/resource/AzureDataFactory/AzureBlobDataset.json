@@ -1,0 +1,67 @@
+{
+  "name": "AzureBlobDataset",
+  "properties": {
+    "published": false,
+    "type": "AzureBlob",
+    "linkedServiceName": "AzureStorageLinkedService",
+    "typeProperties": {
+      "folderPath": "data/prediction/{Year}/{Month}/{Day}/{Hour}/{Minute}/prediction.csv",
+      "format": {
+        "type": "TextFormat",
+        "rowDelimiter": "\n",
+        "columnDelimiter": ",",
+        "escapeChar": "",
+        "nullValue": "N",
+        "treatEmptyAsNull": true,
+        "skipLineCount": 1,
+        "firstRowAsHeader": false
+      },
+      "partitionedBy": [
+        {
+          "name": "Year",
+          "value": {
+            "type": "DateTime",
+            "date": "SliceStart",
+            "format": "yyyy"
+          }
+        },
+        {
+          "name": "Month",
+          "value": {
+            "type": "DateTime",
+            "date": "SliceStart",
+            "format": "MM"
+          }
+        },
+        {
+          "name": "Day",
+          "value": {
+            "type": "DateTime",
+            "date": "SliceStart",
+            "format": "dd"
+          }
+        },
+        {
+          "name": "Hour",
+          "value": {
+            "type": "DateTime",
+            "date": "SliceStart",
+            "format": "HH"
+          }
+        },
+        {
+          "name": "Minute",
+          "value": {
+            "type": "DateTime",
+            "date": "SliceStart",
+            "format": "mm"
+          }
+        }
+      ]
+    },
+    "availability": {
+      "frequency": "Minute",
+      "interval": 15
+    }
+  }
+}

@@ -1,5 +1,15 @@
 #Cortana Intelligence Suite Retail Customer Churn Solution
 
+
+
+## Table of Contents
+- [Introduction](#introduction)
+- [Prerequisites](#prerequisites)
+- [Architecture](#architecture)
+- [Setup Steps](#setup-steps)
+  - [Batch Path Setup Steps](#batch-path-setup-steps)
+  - [Real-time Path Setup Steps](#real-time-path-setup-steps)
+- [Validation and Results](#validation-and-results)
 ## Introduction
 
 The objective of this tutorial is to demonstrate predictive data pipelines for retailer to predict customer churn.  By combining domain knowledge and predictive analytics, retailers can prevent customer churn by using the predictive result and proper marketing strategies.   
@@ -14,7 +24,7 @@ This deployment guide will guide you through the process of creating such a cust
 - Using Azure Machine Learning to deploy prediction model as web services and run periodic prediction in Azure Data Factory (ADF)
 - Dashboard to display sales and customer churn data
 
-#Prerequisites
+## Prerequisites
 
 The steps described later in this guide  requires the
 following prerequisites:
@@ -37,8 +47,8 @@ following prerequisites:
 6)  A local installation of <a href="https://azure.microsoft.com/en-us/documentation/articles/sql-data-warehouse-install-visual-studio/">Visual Studio with SQL Server Data Tools (SSDT)</a>
 
 
-#Architecture
-============
+##Architecture
+
 
 Figure 1 illustrates the Azure architecture developed in this sample.
 
@@ -50,8 +60,14 @@ The above figure is the implemented architecture. The historical data as text fo
  For the nature of the problem, customer behavior changes slowly and doesn’t require real-time or near real-time prediction in minute scale. Therefore, we use Azure Machine Learning in batch mode.  We use Azure SQL DW for its scalability to query large amount of data, and its elasticity of starting small and scaling up as needed easily.  We chose to use PolyBase to load data into Azure SQL DW because of its high efficiency.
 
 
- #Deploy
- =====================
+ ## Deployment Steps
+
+ ### Instruction to go back to your resource group
+ Going back to your resource group is important over the course of deployment steps. Here is the how we can find the desired resource group:
+ 1. Log into the Azure Management Portal https://ms.portal.azure.com
+ 1. Click  **Resource groups** button on upper left
+ 1. Choose the subscription your resource group resides in
+ 1. Use keywords to search or directly select your resource group in the list of resource groups
 
  Below are the steps to deploy the use case into your Azure subscription. Note that to condense the steps somewhat, **>** is used between repeated actions. For example:
 
@@ -63,11 +79,11 @@ The above figure is the implemented architecture. The historical data as text fo
  1. Click: **Button A** > **Button B**  
 
 
-## Unique String
+### Unique String
  You will need a unique string to identify your deployment because some Azure services, e.g. Azure Storage requires a unique name across a region. We suggest you use only letters and numbers in this string and the length should not be greater than 9.
  We suggest you use "[UI]churn[N]"  where [UI] is the user's initials,  N is a random integer that you choose and characters must be entered in in lowercase. Please open your memo file and write down "unique:[unique]" with "[unique]" replaced with your actual unique string.
 
-##Create an Azure Resource Group for the solution
+### Create an Azure Resource Group for the solution
 1. Log into the Azure Management Portal https://ms.portal.azure.com
 1. Click  **Resource groups** button on upper left, and then click **+** to add a resource group.
 1. Enter your **unique string** for the resource group and choose your subscription.
@@ -76,11 +92,16 @@ The above figure is the implemented architecture. The historical data as text fo
   - West Europe
   - Southeast Asia
 
+  | **Azure Resource Group ** |                     |
+|------------------------|---------------------|
+| resource group name           |[unique string]|
+| region              |[region]||
+
 Please open your memo file and write down "resource group:[unique]" with "[unique]" replaced with your actual unique string.
 
 In the following steps, if any entry or item is not mentioned in the instruction, please leave it as the default value.
 
-## Create Azure Storage Account
+### Create Azure Storage Account
 1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
 2. In "Overview" panel, click **+** and enter **storage account** and hit "Enter" key to search
 3. Click ** Storage account** offered by Microsoft in "Storage" category
@@ -111,7 +132,7 @@ These are the steps for creating containers and uploading the data to Azure blob
 
 
 
-## Create Azure SQL Data Warehouse
+### Create Azure SQL Data Warehouse
 1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
 2. In "Overview" panel, click **+** and enter **SQL Data Warehouse** and hit "Enter" key to search
 3. Click **SQL Data Warehouse** offered by Microsoft in "Databases" category
@@ -127,11 +148,11 @@ These are the steps for creating containers and uploading the data to Azure blob
     4. Click **Create**
 8. Adjust Performance to **100** by dragging the sliding bar to the left
 9. Click **Create** at the bottom. The portal may lead you back to the SQL Data Warehouse description panel. DO NOT click "Create".
-9. Go back to your resource group overview and wait until the resouce is create  To check if the resource is create or not, refresh the page or the list of the resources in the resource group as needed.
+9. Go back to your resource group overview and wait until the resource is create.  To check if the resource is create or not, refresh the page or the list of the resources in the resource group as needed.
 10. In the list of resources, click on the SQL Server that was just created.
-11. Under ***Settings*** for the new server, click ***Firewall*** and create a rule called ***open*** with the IP range of 0.0.0.0 to 255.255.255.255. This will allow you to access the database from your desktop. Click ***Save*** at the top of the panel. 
+11. Under ***Settings*** for the new server, click ***Firewall*** and create a rule called ***open*** with the IP range of 0.0.0.0 to 255.255.255.255. This will allow you to access the database from your desktop. Click ***Save*** at the top of the panel.
 
-    **Note**: This firewall rule is not recommended for production level systems but for this demo is acceptable. You will want to set this rule to the IP range of your secure system.
+    **Note**: This firewall rule is not recommended for production level systems but for this demo it is acceptable. You will want to change this rule to allow the IPs with trust.
 
     | **Azure SQL Data Warehouse** |                     |
 |------------------------|---------------------|
@@ -141,8 +162,144 @@ These are the steps for creating containers and uploading the data to Azure blob
 | Password               |                     ||
 
 
+### Load Historical Data into Azure SQL Data Warehouse
+1. Open the createTableAndLoadData.dsql in the resources in Visual Studio 2015 with SQL Server Data Tools (SSDT)
+2. Click the green button on the top-left core of the file window.  
+3. Input the corresponding info for this solution. Choose "SQL Server Authentication" for **Authentication**. Choose the database with name of the unique string you specified earlier.
+4. Wait until all the queries finishes.
 
-## Load Historical Data into Azure SQL Data Warehouse
 
+### Set up Azure Machine Learning
+#### Create Azure Machine Learning Workspace
+1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
+2. In "Overview" panel, click **+** and enter **Machine Learning Workspace** and hit "Enter" key to search
+3. Click **Machine Learning Workspace** offered by Microsoft in "Intelligence + analytics" category
+4. Click **Create** at the bottom of the description panel
+5. In the Machine Learning workspace panel,
+    1. Enter your unique string for "Workspace name"
+    2. Leave "subscription", "Resource group", and "Location" as the default
+    3. Choose "Use existing" for "Storage account"
+    4. Choose "standard" for "Workspace pricing tier"
+    5. Choose "Create new" for "Web service plan"
+    6. Click on "Web service plan tier", choose "S1 Standard" and click "Select" at the bottom
+    7. Click "Create" at the bottom
 
-## Create an Azure Event Hub
+#### Deploy Azure Machine Learning Web Service
+1. Go to
+https://gallery.cortanaintelligence.com/Experiment/Retail-Churn-Predictive-Exp-1
+2. Click "Open in Studio" on the right. Login as needed.
+3. Choose the region and workspace. For region, you should choose the region that your resource group resides. For workspace, you should choose the workspace with the name the same as your unique string.
+4. Wait until the experiment is copied
+5. Input database information in the two "Import Data" modules. You only need to Change "Database server name", "Database name", "User name" and "Password". Use the information you collected in the "Create Azure SQL Data Warehouse" section. Leave the query as it is
+6. Click "Run" at the bottom of the page. It takes around three minutes to run the experiment.
+7. Click "Deploy Web Service"  at the bottom of the page,  choose classic web service, and click "Yes" to publish the web service. This will lead you to the web service page.  The web service home page can also be found by clicking the ***WEB SERVICES*** button on the left menu once logged in your workspace.
+8.  Copy the ***API key*** from the web service home page and save it to your memo
+9. Click the link ***BATCH EXECUTION*** under the ***API HELP PAGE*** section. On the BATCH EXECUTION help page, copy the
+***Request URI*** under the ***Request*** section and add it to the table below as you will need this information later
+. Copy only the URI part https:… /jobs, ignoring the URI parameters starting with ? .
+
+| **Web Service BES Details** |                           |
+| --------------------------- |--------------------------:|
+| API Key                     | API key from API help page|
+| Request URI\*               |                           ||
+
+R+mgIs5RJ7gLhgQHAVBzH5u2GuO0vGLfo1vZWE82zVt79JA1bAN4WhiSW2335I4L/XYFBZehT52YZwhhshc0xg==
+https://ussouthcentral.services.azureml.net/workspaces/990d5f1cac3d433bb7b2c3b16caeb117/services/ccfd2f738282495485f4f6429f693ad3/jobs
+
+### Create an Azure Event Hub
+1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
+2. In "Overview" panel, click **+** and enter **Event Hubs** and hit "Enter" key to search
+3. Click **Event Hubs** offered by Microsoft in "Internet of Things" category
+4. Click **Create** at the bottom of the description panel
+5. In the new panel of "create namespace":
+  1. Enter your **unique string** for "Name"
+  2. Leave everything else as default
+6. Go back to your resource group overview
+7. Look into the "Type" and choose the one with type "Event hubs". Select the service bus namespace created through the previous steps. If the resource is not listed, wait until the resource is create.
+8. On the new expanded panel, click "Event Hubs" in the "Entities" listing.
+9. Click **+** to add an event hub
+10. In the new panel:
+    1. Enter **churn** for "Name"
+    2. Enter **4** for "Partition Count"
+    3. Enter **2** for "Message Retention"
+    4. Click **Create** at the bottom
+11. Look into the "Type" and choose the one with type "Event hubs". Select the service bus namespace created through the previous steps.
+On the new expanded panel, click "Event Hubs" in the "Entities" listing.
+12. Click event hub **churn** created through the previous steps. In the new panel
+    1. Click **Shared access policies** in the "SETTING" listing
+    2. In the new panel,  click **+** to add a new policy. In the new panel
+        1. Enter **sendreceive** for the "Policy name"
+        2. Check **Send** and **Listen**
+        3. Click **Create** at the bottom of the panel
+        4. Wait until the new policy is created in the listing of "Shared access policies"
+        5. Click **sendreceive**, and save "PRIMARY KEY" and "CONNECTION STRING–PRIMARY KEY" to your memo
+
+        | **Azure Event Hub** |                        |
+        |---------------------|------------------------|
+        | Event Hub Namespace | [unique string]  |
+        | Event Hub           |  churn           |
+        |  Primary Key |                        |
+        | Connection String          |                       ||
+
+        v+sIwnNGvPSnbfRObwuaGCqSS7X0pcMtqfdYvsNufjE=
+        Endpoint=sb://ddchurn1.servicebus.windows.net/;SharedAccessKeyName=datagen;SharedAccessKey=v+sIwnNGvPSnbfRObwuaGCqSS7X0pcMtqfdYvsNufjE=;EntityPath=churn
+
+### Create an Azure Stream Analytics Job
+1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
+2. In "Overview" panel, click **+** and enter **Stream Analytics job** and hit "Enter" key to search
+3. Click **Stream Analytics job** offered by Microsoft in "Internet of Things" category
+4. Click **Create** at the bottom of the description panel
+5. Enter **churn** in the "Job name"
+6. Click **Create** at the bottom
+7. Go back to your resource group and refresh the listing
+8. Click **churn** with the type "Stream Analytics job"
+9. In the new panel, click **Inputs** and click **+** in the new panel. In the "New input" panel:
+    1. Enter "datagen" in  "Input alias"
+    2. Choose "Data Stream" for "Source type"
+    3. Choose "Event hub" for "Source"
+    4. Leave subscription to the default
+    5. Choose your unique string for the "Service bus namespace"
+    6. Choose **churn** for "Event hub name"
+    7. Choose **sendreceive** as "Event hub policy name"
+    8. Level everything else as default and click "Create" at the bottom
+10. In the new panel, click **Outputs** and click **+** in the new panel. In the "New output" panel:
+    1. Enter "sqldw" for "Output alias"
+    2. Choose "SQL database" for  "Sink"
+    3. Leave subscription to the default
+    4. choose your unique string for the "Database"
+    5. Enter your username and password for the database
+    6. Enter "Activities" for "Table" and  click "Create" at the bottom
+11. In the new panel, click **Query** and click **+** in the new panel. In the new panel, remove the default content and  enter
+```
+SELECT
+System.Timestamp systime,
+TransactionId,
+"Timestamp",
+UserId,
+ItemId,
+Quantity,
+Value,
+ProductCategory,
+Location
+INTO
+    sqldw
+FROM datagen;
+```
+Click the **save** icon to save the query.
+Note that the input alias and output alias are used in the query, and the selected column has name or alias exactly the same as in Activities table.
+12. Go back to the overview of the Stream analytics job, click "start" to start the job. In the new panel, choose "Now" for the Job output starttime and click "Start" at the bottom.  
+
+### Set up Azure Web Job/Data Generator
+1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
+2. In "Overview" panel, click **+** and enter **Web App** and hit "Enter" key to search
+3. Click **Web App** offered by Microsoft in "Web + Mobile" category
+4. Click **Create** at the bottom of the description panel
+5. In the new panel,
+    1. Enter your unique string for "App name"
+    2. Leave "subscription" and "Resource group" as the default
+    3. Click **App Service Plan/Location** and in the new panel of "App Service Plan"
+        1. Click **Create New** and enter your unique string for the "App Service Plan" in the new panel
+        2. Click **OK** at the bottom of the panel
+6. Click **Create** at the bottom
+7. Go back to your resource group until the Web App is created. You can check the notification. It takes around two minutes to create the web app.
+8. Refresh the resource listing in your resource group.  

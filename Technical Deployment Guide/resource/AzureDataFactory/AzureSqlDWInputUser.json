@@ -1,0 +1,17 @@
+{
+  "name": "AzureSqlDWInputUser",
+  "properties": {
+    "published": false,
+    "type": "AzureSqlDWTable",
+    "linkedServiceName": "AzureSqlDWLinkedService",
+    "typeProperties": {
+      "tableName": "User"
+    },
+    "availability": {
+      "frequency": "Minute",
+      "interval": 15
+    },
+    "external": true,
+    "policy": { }
+  }
+}

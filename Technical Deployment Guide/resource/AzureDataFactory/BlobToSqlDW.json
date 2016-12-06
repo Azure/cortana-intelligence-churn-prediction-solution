@@ -1,0 +1,46 @@
+{
+  "name": "BlobToSqlDW",
+  "properties": {
+    "description": "Move prediction from blob storage to data warehouse",
+    "activities": [
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "BlobSource"
+          },
+          "sink": {
+            "type": "SqlDWSink",
+            "writeBatchSize": 0,
+            "writeBatchTimeout": "00:00:00"
+          }
+        },
+        "inputs": [
+          {
+            "name": "AzureBlobDataset"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "AzureSqlDWOutputPrediction"
+          }
+        ],
+        "policy": {
+          "timeout": "10:00:00",
+          "concurrency": 1,
+          "retry": 1
+        },
+        "scheduler": {
+          "frequency": "Minute",
+          "interval": 15
+        },
+        "name": "EgressBlob",
+        "description": "Move prediction from blob storage to data warehouse"
+      }
+    ],
+    "start": "2016-11-28T20:00:00Z",
+    "end": "2016-11-30T22:00:00Z",
+    "isPaused": false,
+    "pipelineMode": "Scheduled"
+  }
+}

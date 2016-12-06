@@ -1,0 +1,54 @@
+{
+  "name": "MLPipeline",
+  "properties": {
+    "description": "Customer Churn ML pipeline",
+    "activities": [
+      {
+        "type": "AzureMLBatchExecution",
+        "typeProperties": {
+          "webServiceOutputs": {
+            "output1": "AzureBlobDataset"
+          },
+          "webServiceInputs": { },
+          "globalParameters": {
+            "Database server name": "[unique].database.windows.net",
+            "User name": "[user]",
+            "Password": "[password]",
+            "Database query": "$$Text.Format('Select TransactionId, [Timestamp],UserId,ItemId, Quantity,[Value], [Location],ProductCategory, 21 as ChurnPeriod from activities WHERE systime < \\'{0:yyyy-MM-dd HH:mm:ss}\\'', WindowEnd)",
+            "Database name": "[uniqe]",  
+            "Database query1": "select * from users "
+          }
+        },
+        "inputs": [
+          {
+            "name": "AzureSqlDWInputActivity"
+          },
+          {
+            "name": "AzureSqlDWInputUser"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "AzureBlobDataset"
+          }
+        ],
+        "policy": {
+          "timeout": "00:05:00",
+          "concurrency": 1,
+          "retry": 3
+        },
+        "scheduler": {
+          "frequency": "Minute",
+          "interval": 15
+        },
+        "name": "ChurnPredictionML",
+        "description": "AML webservice",
+        "linkedServiceName": "AzureMLLinkedService"
+      }
+    ],
+    "start": "2016-11-28T20:00:00Z",
+    "end": "2016-11-30T22:00:00Z",
+    "isPaused": false,
+    "pipelineMode": "Scheduled"
+  }
+}
