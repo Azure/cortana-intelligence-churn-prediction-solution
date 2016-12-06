@@ -68,6 +68,7 @@ The above figure is the implemented architecture. The historical data as text fo
  1. Click  **Resource groups** button on upper left
  1. Choose the subscription your resource group resides in
  1. Use keywords to search or directly select your resource group in the list of resource groups
+ 1. You need to close the resource description page to add new resources
 
  Below are the steps to deploy the use case into your Azure subscription. Note that to condense the steps somewhat, **>** is used between repeated actions. For example:
 
@@ -92,7 +93,7 @@ The above figure is the implemented architecture. The historical data as text fo
   - West Europe
   - Southeast Asia
 
-  | **Azure Resource Group ** |                     |
+  | **Azure Resource Group** |                     |
 |------------------------|---------------------|
 | resource group name           |[unique string]|
 | region              |[region]||
@@ -198,13 +199,10 @@ https://gallery.cortanaintelligence.com/Experiment/Retail-Churn-Predictive-Exp-1
 ***Request URI*** under the ***Request*** section and add it to the table below as you will need this information later
 . Copy only the URI part https:… /jobs, ignoring the URI parameters starting with ? .
 
-| **Web Service BES Details** |                           |
+| **Machine learning Web Service ** |                           |
 | --------------------------- |--------------------------:|
-| API Key                     | API key from API help page|
-| Request URI\*               |                           ||
-
-R+mgIs5RJ7gLhgQHAVBzH5u2GuO0vGLfo1vZWE82zVt79JA1bAN4WhiSW2335I4L/XYFBZehT52YZwhhshc0xg==
-https://ussouthcentral.services.azureml.net/workspaces/990d5f1cac3d433bb7b2c3b16caeb117/services/ccfd2f738282495485f4f6429f693ad3/jobs
+| apiKey                     | [API key from API help page]|
+| mlEndpint              |        [Batch Request URI]                   ||
 
 ### Create an Azure Event Hub
 1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
@@ -236,13 +234,11 @@ On the new expanded panel, click "Event Hubs" in the "Entities" listing.
 
         | **Azure Event Hub** |                        |
         |---------------------|------------------------|
-        | Event Hub Namespace | [unique string]  |
+        | EventHubServiceNamespace | [unique string]  |
         | Event Hub           |  churn           |
-        |  Primary Key |                        |
-        | Connection String          |                       ||
+        | EventHubServicePolicy  |      sendreceive                  |
+        | EventHubServiceKey         |    [Primary Key]                   ||
 
-        v+sIwnNGvPSnbfRObwuaGCqSS7X0pcMtqfdYvsNufjE=
-        Endpoint=sb://ddchurn1.servicebus.windows.net/;SharedAccessKeyName=datagen;SharedAccessKey=v+sIwnNGvPSnbfRObwuaGCqSS7X0pcMtqfdYvsNufjE=;EntityPath=churn
 
 ### Create an Azure Stream Analytics Job
 1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
@@ -302,4 +298,102 @@ Note that the input alias and output alias are used in the query, and the select
         2. Click **OK** at the bottom of the panel
 6. Click **Create** at the bottom
 7. Go back to your resource group until the Web App is created. You can check the notification. It takes around two minutes to create the web app.
-8. Refresh the resource listing in your resource group.  
+8. Refresh the resource listing in your resource group and select the web Service
+8. On the side panel, search "Application Settings" and click **Application Settings** and on the new panel
+    1. Choose **2.7** for the Python version
+    2. Choose **64-bit** for the Platform
+    3. Toggle **On** for "Always on"
+    4. In the "App Setting", add the following key-value pair:
+    | **Azure App Service Settings** |             |
+        |------------------------|---------------------|
+        | Key                    | Value               |
+        | EventHubServiceNamespace              |[unique string]          |
+        | EventHub              |churn         |
+        | EventHubServicePolicy              |sendreceive         |
+        | EventHubServiceKey              |[unique string]          ||
+     Click "save" and close the panel
+
+9. On the side panel, search "WebJobs" and click **WebJobs**
+10. Click **+** and in the new panel
+    1. Enter "eventhub15min" for "Name"
+    2. Select the downloaded "eventhub_15min.zip" for "File Upload"
+    3. Choose **Triggered** for Type
+    4. Choose **Manual** for "Trigger"  (Note: because the zip file has the scheduled setting, we can use manual in this step for scheduled jobs)
+    5. Click **OK** at the bottom
+11. Select the job "eventhub15min" and start it. Wait until the job finishes.
+
+### Check if Data Ingestion
+you can check if the data is ingested into your data warehouse by using Visual Studio 2015 with SSDT to run testing queries.
+1. Open Visual Studio 2015 with SSDT
+2. Click "View" in the menu
+3. Choose "SQL Server Object Explorer"
+4. Click "Add" icon to add the SQL server that's created in this solution
+5. Filling info on the dialogue as needed
+    1. Choose "SQL Server Authentication" for Authentication
+    2. Choose the database you create in this solution, which has the same name as the unique string.
+6. Right click on the database, choose "New query"
+7. Run this query
+```
+select top 5 * from Activities order by timestamp desc
+```
+Compare the value in the "SysTime" with the current UTC time. The difference should be no more than 15 minutes.
+
+### Set up Azure Data Factory
+1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
+2. In "Overview" panel, click **+** and enter **Data Factory** and hit "Enter" key to search
+3. Click **Data Factory** offered by Microsoft in "VM Extension" category
+4. Click **Create** at the bottom of the description panel
+5. In the new panel of "New data factory",
+    1. Enter **ddchurn1** for "Name"
+    2. Click **Create** at the bottom
+6. Go back to your resource group and select the data factory that's created through previous steps
+7. Click "Author and deploy" on the new panel
+8. Create Linked services:
+    1. Click **Drafts**, copy the content in AzureStorageLinkedService.json to the editor, replace "[unique]" with your unique string and "[Key]" with your storage key, and click the upper arrow button to  deploy it
+    2. Click **Drafts**, copy  the content in AzureSqlDWLinkedService.json to the editor, replace "[unique]" with your unique string  and  "[User]" and "[password]" with their real value in this solution, and click the upper arrow button to  deploy it
+    3. Click **Drafts**,  copy  the content in AzureMLLinkedService.json to the editor, replace  the content in "mlEndpoint" and "apikey" with  the real value in this solution, and click the upper arrow button to  deploy it. You can check the value from your memo in the Azure Machine learning Web service part.
+9. Create datasets
+    1. Click **Drafts**, copy the content in AzureBlobDataset.json to the editor, and click the upper arrow button to  deploy it
+    1. Click **Drafts**, copy the content in AzureSqlDWInputUser.json to the editor, and click the upper arrow button to  deploy it
+    1. Click **Drafts**, copy the content in AzureSqlDWInputActivity.json to the editor, and click the upper arrow button to  deploy it
+    1. Click **Drafts**, copy the content in AzureSqlDWOutputPrediction.json to the editor, and click the upper arrow button to  deploy it
+10. Create pipelines
+    1. Right click **Drafts**, choose "New pipeline",
+        1. copy the content in MLPipeline.json to the editor,
+        2. replace "[unique]" with your unique string  and  "[User]" and "[password]" with their real value in this solution
+        3. Specify an active period that you want the pipeline to run.  Since the data passing through in 15 minutes represents a day's data, and   we have 60 days data in total, we needed only two-day period for the pipeline. An example is like:
+        ```
+        "start": "2016-12-01T00:00:00Z",
+        "end": "2016-12-03T00:00:00Z",
+        ```
+        4.  start the pipeline by settint the value "isPaused" to "false"
+        ```
+        "isPaused": false
+        ```
+        4.  click the upper arrow button to  deploy it
+
+    2. Right click **Drafts**, choose "New pipeline",
+        1. copy the content in BlobToSqlDW.json to the editor,
+        2. Specify an active period that you want the pipeline to run. It should be the same as the MLPipeline
+        3. click the upper arrow button to  deploy it
+
+
+### Set up Power BI
+
+1. Download the Power BI Desktop application (https://powerbi.microsoft.com/en-us/desktop)
+2. Download the Power BI template file dashboard.pbix (Click Raw to start downloading) 3. and open it with Power BI application
+3. On the application ribbon menu, choose Edit Queries
+4. Go to Query Settings on the right pane, double click Source
+5. In the SQL Server Database dialog
+    1. Type: Server Name: [unique].database.windows.net
+    1. Type: Database Name: [unique]
+    1. Click: OK
+    1. Choose: Database for Authentication method
+    1. Input:  [user] and [password]
+    1. On the application ribbon menu, click "Close and Apply"
+6. Once data is loaded, On the application ribbon menu, click "Publish"
+7. When prompt with dialog windows, click "Save"
+
+If you reach here, you have a working solution that runs the customer churn prediction. Over the time, you might have accumulate customer transaction data that display a different buying behavior and therefore you need to retrain your model. The following steps show you how to set up a retrain pipeline which updates the model with new data every 1 hour.
+
+## Retain

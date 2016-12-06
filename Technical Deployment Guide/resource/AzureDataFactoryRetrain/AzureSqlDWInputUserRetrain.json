@@ -1,0 +1,17 @@
+{
+  "name": "AzureSqlDWInputUserRetrain",
+  "properties": {
+    "published": false,
+    "type": "AzureSqlDWTable",
+    "linkedServiceName": "AzureSqlDWLinkedService",
+    "typeProperties": {
+      "tableName": "User"
+    },
+    "availability": {
+      "frequency": "Hour",
+      "interval": 1
+    },
+    "external": true,
+    "policy": { }
+  }
+}

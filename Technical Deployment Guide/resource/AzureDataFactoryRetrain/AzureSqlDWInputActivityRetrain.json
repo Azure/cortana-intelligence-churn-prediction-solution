@@ -1,0 +1,17 @@
+{
+  "name": "AzureSqlDWInputActivityRetrain",
+  "properties": {
+    "published": false,
+    "type": "AzureSqlDWTable",
+    "linkedServiceName": "AzureSqlDWLinkedService",
+    "typeProperties": {
+      "tableName": "Activities"
+    },
+    "availability": {
+      "frequency": "Hour",
+      "interval": 1
+    },
+    "external": true,
+    "policy": { }
+  }
+}

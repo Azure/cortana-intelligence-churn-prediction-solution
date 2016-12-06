@@ -249,14 +249,13 @@ insert into dbo.Users select * from dbo.extUsers
 
 ---------------------------------------
 
-drop table dbo.Prediction
+IF OBJECT_ID(N'dbo.Prediction', 'U') IS NOT NULL
+  DROP TABLE [dbo].Prediction
+GO
 
-create  table dbo.NewPrediction
+create  table dbo.Prediction
 (
        UserId varchar(50),
-       ScoredLabel varchar(50),
-       ScoredProbability real,
-	    PredictionDate datetime,
 		Total_Quantity numeric,
         Total_Value numeric,
 	StDev_Quantity numeric,
@@ -274,10 +273,10 @@ create  table dbo.NewPrediction
 	Total_Value_per_Unique_TransactionId numeric,
 	Total_Value_per_Unique_ItemId numeric,
 	Total_Value_per_Unique_Location numeric,
-	Total_Value_per_Unique_ProductCategory numeric
+	Total_Value_per_Unique_ProductCategory numeric,
+	[Scored Labels] varchar(50),
+    [Scored Probabilities] real,
+	[Prediction_date] datetime
 )
 
 
-select distinct PredictionDate from dbo.Prediction order by PredictionDate
-
-select distinct  * from dbo.Prediction

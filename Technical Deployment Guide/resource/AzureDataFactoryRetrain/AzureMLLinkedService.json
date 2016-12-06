@@ -1,0 +1,12 @@
+{
+  "name": "AzureMLLinkedService",
+  "properties": {
+    "description": "",
+    "type": "AzureML",
+    "typeProperties": {
+      "mlEndpoint": "https://ussouthcentral.services.azureml.net/workspaces/xxxx/services/xxxx/jobs",
+      "apiKey": "**********",
+      "updateResourceEndpoint": "https://management.azureml.net/workspaces/xxxx/webservices/xxxx/endpoints/xxxx"
+    }
+  }
+}

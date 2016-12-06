@@ -1,0 +1,19 @@
+{
+  "name": "TrainedModelBlob",
+  "properties": {
+    "published": false,
+    "type": "AzureBlob",
+    "linkedServiceName": "AzureStorageLinkedService",
+    "typeProperties": {
+      "fileName": "model.ilearner",
+      "folderPath": "trainingoutput",
+      "format": {
+        "type": "TextFormat"
+      }
+    },
+    "availability": {
+      "frequency": "Hour",
+      "interval": 1
+    }
+  }
+}

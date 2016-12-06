@@ -1,13 +1,12 @@
 {
-  "name": "MLPipeline",
+  "name": "pipeline",
   "properties": {
-    "description": "Customer Churn ML pipeline",
     "activities": [
       {
         "type": "AzureMLBatchExecution",
         "typeProperties": {
           "webServiceOutputs": {
-            "output1": "AzureBlobDataset"
+            "output1": "TrainedModelBlob"
           },
           "webServiceInputs": { },
           "globalParameters": {
@@ -21,33 +20,33 @@
         },
         "inputs": [
           {
-            "name": "AzureSqlDWInputActivity"
+            "name": "AzureSQLDWInputActivityRetrain"
           },
           {
-            "name": "AzureSqlDWInputUser"
+            "name": "AzureSQLDWinputUserRetrain"
           }
         ],
         "outputs": [
           {
-            "name": "AzureBlobDataset"
+            "name": "TrainedModelBlob"
           }
         ],
         "policy": {
-          "timeout": "00:05:00",
+          "timeout": "02:00:00",
           "concurrency": 1,
-          "retry": 3
+          "executionPriorityOrder": "NewestFirst",
+          "retry": 1
         },
         "scheduler": {
-          "frequency": "Minute",
-          "interval": 15
+          "frequency": "Hour",
+          "interval": 1
         },
-        "name": "ChurnPredictionML",
-        "description": "AML webservice",
-        "linkedServiceName": "AzureMLLinkedService"
+        "name": "retraining",
+        "linkedServiceName": "AzureMLLinkedServiceTraining"
       }
     ],
-    "start": "2016-11-28T20:00:00Z",
-    "end": "2016-11-30T22:00:00Z",
+    "start": "2016-11-29T00:00:00Z",
+    "end": "2016-11-29T01:00:00Z",
     "isPaused": true,
     "pipelineMode": "Scheduled"
   }

@@ -1,0 +1,11 @@
+{
+  "name": "AzureMLLinkedServiceTraining",
+  "properties": {
+    "description": "",
+    "type": "AzureML",
+    "typeProperties": {
+      "mlEndpoint": "https://ussouthcentral.services.azureml.net/workspaces/xxxx/services/xxxx/jobs/",
+      "apiKey": "**********"
+    }
+  }
+}

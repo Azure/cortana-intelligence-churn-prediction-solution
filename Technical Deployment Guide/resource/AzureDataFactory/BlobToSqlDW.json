@@ -40,7 +40,7 @@
     ],
     "start": "2016-11-28T20:00:00Z",
     "end": "2016-11-30T22:00:00Z",
-    "isPaused": false,
+    "isPaused": true,
     "pipelineMode": "Scheduled"
   }
 }
