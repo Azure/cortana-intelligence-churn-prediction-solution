@@ -7,9 +7,8 @@
 - [Prerequisites](#prerequisites)
 - [Architecture](#architecture)
 - [Setup Steps](#setup-steps)
-  - [Batch Path Setup Steps](#batch-path-setup-steps)
-  - [Real-time Path Setup Steps](#real-time-path-setup-steps)
-- [Validation and Results](#validation-and-results)
+- [PowerBI Dashboard](#dashboard)
+- [Retrain](#retrain)
 ## Introduction
 
 The objective of this tutorial is to demonstrate predictive data pipelines for retailer to predict customer churn.  By combining domain knowledge and predictive analytics, retailers can prevent customer churn by using the predictive result and proper marketing strategies.   
