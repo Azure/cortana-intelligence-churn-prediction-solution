@@ -9,6 +9,8 @@
 - [Setup Steps](#setup-steps)
 - [PowerBI Dashboard](#dashboard)
 - [Retrain](#retrain)
+
+
 ## Introduction
 
 The objective of this tutorial is to demonstrate predictive data pipelines for retailer to predict customer churn.  By combining domain knowledge and predictive analytics, retailers can prevent customer churn by using the predictive result and proper marketing strategies.   
@@ -51,7 +53,11 @@ Figure 1 illustrates the Azure architecture developed in this sample.
 ![](media/architecture.png)
 Figure 1: Architecture
 
-The above figure is the implemented architecture. The historical data as text format will be loaded from Azure Blob Storage into Azure SQL Data Warehouse (DW) though Polybase.  The real-time event data will be ingested through Event Hub into Azure.  Azure Stream Analytics will store the data in Azure SQL DW. The prediction through Azure Machine Learning (AML) runs in batch mode and is invoked by Azure Data Factory. AML will import data from Azure SQL DW and output the prediction to Azure Blob Storage. Through PolyBase, the prediction result can be loaded into Azure SQL DW efficiently and fast. Azure SQL DW serves the queries to populate the PowerBI dashboard. We use Azure Data Factory to orchestrate 1) AML prediction 2) Copy the prediction from Azure Blob Storage to  Azure SQL Data Warehouse. The machine learning model here is used as an example experiment and it shows the general techniques of data science that can be used in customer churn prediction. You can use domain knowledge and combine the available datasets to build more advanced model to meet your business requirements.
+The above figure is the implemented architecture. The historical data as text format will be loaded from Azure Blob Storage into Azure SQL Data Warehouse (DW) though Polybase.  The real-time event data will be ingested through Event Hub into Azure.  Azure Stream Analytics will store the data in Azure SQL DW. The prediction through Azure Machine Learning (AML) runs in batch mode and is invoked by Azure Data Factory. AML will import data from Azure SQL DW and output the prediction to Azure Blob Storage. Through PolyBase, the prediction result can be loaded into Azure SQL DW efficiently and fast. Azure SQL DW serves the queries to populate the PowerBI dashboard. We use Azure Data Factory to orchestrate
+1. AML prediction
+2. Copy the prediction from Azure Blob Storage to  Azure SQL Data Warehouse.
+
+The machine learning model here is used as an example experiment and it shows the general techniques of data science that can be used in customer churn prediction. You can use domain knowledge and combine the available datasets to build more advanced model to meet your business requirements.
 
  For the nature of the problem, customer behavior changes slowly and doesn’t require real-time or near real-time prediction in minute scale. Therefore, we use Azure Machine Learning in batch mode.  We use Azure SQL DW for its scalability to query large amount of data, and its elasticity of starting small and scaling up as needed easily.  We chose to use PolyBase to load data into Azure SQL DW because of its high efficiency.
 
@@ -301,13 +307,15 @@ Note that the input alias and output alias are used in the query, and the select
     3. Toggle **On** for "Always on"
     4. In the "App Setting", add the following key-value pair:
 
-    | **Azure App Service Settings** |             |
+        | **Azure App Service Settings** |             |
         |------------------------|---------------------|
         | Key                    | Value               |
-        | EventHubServiceNamespace              |[unique string]          |
+        | EventHubServiceNamespace |[unique string]          |
         | EventHub              |churn         |
         | EventHubServicePolicy              |sendreceive         |
         | EventHubServiceKey              |[unique string]          ||
+
+
      Click "save" and close the panel
 
 9. On the side panel, search "WebJobs" and click **WebJobs**
