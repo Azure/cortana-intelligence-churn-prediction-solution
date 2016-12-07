@@ -64,11 +64,13 @@ The machine learning model here is used as an example experiment and it shows th
  For the nature of the problem, customer behavior changes slowly and doesn’t require real-time or near real-time prediction in minute scale. Therefore, we use Azure Machine Learning in batch mode.  We use Azure SQL DW for its scalability to query large amount of data, and its elasticity of starting small and scaling up as needed easily.  We chose to use PolyBase to load data into Azure SQL DW because of its high efficiency.
 
 
- ## Setup Steps
+##Setup Steps
 
- ### Instruction for Finding Resource Groups
+The following are the steps to deploy the end-to-end solution for the predictive pieples.
 
- Going back to your resource group is important over the course of deployment steps. Here is the how we can find the desired resource group:
+### Instruction for Finding Resource Groups
+
+Going back to your resource group is important over the course of deployment steps. Here is the how we can find the desired resource group:
 
  1. Log into the Azure Management Portal https://ms.portal.azure.com
  1. Click  **Resource groups** button on upper left
@@ -124,6 +126,7 @@ These are the steps to get the access key that will be used in the SQL script to
 | Primary access key     |[key]             ||
 
 These are the steps for creating containers and uploading the data to Azure blob storage:
+
 1. Click **Containers** and on the new panel click **+** to add a containers
 1. Enter **data** for "Name" and click **Create** at the bottom
 1. Click the **data** container -> click "Upload" button on the top of the new panel
@@ -137,14 +140,14 @@ These are the steps for creating containers and uploading the data to Azure blob
 1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
 2. In "Overview" panel, click **+** and enter **SQL Data Warehouse** and hit "Enter" key to search
 3. Click **SQL Data Warehouse** offered by Microsoft in "Databases" category
-4. Click ** Create** at the bottom of the description panel
+4. Click **Create** at the bottom of the description panel
 5. Enter your **unique string** for "Database Name"
 6. Make sure the selected resource group is the one you just created. If not, choose the resource group you created for this solution.
 7. Leave **Select source** as the default value "Blank database"
 7. Click **Server** > **Create a new server**
 8. In the new panel for "New Server"
     1. Enter **unique string** for "Server name"
-    2. Use **azureadmin** or any of your preferred admin name. Please write it down in your memo: [server admin login]:[the value you entered]
+    2. Use **azureadmin** or any of your preferred admin name. Please write it down in your memo: [User]:[the value you entered]
     3. Use **pass@word1**  or any of your preferred password. Please write it down in your memo: [Password]:[the value you entered]
     4. Click **Create**
 8. Adjust Performance to **300** by dragging the sliding bar to the left.
@@ -159,7 +162,7 @@ These are the steps for creating containers and uploading the data to Azure blob
 |------------------------|---------------------|
 | Server Name            |[unique string]|
 | Database               |[unique string]|
-| server admin login     |                     |
+| User     |                     |
 | Password               |                     ||
 
 
@@ -191,17 +194,17 @@ These are the steps for creating containers and uploading the data to Azure blob
 1. Go to
 https://gallery.cortanaintelligence.com/Experiment/Retail-Churn-Predictive-Exp-1
 2. Click **Open in Studio** on the right. Login as needed.
-3. Choose the region and workspace. For region, you should choose the region that your resource group resides. You can get the information from [#Create-an-Azure-Resource-Group]  For workspace, you should choose the workspace with the name the same as your unique string.
+3. Choose the region and workspace. For region, you should choose the region that your resource group resides. You can get the information from table "Azure Resource Group"  For workspace, you should choose the workspace with the name the same as your unique string.
 4. Wait until the experiment is copied
-5. Input database information in the two "Import Data" modules. You only need to Change "Database server name", "Database name", "User name" and "Password". Use the information you collected in the "Create Azure SQL Data Warehouse" section. Leave the query as it is
-6. Click "Run" at the bottom of the page. It takes around three minutes to run the experiment.
-7. Click "Deploy Web Service"  at the bottom of the page,  choose classic web service, and click "Yes" to publish the web service. This will lead you to the web service page.  The web service home page can also be found by clicking the ***WEB SERVICES*** button on the left menu once logged in your workspace.
+5. Input database information in the two **Import Data** modules at the top of the experiment. Select the module to change its parameters. You only need to Change **Database server name**,**Database name**, **User name** and **Password**. Use the information you collected in the table  "Azure SQL Data Warehouse". Leave the query as it is
+6. Click **Run** at the bottom of the page. It takes around three minutes to run the experiment.
+7. Click **Deploy Web Service**  at the bottom of the page,  choose classic web service, and click "Yes" to publish the web service. This will lead you to the web service page.  The web service home page can also be found by clicking the ***WEB SERVICES*** button on the left menu once logged in your workspace.
 8.  Copy the ***API key*** from the web service home page and save it to your memo
 9. Click the link ***BATCH EXECUTION*** under the ***API HELP PAGE*** section. On the BATCH EXECUTION help page, copy the
 ***Request URI*** under the ***Request*** section and add it to the table below as you will need this information later
 . Copy only the URI part https:… /jobs, ignoring the URI parameters starting with ? .
 
-| **Machine learning Web Service ** |                           |
+|**Machine learning Web Service** |      |
 | --------------------------- |--------------------------:|
 | apiKey                     | [API key from API help page]|
 | mlEndpint              |        [Batch Request URI]                   ||
@@ -215,18 +218,18 @@ https://gallery.cortanaintelligence.com/Experiment/Retail-Churn-Predictive-Exp-1
   1. Enter your **unique string** for "Name"
   2. Leave everything else as default
 6. Go back to your resource group overview
-7. Look into the "Type" and choose the one with type "Event hubs". Select the service bus namespace created through the previous steps. If the resource is not listed, wait until the resource is create.
-8. On the new expanded panel, click "Event Hubs" in the "Entities" listing.
+7. Look into the ***Type*** and choose the one with type ***Event hubs***. Select the service bus namespace created through the previous steps. If the resource is not listed, wait until the resource is create.
+8. On the new expanded panel, click ***Event Hubs*** in the ***Entities*** listing.
 9. Click **+** to add an event hub
 10. In the new panel:
     1. Enter **churn** for "Name"
     2. Enter **4** for "Partition Count"
     3. Enter **2** for "Message Retention"
     4. Click **Create** at the bottom
-11. Look into the "Type" and choose the one with type "Event hubs". Select the service bus namespace created through the previous steps.
-On the new expanded panel, click "Event Hubs" in the "Entities" listing.
+11. Look into the ***Type*** and choose the one with type ***Event hubs***. Select the service bus namespace created through the previous steps.
+On the new expanded panel, click ***Event Hubs*** in the ***Entities*** listing.
 12. Click event hub **churn** created through the previous steps. In the new panel
-    1. Click **Shared access policies** in the "SETTING" listing
+    1. Click ***Shared access policies*** in the ***SETTING*** listing
     2. In the new panel,  click **+** to add a new policy. In the new panel
         1. Enter **sendreceive** for the "Policy name"
         2. Check **Send** and **Listen**
@@ -234,12 +237,12 @@ On the new expanded panel, click "Event Hubs" in the "Entities" listing.
         4. Wait until the new policy is created in the listing of "Shared access policies"
         5. Click **sendreceive**, and save "PRIMARY KEY" and "CONNECTION STRING–PRIMARY KEY" to your memo
 
-        | **Azure Event Hub** |                        |
-        |---------------------|------------------------|
-        | EventHubServiceNamespace | [unique string]  |
-        | Event Hub           |  churn           |
-        | EventHubServicePolicy  |      sendreceive                  |
-        | EventHubServiceKey         |    [Primary Key]                   ||
+| **Azure Event Hub** |                        |
+|---------------------|------------------------|
+| EventHubServiceNamespace | [unique string]  |
+| Event Hub           |  churn           |
+| EventHubServicePolicy  |     sendreceive                 |
+| EventHubServiceKey       |  [PrimaryKey]     ||
 
 
 ### Create an Azure Stream Analytics Job
@@ -252,21 +255,21 @@ On the new expanded panel, click "Event Hubs" in the "Entities" listing.
 7. Go back to your resource group and refresh the listing
 8. Click **churn** with the type "Stream Analytics job"
 9. In the new panel, click **Inputs** and click **+** in the new panel. In the "New input" panel:
-    1. Enter "datagen" in  "Input alias"
+    1. Enter **datagen** for  "Input alias"
     2. Choose "Data Stream" for "Source type"
     3. Choose "Event hub" for "Source"
     4. Leave subscription to the default
-    5. Choose your unique string for the "Service bus namespace"
+    5. Choose your **unique string** for the "Service bus namespace"
     6. Choose **churn** for "Event hub name"
     7. Choose **sendreceive** as "Event hub policy name"
-    8. Level everything else as default and click "Create" at the bottom
+    8. Level everything else as default and click **Create** at the bottom
 10. In the new panel, click **Outputs** and click **+** in the new panel. In the "New output" panel:
-    1. Enter "sqldw" for "Output alias"
-    2. Choose "SQL database" for  "Sink"
+    1. Enter **sqldw** for "Output alias"
+    2. Choose **SQL database** for  "Sink"
     3. Leave subscription to the default
-    4. choose your unique string for the "Database"
+    4. choose your **unique string** for the "Database"
     5. Enter your username and password for the database
-    6. Enter "Activities" for "Table" and  click "Create" at the bottom
+    6. Enter **Activities** for "Table" and  click **Create** at the bottom
 11. In the new panel, click **Query** and click **+** in the new panel. In the new panel, remove the default content and  enter
 ```
 SELECT
@@ -284,8 +287,8 @@ INTO
 FROM datagen;
 ```
 Click the **save** icon to save the query.
-Note that the input alias and output alias are used in the query, and the selected column has name or alias exactly the same as in Activities table.
-12. Go back to the overview of the Stream analytics job, click "start" to start the job. In the new panel, choose "Now" for the Job output starttime and click "Start" at the bottom.  
+  - [**Note**]  The input alias and output alias are used in the query, and the selected column has name or alias exactly the same as in Activities table.
+12. Go back to the overview of the Stream analytics job, click "start" to start the job. In the new panel, choose "Now" for the Job output starttime and click **Start** at the bottom.  
 
 ### Set up Azure Web Job/Data Generator
 1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
@@ -293,30 +296,28 @@ Note that the input alias and output alias are used in the query, and the select
 3. Click **Web App** offered by Microsoft in "Web + Mobile" category
 4. Click **Create** at the bottom of the description panel
 5. In the new panel,
-    1. Enter your unique string for "App name"
+    1. Enter your **unique string** for "App name"
     2. Leave "subscription" and "Resource group" as the default
-    3. Click **App Service Plan/Location** and in the new panel of "App Service Plan"
-        1. Click **Create New** and enter your unique string for the "App Service Plan" in the new panel
+    3. Click **App Service Plan/Location** and in the new panel of ***App Service Plan***
+        1. Click **Create New** and enter your unique string for the ***App Service Plan*** in the new panel
         2. Click **OK** at the bottom of the panel
 6. Click **Create** at the bottom
 7. Go back to your resource group until the Web App is created. You can check the notification. It takes around two minutes to create the web app.
 8. Refresh the resource listing in your resource group and select the web Service
-8. On the side panel, search "Application Settings" and click **Application Settings** and on the new panel
+8. On the side panel, search "Application Settings" and click ***Application Settings*** and on the new panel
     1. Choose **2.7** for the Python version
     2. Choose **64-bit** for the Platform
     3. Toggle **On** for "Always on"
-    4. In the "App Setting", add the following key-value pair:
+    4. In the ***App Setting***, add the following key-value pairs:
 
-        | **Azure App Service Settings** |             |
-        |------------------------|---------------------|
-        | Key                    | Value               |
-        | EventHubServiceNamespace |[unique string]          |
-        | EventHub              |churn         |
-        | EventHubServicePolicy              |sendreceive         |
-        | EventHubServiceKey              |[unique string]          ||
-
-
-     Click "save" and close the panel
+| **Azure App Service Settings** |             |
+|------------------------|---------------------|
+| Key                    | Value               |
+| EventHubServiceNamespace |[unique string]          |
+| EventHub              |churn         |
+| EventHubServicePolicy              |sendreceive         |
+| EventHubServiceKey           |[unique string]          ||
+Click "save" and close the panel
 
 9. On the side panel, search "WebJobs" and click **WebJobs**
 10. Click **+** and in the new panel
