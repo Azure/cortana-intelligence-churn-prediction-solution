@@ -424,16 +424,16 @@ If you reach here, you have a working solution that runs the customer churn pred
   | mlEndpint              |        [Batch Request URI]                   ||
 
 
-### Create Updatable  Predictive Machine Learning Web Service
+### Create Updatable Predictive Machine Learning Web Service
 The default web service endpoint we deployed in [#### Deploy Azure Machine Learning Predictive Web Service] is associate with the experiment itself. In order to have a updatable endpoint, we need to create an addition service endpoint.
 
 1. Go to https://studio.azureml.net, and choose workspace with the name of your unique string. You can change the workspace by clicking drop-down list on the top right of the web page.
-2. On the left side, choose **Web Service** and click the service that you deployed in [#### Deploy Azure Machine Learning Predictive Web Service] with name "Retail Churn [Predictive Exp.]"
+2. On the left side, choose **Web Service** and click the service that you deployed in the section "Deploy Azure Machine Learning Web Service" with name "Retail Churn [Predictive Exp.]"
 3. Click ***Manage endpoints*** at the bottom of the page in the "Additional endpoints" section.
 4. On the newly loaded page, click **+New**,
-    1. Enter ***update*** for "Name"
+    1. Enter **update** for "Name"
     2. Leave everything else as default
-    3. Click "Save"
+    3. Click **Save**
 5. After the endpoint is created, click the "update" service endpoint
     1. click ***Use endpoint*** under the **BASICS** picture, save to the memo the "Primary key", "Batch requests" up to "jobs" and also "Patch"
     2. Click ***API help*** under ***Patch*** URI, in the new page, save to the memo the **Resource Name** in the ***Updatable Resources*** section. It starts with "Retail Churn Template".
@@ -462,7 +462,7 @@ The default web service endpoint we deployed in [#### Deploy Azure Machine Learn
 5. Create datasets
     1.  Click **New Dataset**, choose ***Azure Blob Storage***, replace the content in the editor with the content in [TrainedModelBlob.json](resource/AzureDataFactoryRetrain/TrainedModelBlob.json) to the editor, and click the upper arrow button to  deploy it
     1.  Click **New Dataset**, choose ***Azure SQL Data Warehouse***, replace the content in the editor with the content in [AzureSqlDWInputUserRetrain.json](resource/AzureDataFactoryRetrain/AzureSqlDWInputUserRetrain.json) to the editor, and click the upper arrow button to  deploy it
-    1. Click **New Dataset**, choose ***Azure SQL Data Warehouse***, replace the content in [AzureSqlDWInputActivityRetain.json](resource/AzureDataFactoryRetrain/AzureSqlDWInputActivityRetain.json) to the editor, and click the upper arrow button to  deploy it
+    1. Click **New Dataset**, choose ***Azure SQL Data Warehouse***, replace the content in [AzureSqlDWInputActivityRetain.json](resource/AzureDataFactoryRetrain/AzureSqlDWInputActivityRetrain.json) to the editor, and click the upper arrow button to  deploy it
     1. Click **New Dataset**, choose ***Azure Blob Storage***, replace the content in the editor with the content in [PlaceHolderRetrain.json](resource/AzureDataFactoryRetrain/PlaceHolderRetrain.json) to the editor, and click the upper arrow button to deploy it
 6. Create pipelines
     1. Right click **Drafts**, choose "New pipeline",
