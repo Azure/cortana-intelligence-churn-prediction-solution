@@ -6,7 +6,7 @@
         "type": "AzureMLUpdateResource",
         "typeProperties": {
           "trainedModelDatasetName": "TrainedModelBlob",
-          "trainedModelName": "Retail Churn Template-Single Experiment SQL Write [trained model] - Copy"
+          "trainedModelName": "Retail Churn Template-Single Experiment SQL Write [trained model] - Copy (2)"
         },
         "inputs": [
           {

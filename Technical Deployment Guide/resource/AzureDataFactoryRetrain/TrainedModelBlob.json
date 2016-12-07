@@ -1,19 +1,53 @@
 {
-  "name": "TrainedModelBlob",
-  "properties": {
-    "published": false,
-    "type": "AzureBlob",
-    "linkedServiceName": "AzureStorageLinkedService",
-    "typeProperties": {
-      "fileName": "model.ilearner",
-      "folderPath": "trainingoutput",
-      "format": {
-        "type": "TextFormat"
-      }
-    },
-    "availability": {
-      "frequency": "Hour",
-      "interval": 1
+    "name": "TrainedModelBlob",
+    "properties": {
+        "published": false,
+        "type": "AzureBlob",
+        "linkedServiceName": "AzureStorageLinkedService",
+      "typeProperties": {
+        "fileName": "model.ilearner",
+        "folderPath": "trainingoutput/model/{Year}/{Month}/{Day}/{Hour}/",
+        "format": {
+          "type": "TextFormat"
+        },
+        "partitionedBy": [
+          {
+            "name": "Year",
+            "value": {
+              "type": "DateTime",
+              "date": "SliceStart",
+              "format": "yyyy"
+            }
+          },
+          {
+            "name": "Month",
+            "value": {
+              "type": "DateTime",
+              "date": "SliceStart",
+              "format": "MM"
+            }
+          },
+          {
+            "name": "Day",
+            "value": {
+              "type": "DateTime",
+              "date": "SliceStart",
+              "format": "dd"
+            }
+          },
+          {
+            "name": "Hour",
+            "value": {
+              "type": "DateTime",
+              "date": "SliceStart",
+              "format": "HH"
+            }
+          }
+        ]
+      },
+        "availability": {
+            "frequency": "Hour",
+            "interval": 1
+        }
     }
-  }
 }
