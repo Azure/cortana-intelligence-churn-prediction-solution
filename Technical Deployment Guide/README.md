@@ -371,8 +371,8 @@ Compare the value in the "SysTime" with the current UTC time. The difference sho
     1. Click **New Dataset**, choose ***Azure SQL Data Warehouse***, replace the content in the editor with  the content  in [AzureSqlDWOutputPrediction.json](resource/AzureDataFactory/AzureSqlDWOutputPrediction.json) to the editor, and click the upper arrow button to  deploy it
 10. Create pipelines
     1. Right click **Drafts**, choose "New pipeline",
-        1. copy the content in [MLPipeline.json](resource/AzureDataFactory/MLPipeline.json) to the editor,
-        2. replace "[unique]" with your unique string  and  "[User]" and "[password]" with their real value in this solution
+        1. Copy the content in [MLPipeline.json](resource/AzureDataFactory/MLPipeline.json) to the editor,
+        2. Replace "[unique]" with your unique string  and  "[User]" and "[password]" with their real value in this solution
         3. Specify an active period that you want the pipeline to run.  Since the data passing through in 15 minutes represents a day's data, and   we have 60 days data in total, we needed only two-day period for the pipeline. An example is like:
         ```
         "start": "2016-12-01T00:00:00Z",
@@ -385,9 +385,9 @@ Compare the value in the "SysTime" with the current UTC time. The difference sho
         4.  click the upper arrow button to  deploy it
 
     2. Right click **Drafts**, choose "New pipeline",
-        1. copy the content in [BlobToSqlDW.json](resource/AzureDataFactory/BlobToSqlDW.json) to the editor,
+        1. Copy the content in [BlobToSqlDW.json](resource/AzureDataFactory/BlobToSqlDW.json) to the editor,
         2. Specify an active period that you want the pipeline to run. It should be the same as the MLPipeline
-        3. click the upper arrow button to  deploy it
+        3. Click the upper arrow button to  deploy it
 
 
 ## PowerBI Dashboard
@@ -454,11 +454,11 @@ The default web service endpoint we deployed in the section of "Deploy Azure Mac
 3. Click ***Author and deploy***
 3. Stop MLPipeline:
     1.  Click **MLPipeline** in the "Piepelines" list,
-    2.  start the pipeline by setting the value "isPaused" to "true"
+    2.  Start the pipeline by setting the value "isPaused" to "true"
     ```
     "isPaused": true
     ```
-    3.  click the upper arrow button to  deploy it
+    3.  Click the upper arrow button to  deploy it
 4. Create/Update Linked services:
     1. Click **New Compute**, choose ***Azure ML***,  replay the content in the editor with  the content in [AzureMLLinkedServiceTraining.json](resource/AzureDataFactoryRetrain/AzureMLLinkedServiceTraining.json), replace  the content in "mlEndpoint" and "apikey" with  the real value in the "Train Machine learning Web Service" section of your memo , and click the upper arrow button to  deploy it. You can check the value from your memo in the Azure Machine learning Web service part.
     2. Click **AzureMLLinkedService**, copy  the content in [AzureMLLinkedService.json](resource/AzureDataFactoryRetrain/AzureMLLinkedService.json) in the retrain folder  to the editor, replace  the content in "mlEndpoint" , "apikey" and "updateResourceEndpoint" with  the real value in the "Updatable Predictive Machine learning Web Service" section of your memo , and click the upper arrow button to  deploy it.
@@ -469,29 +469,29 @@ The default web service endpoint we deployed in the section of "Deploy Azure Mac
     1. Click **New Dataset**, choose ***Azure Blob Storage***, replace the content in the editor with the content in [PlaceHolderRetrain.json](resource/AzureDataFactoryRetrain/PlaceHolderRetrain.json) to the editor, and click the upper arrow button to deploy it
 6. Create pipelines
     1. Right click **Drafts**, choose "New pipeline",
-        1. copy the content in [RetrainPipeline.json](resource/AzureDataFactoryRetrain/RetrainPipeline.json) to the editor,
-        2. replace "[unique]" with your unique string (two instances of ""[unique]""),  "[User]" and "[password]" with their real value in this solution
+        1. Copy the content in [RetrainPipeline.json](resource/AzureDataFactoryRetrain/RetrainPipeline.json) to the editor,
+        2. Replace "[unique]" with your unique string (two instances of ""[unique]""),  "[User]" and "[password]" with their real value in this solution
         3. Specify an active period that you want the pipeline to run.  Since the data passing through in 15 minutes represents a day's data, and  we have 60 days data in total, we needed only two-day period for the pipeline. You should set the start time a hour ahead of the current UTC time so that you can see this pipeline working immediately. If the current time is "2016-12-01T19:00:00Z",  An example is like:
         ```
         "start": "2016-12-01T18:00:00Z",
         "end": "2016-12-03T18:00:00Z",
         ```
-        4.  start the pipeline by setting the value "isPaused" to "false"
+        4.  Start the pipeline by setting the value "isPaused" to "false"
         ```
         "isPaused": false
         ```
-        4.  click the upper arrow button to  deploy it
+        4.  Click the upper arrow button to  deploy it
 
     2. Right click **Drafts**, choose "New pipeline",
-        1. copy the content in [UpdatePipeline.json](resource/AzureDataFactoryRetrain/UpdatePipeline.json) to the editor,
+        1. Copy the content in [UpdatePipeline.json](resource/AzureDataFactoryRetrain/UpdatePipeline.json) to the editor,
         2. Specify an active period that you want the pipeline to run. It should be the same as the MLPipeline
-        3. click the upper arrow button to  deploy it
+        3. Click the upper arrow button to  deploy it
 7. Start MLPipeline
     1.  Click **MLPipeline** in the "Piepelines" list,
-    2.  start the pipeline by setting the value "isPaused" to "false"
+    2.  Start the pipeline by setting the value "isPaused" to "false"
         ```
         "isPaused": false
         ```
-    3.  click the upper arrow button to  deploy it
+    3.  Click the upper arrow button to  deploy it
 
 To get more information about retrainng, please go to [Updating models using Update Resource Activity](https://docs.microsoft.com/en-us/azure/data-factory/data-factory-azure-ml-batch-execution-activity#updating-models-using-update-resource-activity).
