@@ -7,13 +7,14 @@
 - [Prerequisites](#prerequisites)
 - [Architecture](#architecture)
 - [Setup Steps](#setup-steps)
-- [PowerBI Dashboard](#dashboard)
+  -[Create an Azure Resource Group](#Create-an-Azure-Resource-Group)
+- [PowerBI Dashboard](#powerbi-dashboard)
 - [Retrain](#retrain)
 
 
 ## Introduction
 
-The objective of this tutorial is to demonstrate predictive data pipelines for retailer to predict customer churn.  By combining domain knowledge and predictive analytics, retailers can prevent customer churn by using the predictive result and proper marketing strategies.   
+The objective of this tutorial is to demonstrate predictive data pipelines for retailer to predict customer churn.  By combining domain knowledge and predictive analytics, retailers can prevent customer churn by using the predictive result and proper marketing strategies.  It also shows steps how retraining of a model works.
 
 The end-to-end solution is implemented in the cloud, using Microsoft Azure. The solution is composed of several Azure components, including data ingest, data storage, data movement, advanced analytics and visualization. The advanced analytics is featured with Azure Machine Learning where you can use Python or R language to  build data science model and also reuse existing in-house or third-party libraries.  With data ingest, the solution can make prediction based on the data that moves in to azure from on-premises environment.
 
@@ -24,6 +25,7 @@ This deployment guide will guide you through the process of creating such a cust
 - Use of PolyBase to load on-premises data to Azure SQL DW
 - Using Azure Machine Learning to deploy prediction model as web services and run periodic prediction in Azure Data Factory (ADF)
 - Dashboard to display sales and customer churn data
+- Retaining of the machine learning model with new data
 
 ## Prerequisites
 
@@ -62,31 +64,27 @@ The machine learning model here is used as an example experiment and it shows th
  For the nature of the problem, customer behavior changes slowly and doesn’t require real-time or near real-time prediction in minute scale. Therefore, we use Azure Machine Learning in batch mode.  We use Azure SQL DW for its scalability to query large amount of data, and its elasticity of starting small and scaling up as needed easily.  We chose to use PolyBase to load data into Azure SQL DW because of its high efficiency.
 
 
- ## Deployment Steps
+ ## Setup Steps
 
- ### Instruction to go back to your resource group
+ ### Instruction for Finding Resource Groups
+
  Going back to your resource group is important over the course of deployment steps. Here is the how we can find the desired resource group:
+
  1. Log into the Azure Management Portal https://ms.portal.azure.com
  1. Click  **Resource groups** button on upper left
  1. Choose the subscription your resource group resides in
  1. Use keywords to search or directly select your resource group in the list of resource groups
  1. You need to close the resource description page to add new resources
 
- Below are the steps to deploy the use case into your Azure subscription. Note that to condense the steps somewhat, **>** is used between repeated actions. For example:
-
- 1. Click: **Button A**
- 1. Click: **Button B**
-
- is written as
-
- 1. Click: **Button A** > **Button B**  
 
 
 ### Unique String
+
  You will need a unique string to identify your deployment because some Azure services, e.g. Azure Storage requires a unique name across a region. We suggest you use only letters and numbers in this string and the length should not be greater than 9.
  We suggest you use "[UI]churn[N]"  where [UI] is the user's initials,  N is a random integer that you choose and characters must be entered in in lowercase. Please open your memo file and write down "unique:[unique]" with "[unique]" replaced with your actual unique string.
 
-### Create an Azure Resource Group for the solution
+### Create an Azure Resource Group
+
 1. Log into the Azure Management Portal https://ms.portal.azure.com
 1. Click  **Resource groups** button on upper left, and then click **+** to add a resource group.
 1. Enter your **unique string** for the resource group and choose your subscription.
@@ -95,43 +93,43 @@ The machine learning model here is used as an example experiment and it shows th
   - West Europe
   - Southeast Asia
 
-  | **Azure Resource Group** |                     |
-|------------------------|---------------------|
-| resource group name           |[unique string]|
-| region              |[region]||
 
-Please open your memo file and write down "resource group:[unique]" with "[unique]" replaced with your actual unique string.
+Please open your memo file and save the information as the following table. Please replace the content in [] with its actual value.  
+
+| **Azure Resource Group** |                     |
+|------------------------|---------------------|
+| resource group name    |[unique string]|
+| region              |[region]||
 
 In the following steps, if any entry or item is not mentioned in the instruction, please leave it as the default value.
 
 ### Create Azure Storage Account
 1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
 2. In "Overview" panel, click **+** and enter **storage account** and hit "Enter" key to search
-3. Click ** Storage account** offered by Microsoft in "Storage" category
-4. Click ** Create** at the bottom of the description panel
-5. Enter your **unique string** for "Name". Please write down in your memo: storage account: [Unique string]
+3. Click **Storage account** offered by Microsoft in "Storage" category
+4. Click **Create** at the bottom of the description panel
+5. Enter your **unique string** for "Name".
 6. Make sure the selected resource group is the one you just created. If not, choose the resource group you created for this solution.
 7. Leave everything else to use the default value
-8. Click **Create** at the bottom. The portal may lead you back to the storage account description panel. DO NOT click "Create".
+8. Click **Create** at the bottom. The portal may lead you back to the storage account description panel. Close the panel and DO NOT click "Create".
 9. Go back to your resource group overview and wait until the storage account is created. To check if the resource is create or not, refresh the page or the list of the resources in the resource group as needed.
 
 These are the steps to get the access key that will be used in the SQL script to load the data into Azure SQL DW:
-10. Click the created storage account and in the new panel click **Access keys**
-11. In the new panel, click the icon of "Click to copy" and paste the key in your memo
+1. Click the created storage account and in the new panel click **Access keys**
+12. In the new panel, click the icon of "Click to copy" and paste the key in your memo
 
 | **Azure Storage Account** |                     |
 |------------------------|---------------------|
 | Storage Account        |[unique string]|
-| Connection String      |             |
-| Primary access key     |             ||
+| Primary access key     |[key]             ||
 
 These are the steps for creating containers and uploading the data to Azure blob storage:
 1. Click **Containers** and on the new panel click **+** to add a containers
 1. Enter **data** for "Name" and click **Create** at the bottom
 1. Click the **data** container -> click "Upload" button on the top of the new panel
-1. Choose Users.csv file that you can download from "resource" folder
+1. Choose [Users.csv](resource/Users.csv) file that you can download from "resource" folder
 1. Click **Upload**
-1. Repeat the last two steps for Actvities.csv, age.csv, region.csv
+1. Repeat the last two steps for [Actvities.csv](resource/Actvities.csv),[age.csv](resource/age.csv),[region.csv](resource/region.csv).
 
 
 
@@ -149,15 +147,15 @@ These are the steps for creating containers and uploading the data to Azure blob
     2. Use **azureadmin** or any of your preferred admin name. Please write it down in your memo: [server admin login]:[the value you entered]
     3. Use **pass@word1**  or any of your preferred password. Please write it down in your memo: [Password]:[the value you entered]
     4. Click **Create**
-8. Adjust Performance to **100** by dragging the sliding bar to the left
-9. Click **Create** at the bottom. The portal may lead you back to the SQL Data Warehouse description panel. DO NOT click "Create".
+8. Adjust Performance to **300** by dragging the sliding bar to the left.
+9. Click **Create** at the bottom. The portal may lead you back to the SQL Data Warehouse description panel. Close the panel and DO NOT click "Create".
 9. Go back to your resource group overview and wait until the resource is create.  To check if the resource is create or not, refresh the page or the list of the resources in the resource group as needed.
 10. In the list of resources, click on the SQL Server that was just created.
-11. Under ***Settings*** for the new server, click ***Firewall*** and create a rule called ***open*** with the IP range of 0.0.0.0 to 255.255.255.255. This will allow you to access the database from your desktop. Click ***Save*** at the top of the panel.
+11. Under ***Settings*** for the new server, click ***Firewall*** and create a rule called ***open*** with the IP range of **0.0.0.0** to **255.255.255.255**. This will allow you to access the database from your desktop. Click ***Save*** at the top of the panel.
 
-    **Note**: This firewall rule is not recommended for production level systems but for this demo it is acceptable. You will want to change this rule to allow the IPs with trust.
+    **Note**: This firewall rule is not recommended for production level systems but for this demo it is acceptable. You will want to change this rule to only allow the IPs with trust.
 
-    | **Azure SQL Data Warehouse** |                     |
+| **Azure SQL Data Warehouse** |                     |
 |------------------------|---------------------|
 | Server Name            |[unique string]|
 | Database               |[unique string]|
@@ -166,32 +164,34 @@ These are the steps for creating containers and uploading the data to Azure blob
 
 
 ### Load Historical Data into Azure SQL Data Warehouse
-1. Open the createTableAndLoadData.dsql in the resources in Visual Studio 2015 with SQL Server Data Tools (SSDT)
+1. Open the [createTableAndLoadData.dsql](resource/createTableAndLoadData.dsql) in the resources in Visual Studio 2015 with SQL Server Data Tools (SSDT)
 2. Click the green button on the top-left core of the file window.  
-3. Input the corresponding info for this solution. Choose "SQL Server Authentication" for **Authentication**. Choose the database with name of the unique string you specified earlier.
+3. Input the corresponding info for this solution. Choose **SQL Server Authentication** for **Authentication**. Choose the database with name of the unique string you specified earlier.
 4. Wait until all the queries finishes.
 
 
 ### Set up Azure Machine Learning
+
 #### Create Azure Machine Learning Workspace
+
 1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
 2. In "Overview" panel, click **+** and enter **Machine Learning Workspace** and hit "Enter" key to search
 3. Click **Machine Learning Workspace** offered by Microsoft in "Intelligence + analytics" category
 4. Click **Create** at the bottom of the description panel
 5. In the Machine Learning workspace panel,
-    1. Enter your unique string for "Workspace name"
+    1. Enter your **unique string** for "Workspace name"
     2. Leave "subscription", "Resource group", and "Location" as the default
-    3. Choose "Use existing" for "Storage account"
-    4. Choose "standard" for "Workspace pricing tier"
-    5. Choose "Create new" for "Web service plan"
-    6. Click on "Web service plan tier", choose "S1 Standard" and click "Select" at the bottom
-    7. Click "Create" at the bottom
+    3. Choose **Use existing** for "Storage account"
+    4. Choose **standard** for "Workspace pricing tier"
+    5. Choose **Create new** for "Web service plan"
+    6. Click on **Web service plan tier**, choose **S1 Standard** and click **Select** at the bottom
+    7. Click **Create** at the bottom
 
 #### Deploy Azure Machine Learning Predictive Web Service
 1. Go to
 https://gallery.cortanaintelligence.com/Experiment/Retail-Churn-Predictive-Exp-1
-2. Click "Open in Studio" on the right. Login as needed.
-3. Choose the region and workspace. For region, you should choose the region that your resource group resides. For workspace, you should choose the workspace with the name the same as your unique string.
+2. Click **Open in Studio** on the right. Login as needed.
+3. Choose the region and workspace. For region, you should choose the region that your resource group resides. You can get the information from [#Create-an-Azure-Resource-Group]  For workspace, you should choose the workspace with the name the same as your unique string.
 4. Wait until the experiment is copied
 5. Input database information in the two "Import Data" modules. You only need to Change "Database server name", "Database name", "User name" and "Password". Use the information you collected in the "Create Azure SQL Data Warehouse" section. Leave the query as it is
 6. Click "Run" at the bottom of the page. It takes around three minutes to run the experiment.
@@ -383,7 +383,7 @@ Compare the value in the "SysTime" with the current UTC time. The difference sho
         3. click the upper arrow button to  deploy it
 
 
-### Set up Power BI
+## PowerBI Dashboard
 
 1. Download the Power BI Desktop application (https://powerbi.microsoft.com/en-us/desktop)
 2. Download the Power BI template file dashboard.pbix (Click Raw to start downloading) 3. and open it with Power BI application
