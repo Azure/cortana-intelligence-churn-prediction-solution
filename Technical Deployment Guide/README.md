@@ -310,32 +310,35 @@ Click the **save** icon to save the query.
     3. Toggle **On** for "Always on"
     4. In the ***App Setting***, add the following key-value pairs:
 
-| **Azure App Service Settings** |             |
-|------------------------|---------------------|
-| Key                    | Value               |
-| EventHubServiceNamespace |[unique string]          |
-| EventHub              |churn         |
-| EventHubServicePolicy              |sendreceive         |
-| EventHubServiceKey           |[unique string]          ||
-Click "save" and close the panel
+      | **Azure App Service Settings** |             |
+      |------------------------|---------------------|
+      | Key                    | Value               |
+      | EventHubServiceNamespace |[unique string]          |
+      | EventHub              |churn         |
+      | EventHubServicePolicy              |sendreceive         |
+|    EventHubServiceKey           |[unique string]            ||
+
+  Click **save** and close the panel
 
 9. On the side panel, search "WebJobs" and click **WebJobs**
 10. Click **+** and in the new panel
-    1. Enter "eventhub15min" for "Name"
-    2. Select the downloaded "eventhub_15min.zip" for "File Upload"
+    1. Enter **eventhub15min** for "Name"
+    2. Select the downloaded [eventhub_15min.zip](resource/eventhub_15min.zip) for "File Upload". Click "Raw" on the github page to download the zip file.
     3. Choose **Triggered** for Type
-    4. Choose **Manual** for "Trigger"  (Note: because the zip file has the scheduled setting, we can use manual in this step for scheduled jobs)
+    4. Choose **Manual** for "Trigger"  (Note: because the zip file has the scheduled setting file, we can use manual in this step for scheduled jobs)
     5. Click **OK** at the bottom
-11. Select the job "eventhub15min" and start it. Wait until the job finishes.
+11. Select the job "eventhub15min" and **start** it. Wait until the job finishes.
 
-### Check if Data Ingestion
+### Check Data Ingest
+
 you can check if the data is ingested into your data warehouse by using Visual Studio 2015 with SSDT to run testing queries.
+
 1. Open Visual Studio 2015 with SSDT
 2. Click "View" in the menu
 3. Choose "SQL Server Object Explorer"
 4. Click "Add" icon to add the SQL server that's created in this solution
 5. Filling info on the dialogue as needed
-    1. Choose "SQL Server Authentication" for Authentication
+    1. Choose "SQL Server Authentication" for ***Authentication***
     2. Choose the database you create in this solution, which has the same name as the unique string.
 6. Right click on the database, choose "New query"
 7. Run this query
@@ -346,26 +349,26 @@ Compare the value in the "SysTime" with the current UTC time. The difference sho
 
 ### Set up Azure Data Factory
 1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
-2. In "Overview" panel, click **+** and enter **Data Factory** and hit "Enter" key to search
+2. In ***Overview*** panel, click **+** and enter **Data Factory** and hit "Enter" key to search
 3. Click **Data Factory** offered by Microsoft in "VM Extension" category
 4. Click **Create** at the bottom of the description panel
 5. In the new panel of "New data factory",
     1. Enter **ddchurn1** for "Name"
     2. Click **Create** at the bottom
 6. Go back to your resource group and select the data factory that's created through previous steps
-7. Click "Author and deploy" on the new panel
+7. Click ***Author and deploy*** on the new panel
 8. Create Linked services:
-    1. Click **New Data Store**, choose "Azure Storage", replace the content in the editor with the content in AzureStorageLinkedService.json to the editor, replace "[unique]" with your unique string and "[Key]" with your storage key, and click the upper arrow button to  deploy it
-    2. Click **New Data Store**, choose "Azure SQL Data Warehouse", replace the content in the editor with    the content in AzureSqlDWLinkedService.json to the editor, replace "[unique]" with your unique string  and  "[User]" and "[password]" with their real value in this solution, and click the upper arrow button to  deploy it
-    3.  Click **New Compute**, choose "Azure ML",  replace the content in the editor with  the content in AzureMLLinkedService.json to the editor, replace  the content in "mlEndpoint" and "apikey" with  the real value in this solution, and click the upper arrow button to  deploy it. You can check the value from your memo in the Azure Machine learning Web service part.
+    1. Click **New Data Store**, choose ***Azure Storage***, replace the content in the editor with the content in [AzureStorageLinkedService.json](resource/AzureDataFactory/AzureStorageLinkedService.json) to the editor, replace "[unique]" with your unique string and "[Key]" with your storage key, and click the upper arrow button to  deploy it
+    2. Click **New Data Store**, choose ***Azure SQL Data Warehouse***, replace the content in the editor with    the content in [AzureSqlDWLinkedService.json](resource/AzureDataFactory/AzureSqlDWLinkedService.json) to the editor, replace "[unique]" with your unique string  and  "[User]" and "[password]" with their real value in this solution, and click the upper arrow button to  deploy it
+    3.  Click **New Compute**, choose ***Azure ML***,  replace the content in the editor with  the content in [AzureMLLinkedService.json](resource/AzureDataFactory/AzureMLLinkedService.json) to the editor, replace  the content in "mlEndpoint" and "apikey" with  the real value in this solution, and click the upper arrow button to  deploy it. You can check the value from your memo in the Azure Machine learning Web service part.
 9. Create datasets
-    1. Click **New Dataset**, choose "Azure Blob Storage", replace the content in the editor with the content in AzureBlobDataset.json to the editor, and click the upper arrow button to  deploy it
-    1. Click **New Dataset**, choose "Azure SQL Data Warehouse", replace the content in the editor with the content in AzureSqlDWInputUser.json to the editor, and click the upper arrow button to  deploy it
-    1. Click **New Dataset**, choose "Azure SQL Data Warehouse", replace the content in the editor with  the content in AzureSqlDWInputActivity.json to the editor, and click the upper arrow button to  deploy it
-    1. Click **New Dataset**, choose "Azure SQL Data Warehouse", replace the content in the editor with  the content  in AzureSqlDWOutputPrediction.json to the editor, and click the upper arrow button to  deploy it
+    1. Click **New Dataset**, choose ***Azure Blob Storage***, replace the content in the editor with the content in [AzureBlobDataset.json](resource/AzureDataFactory/AzureBlobDataset.json) to the editor, and click the upper arrow button to  deploy it
+    1. Click **New Dataset**, choose ***Azure SQL Data Warehouse***, replace the content in the editor with the content in [AzureSqlDWInputUser.json](resource/AzureDataFactory/AzureSqlDWInputUser.json) to the editor, and click the upper arrow button to  deploy it
+    1. Click **New Dataset**, choose ***Azure SQL Data Warehouse***, replace the content in the editor with  the content in AzureSqlDWInputActivity.json(resource/AzureDataFactory/AzureSqlDWInputActivity.json) to the editor, and click the upper arrow button to  deploy it
+    1. Click **New Dataset**, choose ***Azure SQL Data Warehouse***, replace the content in the editor with  the content  in [AzureSqlDWOutputPrediction.json](resource/AzureDataFactory/AzureSqlDWOutputPrediction.json) to the editor, and click the upper arrow button to  deploy it
 10. Create pipelines
     1. Right click **Drafts**, choose "New pipeline",
-        1. copy the content in MLPipeline.json to the editor,
+        1. copy the content in [MLPipeline.json](resource/AzureDataFactory/MLPipeline.json) to the editor,
         2. replace "[unique]" with your unique string  and  "[User]" and "[password]" with their real value in this solution
         3. Specify an active period that you want the pipeline to run.  Since the data passing through in 15 minutes represents a day's data, and   we have 60 days data in total, we needed only two-day period for the pipeline. An example is like:
         ```
@@ -379,7 +382,7 @@ Compare the value in the "SysTime" with the current UTC time. The difference sho
         4.  click the upper arrow button to  deploy it
 
     2. Right click **Drafts**, choose "New pipeline",
-        1. copy the content in BlobToSqlDW.json to the editor,
+        1. copy the content in [BlobToSqlDW.json](resource/AzureDataFactory/BlobToSqlDW.json) to the editor,
         2. Specify an active period that you want the pipeline to run. It should be the same as the MLPipeline
         3. click the upper arrow button to  deploy it
 
@@ -406,14 +409,14 @@ If you reach here, you have a working solution that runs the customer churn pred
 
 ### Deploy Training Machine Learning Web Service
 1. Go to https://gallery.cortanaintelligence.com/Experiment/Retail-Churn-Train-1
-2. Click "Open in Studio" on the right. Login as needed.
+2. Click ***Open in Studio*** on the right. Login as needed.
 3. Choose the region and workspace. For region, you should choose the region that your resource group resides. For workspace, you should choose the workspace with the name the same as your unique string.
 4. Wait until the experiment is copied
 5. Input database information in the two "Import Data" modules. You only need to Change "Database server name", "Database name", "User name" and "Password". Use the information you collected in the "Create Azure SQL Data Warehouse" section. Leave the query as it is.
-6. Click "Run" at the bottom of the page. It takes around three minutes to run the experiment.
-7. Click "Deploy Web Service" at the bottom of the page, choose classic web service, and click "Yes" to publish the web service. This will lead you to the web service page. The web service home page can also be found by clicking the WEB SERVICES button on the left menu once logged in your workspace.
+6. Click **Run** at the bottom of the page. It takes around three minutes to run the experiment.
+7. Click **Deploy Web Service** at the bottom of the page, choose classic web service, and click "Yes" to publish the web service. This will lead you to the web service page. The web service home page can also be found by clicking the WEB SERVICES button on the left menu once logged in your workspace.
 8. Copy the API key from the web service home page and save it to your memo
-9. Click the link BATCH EXECUTION under the API HELP PAGE section. On the BATCH EXECUTION help page, copy the Request URI under the Request section and add it to the table below as you will need this information later . Copy only the URI part https:… /jobs, ignoring the URI parameters starting with ? .
+9. Click the link ***BATCH EXECUTION*** under the ***API HELP PAGE section***. On the BATCH EXECUTION help page, copy the Request URI under the Request section and add it to the table below as you will need this information later . Copy only the URI part https:… /jobs, ignoring the URI parameters starting with ? .
 
   | **Train Machine learning Web Service** |                           |
   | --------------------------- |--------------------------|
@@ -426,26 +429,26 @@ The default web service endpoint we deployed in [#### Deploy Azure Machine Learn
 
 1. Go to https://studio.azureml.net, and choose workspace with the name of your unique string. You can change the workspace by clicking drop-down list on the top right of the web page.
 2. On the left side, choose **Web Service** and click the service that you deployed in [#### Deploy Azure Machine Learning Predictive Web Service] with name "Retail Churn [Predictive Exp.]"
-3. Click "Manage endpoints" at the bottom of the page in the "Additional endpoints" section.
+3. Click ***Manage endpoints*** at the bottom of the page in the "Additional endpoints" section.
 4. On the newly loaded page, click **+New**,
-    1. Enter "update" for "Name"
+    1. Enter ***update*** for "Name"
     2. Leave everything else as default
     3. Click "Save"
 5. After the endpoint is created, click the "update" service endpoint
-    1. click "Use endpoint" under the "BASICS" picture, save to the memo the "Primary key", "Batch requests" up to "jobs" and also "Patch"
-    2. Click "API help" under "Patch" URI, in the new page, save to the memo the "Resource Name" in the "Updatable Resources" section. It starts with "Retail Churn Template".
+    1. click ***Use endpoint*** under the **BASICS** picture, save to the memo the "Primary key", "Batch requests" up to "jobs" and also "Patch"
+    2. Click ***API help*** under ***Patch*** URI, in the new page, save to the memo the **Resource Name** in the ***Updatable Resources*** section. It starts with "Retail Churn Template".
 
     | **updatable Predictive Machine Learning Web Service** |                           |
     | --------------------------- |--------------------------:|
     | apiKey                     | [Primary Key]|
     | mlEndpint              |        [Batch Request URI]                   |
     | updateResourceEndpoint |   [Patch]|
-    |  trainedModelName | [Resource Name]|
+    | trainedModelName | [Resource Name]|
 
 ### Create Azure Data Factory For Retraining and Updating
 1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
 2. Click the data factory you created in this solution
-3. Click "Author and deploy"
+3. Click ***Author and deploy***
 3. Stop MLPipeline:
     1.  Click **MLPipeline** in the "Piepelines" list,
     2.  start the pipeline by setting the value "isPaused" to "true"
@@ -454,16 +457,16 @@ The default web service endpoint we deployed in [#### Deploy Azure Machine Learn
     ```
     3.  click the upper arrow button to  deploy it
 4. Create/Update Linked services:
-    1. Click **New Compute**, choose "Azure ML",  replay the content in the editor with  the content in AzureMLLinkedServiceTraining.json, replace  the content in "mlEndpoint" and "apikey" with  the real value in the "Train Machine learning Web Service" section of your memo , and click the upper arrow button to  deploy it. You can check the value from your memo in the Azure Machine learning Web service part.
-    2. Click **AzureMLLinkedService**, copy  the content in AzureMLLinkedService.json in the retrain folder  to the editor, replace  the content in "mlEndpoint" , "apikey" and "updateResourceEndpoint" with  the real value in the "Updatable Predictive Machine learning Web Service" section of your memo , and click the upper arrow button to  deploy it.
+    1. Click **New Compute**, choose ***Azure ML***,  replay the content in the editor with  the content in [AzureMLLinkedServiceTraining.json](resource/AzureDataFactoryRetrain/AzureMLLinkedServiceTraining.json), replace  the content in "mlEndpoint" and "apikey" with  the real value in the "Train Machine learning Web Service" section of your memo , and click the upper arrow button to  deploy it. You can check the value from your memo in the Azure Machine learning Web service part.
+    2. Click **AzureMLLinkedService**, copy  the content in [AzureMLLinkedService.json](resource/AzureDataFactoryRetrain/AzureMLLinkedService.json) in the retrain folder  to the editor, replace  the content in "mlEndpoint" , "apikey" and "updateResourceEndpoint" with  the real value in the "Updatable Predictive Machine learning Web Service" section of your memo , and click the upper arrow button to  deploy it.
 5. Create datasets
-    1.  Click **New Dataset**, choose "Azure Blob Storage", replace the content in the editor with the content in TrainedModelBlob.json to the editor, and click the upper arrow button to  deploy it
-    1.  Click **New Dataset**, choose "Azure SQL Data Warehouse", replace the content in the editor with the content in AzureSqlDWInputUserRetrain.json to the editor, and click the upper arrow button to  deploy it
-    1. Click **New Dataset**, choose "Azure SQL Data Warehouse", replace the content in AzureSqlDWInputActivityRetain.json to the editor, and click the upper arrow button to  deploy it
-    1. Click **New Dataset**, choose "Azure Blob Storage", replace the content in the editor with the content in PlaceHolderRetrain.json to the editor, and click the upper arrow button to  deploy it
+    1.  Click **New Dataset**, choose ***Azure Blob Storage***, replace the content in the editor with the content in [TrainedModelBlob.json](resource/AzureDataFactoryRetrain/TrainedModelBlob.json) to the editor, and click the upper arrow button to  deploy it
+    1.  Click **New Dataset**, choose ***Azure SQL Data Warehouse***, replace the content in the editor with the content in [AzureSqlDWInputUserRetrain.json](resource/AzureDataFactoryRetrain/AzureSqlDWInputUserRetrain.json) to the editor, and click the upper arrow button to  deploy it
+    1. Click **New Dataset**, choose ***Azure SQL Data Warehouse***, replace the content in [AzureSqlDWInputActivityRetain.json](resource/AzureDataFactoryRetrain/AzureSqlDWInputActivityRetain.json) to the editor, and click the upper arrow button to  deploy it
+    1. Click **New Dataset**, choose ***Azure Blob Storage***, replace the content in the editor with the content in [PlaceHolderRetrain.json](resource/AzureDataFactoryRetrain/PlaceHolderRetrain.json) to the editor, and click the upper arrow button to deploy it
 6. Create pipelines
     1. Right click **Drafts**, choose "New pipeline",
-        1. copy the content in RetrainPipeline.json to the editor,
+        1. copy the content in [RetrainPipeline.json](resource/AzureDataFactoryRetrain/RetrainPipeline.json) to the editor,
         2. replace "[unique]" with your unique string (two instances of ""[unique]""),  "[User]" and "[password]" with their real value in this solution
         3. Specify an active period that you want the pipeline to run.  Since the data passing through in 15 minutes represents a day's data, and  we have 60 days data in total, we needed only two-day period for the pipeline. You should set the start time a hour ahead of the current UTC time so that you can see this pipeline working immediately. If the current time is "2016-12-01T19:00:00Z",  An example is like:
         ```
@@ -477,7 +480,7 @@ The default web service endpoint we deployed in [#### Deploy Azure Machine Learn
         4.  click the upper arrow button to  deploy it
 
     2. Right click **Drafts**, choose "New pipeline",
-        1. copy the content in UpdatePipeline.json to the editor,
+        1. copy the content in [UpdatePipeline.json](resource/AzureDataFactoryRetrain/UpdatePipeline.json) to the editor,
         2. Specify an active period that you want the pipeline to run. It should be the same as the MLPipeline
         3. click the upper arrow button to  deploy it
 7. Start MLPipeline:
@@ -487,3 +490,5 @@ The default web service endpoint we deployed in [#### Deploy Azure Machine Learn
             "isPaused": false
             ```
         3.  click the upper arrow button to  deploy it
+
+To get more information about retraing, please go to [Updating models using Update Resource Activity](https://docs.microsoft.com/en-us/azure/data-factory/data-factory-azure-ml-batch-execution-activity#updating-models-using-update-resource-activity) and
