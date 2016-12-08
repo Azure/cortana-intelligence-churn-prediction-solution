@@ -81,7 +81,7 @@ Going back to your resource group is important over the course of deployment ste
 
 ### Unique String
 
- You will need a unique string to identify your deployment because some Azure services, e.g. Azure Storage requires a unique name across a region. We suggest you use only letters and numbers in this string and the length should not be greater than 9.
+ You will need a unique string to identify your deployment because some Azure services, e.g. Azure Storage requires a unique name for each instance across the service. We suggest you use only letters and numbers in this string and the length should not be greater than 9.
  We suggest you use "[UI]churn[N]"  where [UI] is the user's initials,  N is a random integer that you choose and characters must be entered in in lowercase. Please open your memo file and write down "unique:[unique]" with "[unique]" replaced with your actual unique string.
 
 ### Create an Azure Resource Group
@@ -124,7 +124,7 @@ These are the steps to get the access key that will be used in the SQL script to
 
 | **Azure Storage Account** |                     |
 |------------------------|---------------------|
-| Storage Account        |[unique]|
+| Storage Account        |[unique string]|
 | access key     |[key]             ||
 
 #### Create Containers and Upload Data to Azure Storage Account
@@ -187,7 +187,7 @@ These are the steps for creating containers and uploading the data to Azure blob
 5. In the Machine Learning workspace panel,
     1. Enter your **unique string** for "Workspace name"
     2. Leave "subscription", "Resource group", and "Location" as the default
-    3. Choose **Use existing** for "Storage account"
+    3. Choose **Use existing** for "Storage account" and select your unique string as the storage account.  
     4. Choose **standard** for "Workspace pricing tier"
     5. Choose **Create new** for "Web service plan"
     6. Click on **Web service plan tier**, choose **S1 Standard** and click **Select** at the bottom
@@ -229,7 +229,7 @@ https://gallery.cortanaintelligence.com/Experiment/Retail-Churn-Predictive-Exp-1
     2. Enter **4** for "Partition Count"
     3. Enter **2** for "Message Retention"
     4. Click **Create** at the bottom
-11. Look into the ***Type*** and choose the one with type ***Event hubs***. Select the service bus namespace created through the previous steps.
+11. Go back to your resource group and look into the ***Type*** and choose the one with type ***Event hubs***. Select the service bus namespace created through the previous steps.
 On the new expanded panel, click ***Event Hubs*** in the ***Entities*** listing.
 12. Click event hub **churn** created through the previous steps. In the new panel
     1. Click ***Shared access policies*** in the ***SETTING*** listing
@@ -237,7 +237,7 @@ On the new expanded panel, click ***Event Hubs*** in the ***Entities*** listing.
         1. Enter **sendreceive** for the "Policy name"
         2. Check **Send** and **Listen**
         3. Click **Create** at the bottom of the panel
-        4. Wait until the new policy is created in the listing of "Shared access policies"
+        4. Wait until the new policy is created and shown in the listing of "Shared access policies"
         5. Click the policy **sendreceive**, and save "PRIMARY KEY"  to your memo
 
 | **Azure Event Hub** |                        |
@@ -256,9 +256,9 @@ On the new expanded panel, click ***Event Hubs*** in the ***Entities*** listing.
 5. Enter **churn** in the "Job name"
 6. Click **Create** at the bottom
 7. Go back to your resource group and refresh the listing
-8. Click **churn** with the type "Stream Analytics job"
+8. Click your **unique string** with the type "Stream Analytics job"
 9. In the new panel, click **Inputs** and click **+** in the new panel. In the "New input" panel:
-    1. Enter **datagen** for  "Input alias"
+    1. Enter  **datagen** for  "Input alias"
     2. Choose **Data Stream** for "Source type"
     3. Choose **Event hub** for "Source"
     4. Leave subscription to the default
@@ -267,7 +267,7 @@ On the new expanded panel, click ***Event Hubs*** in the ***Entities*** listing.
     7. Choose **sendreceive** as "Event hub policy name"
     8. Level everything else as default and click **Create** at the bottom
 10. In the new panel, click **Outputs** and click **+** in the new panel. In the "New output" panel:
-    1. Enter **sqldw** for "Output alias"
+    1. Enter  **sqldw** for "Output alias"
     2. Choose **SQL database** for  "Sink"
     3. Leave subscription to the default
     4. choose your **unique string** for the "Database"
@@ -290,7 +290,8 @@ INTO
 FROM datagen;
 ```
   Click the **save** icon to save the query.
-  - **[Note]: The input alias and output alias are used in the query, and the selected column has name or alias exactly the same as in Activities table.**
+  **[Note]: The input alias and output alias are used in the query, and the selected column should have name or alias exactly the same as in Activities table.**
+
 12. Go back to the overview of the Stream analytics job, click **start** to start the Stream Analytics job. In the new panel, choose "Now" for the "Job output starttime" and click **Start** at the bottom.  
 
 ### Set up Azure Web Job/Data Generator
@@ -303,7 +304,8 @@ FROM datagen;
     2. Leave "subscription" and "Resource group" as the default
     3. Click **App Service Plan/Location** and in the new panel of ***App Service Plan***
         1. Click **Create New** and enter your unique string for the ***App Service Plan*** in the new panel
-        2. Click **OK** at the bottom of the panel
+        2. Choose the region where your resource group resides
+        3. Click **OK** at the bottom of the panel
 6. Click **Create** at the bottom
 7. Go back to your resource group until the Web App is created. You can check the notification. It takes around two minutes to create the web app.
 8. Refresh the resource listing in your resource group and select the web Service
@@ -316,16 +318,16 @@ FROM datagen;
       | **Azure App Service Settings** |             |
       |------------------------|---------------------|
       | Key                    | Value               |
-      | EventHubServiceNamespace |[unique]          |
+      | EventHubServiceNamespace |[unique string]          |
       | EventHub              |churn         |
       | EventHubServicePolicy              |sendreceive         |
-|    EventHubServiceKey           |[unique]            ||
+      |    EventHubServiceKey           |[unique string]            ||
 
   Click **save** and close the panel
 
 9. On the side panel, search "WebJobs" and click **WebJobs**
 10. Click **+** and in the new panel
-    1. Enter **eventhub15min** for "Name"
+    1. Enter **eventhub15min** for "Name". Space character is not allowed in the name.
     2. Select the downloaded [eventhub_15min.zip](resource/eventhub_15min.zip) for "File Upload". Click "Raw" on the github page to download the zip file.
     3. Choose **Triggered** for Type
     4. Choose **Manual** for "Trigger"  (Note: because the zip file has the scheduled setting file, we can use manual in this step for scheduled jobs)
@@ -340,9 +342,8 @@ you can check if the data is ingested into your data warehouse by using Visual S
 2. Click "View" in the menu
 3. Choose "SQL Server Object Explorer"
 4. Click "Add" icon to add the SQL server that's created in this solution
-5. Filling info on the dialogue as needed
-    1. Choose "SQL Server Authentication" for ***Authentication***
-    2. Choose the database you create in this solution, which has the same name as the unique string.
+5. Filling info on the dialogue as needed. Choose "SQL Server Authentication" for ***Authentication***
+6. After connecting to the server, expand the server,  in "Databases", choose the database you create in this solution, which has the same name as the unique string.
 6. Right click on the database, choose "New query"
 7. Run this query
 ```
@@ -362,12 +363,12 @@ Compare the value in the "SysTime" with the current UTC time. The difference sho
 7. Click ***Author and deploy*** on the new panel
 8. Create Linked services:
     1. Click **New Data Store**, choose ***Azure Storage***, replace the content in the editor with the content in [AzureStorageLinkedService.json](resource/AzureDataFactory/AzureStorageLinkedService.json) to the editor, replace "[unique]" with your unique string and "[Key]" with your storage key, and click the upper arrow button to  deploy it
-    2. Click **New Data Store**, choose ***Azure SQL Data Warehouse***, replace the content in the editor with    the content in [AzureSqlDWLinkedService.json](resource/AzureDataFactory/AzureSqlDWLinkedService.json) to the editor, replace "[unique]" with your unique string  and  "[User]" and "[password]" with their real value in this solution, and click the upper arrow button to  deploy it
+    2. Click **New Data Store**, choose ***Azure SQL Data Warehouse***, replace the content in the editor with    the content in [AzureSqlDWLinkedService.json](resource/AzureDataFactory/AzureSqlDWLinkedService.json) to the editor, replace "[unique]" with your unique string  and  "[User]" and "[password]" with their real value in this solution, and click the upper arrow button to  deploy it. Note that there are two instances of "[unique]".
     3.  Click **New Compute**, choose ***Azure ML***,  replace the content in the editor with  the content in [AzureMLLinkedService.json](resource/AzureDataFactory/AzureMLLinkedService.json) to the editor, replace  the content in "mlEndpoint" and "apikey" with  the real value in this solution, and click the upper arrow button to  deploy it. You can check the value from your memo in the Azure Machine learning Web service part.
 9. Create datasets
     1. Click **New Dataset**, choose ***Azure Blob Storage***, replace the content in the editor with the content in [AzureBlobDataset.json](resource/AzureDataFactory/AzureBlobDataset.json) to the editor, and click the upper arrow button to  deploy it
     1. Click **New Dataset**, choose ***Azure SQL Data Warehouse***, replace the content in the editor with the content in [AzureSqlDWInputUser.json](resource/AzureDataFactory/AzureSqlDWInputUser.json) to the editor, and click the upper arrow button to  deploy it
-    1. Click **New Dataset**, choose ***Azure SQL Data Warehouse***, replace the content in the editor with  the content in AzureSqlDWInputActivity.json(resource/AzureDataFactory/AzureSqlDWInputActivity.json) to the editor, and click the upper arrow button to  deploy it
+    1. Click **New Dataset**, choose ***Azure SQL Data Warehouse***, replace the content in the editor with  the content in [AzureSqlDWInputActivity.json](resource/AzureDataFactory/AzureSqlDWInputActivity.json) to the editor, and click the upper arrow button to  deploy it
     1. Click **New Dataset**, choose ***Azure SQL Data Warehouse***, replace the content in the editor with  the content  in [AzureSqlDWOutputPrediction.json](resource/AzureDataFactory/AzureSqlDWOutputPrediction.json) to the editor, and click the upper arrow button to  deploy it
 10. Create pipelines
     1. Right click **Drafts**, choose "New pipeline",
@@ -387,6 +388,10 @@ Compare the value in the "SysTime" with the current UTC time. The difference sho
     2. Right click **Drafts**, choose "New pipeline",
         1. Copy the content in [BlobToSqlDW.json](resource/AzureDataFactory/BlobToSqlDW.json) to the editor,
         2. Specify an active period that you want the pipeline to run. It should be the same as the MLPipeline
+        4.  start the pipeline by setting the value "isPaused" to "false"
+        ```
+        "isPaused": false
+        ```
         3. Click the upper arrow button to  deploy it
 
 
@@ -461,7 +466,7 @@ The default web service endpoint we deployed in the section of "Deploy Azure Mac
     3.  Click the upper arrow button to  deploy it
 4. Create/Update Linked services:
     1. Click **New Compute**, choose ***Azure ML***,  replay the content in the editor with  the content in [AzureMLLinkedServiceTraining.json](resource/AzureDataFactoryRetrain/AzureMLLinkedServiceTraining.json), replace  the content in "mlEndpoint" and "apikey" with  the real value in the "Train Machine learning Web Service" section of your memo , and click the upper arrow button to  deploy it. You can check the value from your memo in the Azure Machine learning Web service part.
-    2. Click **AzureMLLinkedService**, copy  the content in [AzureMLLinkedService.json](resource/AzureDataFactoryRetrain/AzureMLLinkedService.json) in the retrain folder  to the editor, replace  the content in "mlEndpoint" , "apikey" and "updateResourceEndpoint" with  the real value in the "Updatable Predictive Machine learning Web Service" section of your memo , and click the upper arrow button to  deploy it.
+    2. Click **AzureMLLinkedService**, remove the content in the editor, copy  the content in [AzureMLLinkedService.json](resource/AzureDataFactoryRetrain/AzureMLLinkedService.json) in the retrain folder  to the editor, replace  the content in "mlEndpoint" , "apikey" and "updateResourceEndpoint" with  the real value in the "Updatable Predictive Machine learning Web Service" section of your memo , and click the upper arrow button to  deploy it.
 5. Create datasets
     1.  Click **New Dataset**, choose ***Azure Blob Storage***, replace the content in the editor with the content in [TrainedModelBlob.json](resource/AzureDataFactoryRetrain/TrainedModelBlob.json) to the editor, and click the upper arrow button to  deploy it
     1.  Click **New Dataset**, choose ***Azure SQL Data Warehouse***, replace the content in the editor with the content in [AzureSqlDWInputUserRetrain.json](resource/AzureDataFactoryRetrain/AzureSqlDWInputUserRetrain.json) to the editor, and click the upper arrow button to  deploy it
@@ -484,8 +489,12 @@ The default web service endpoint we deployed in the section of "Deploy Azure Mac
 
     2. Right click **Drafts**, choose "New pipeline",
         1. Copy the content in [UpdatePipeline.json](resource/AzureDataFactoryRetrain/UpdatePipeline.json) to the editor,
-        2. Specify an active period that you want the pipeline to run. It should be the same as the MLPipeline
-        3. Click the upper arrow button to  deploy it
+        2. Specify an active period that you want the pipeline to run. It should be the same as the RetrainPipeline.
+        3.  Start the pipeline by setting the value "isPaused" to "false"
+        ```
+        "isPaused": false
+        ```
+        4. Click the upper arrow button to  deploy it
 7. Start MLPipeline
     1.  Click **MLPipeline** in the "Piepelines" list,
     2.  Start the pipeline by setting the value "isPaused" to "false"
