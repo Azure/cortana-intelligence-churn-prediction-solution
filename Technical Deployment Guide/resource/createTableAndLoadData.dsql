@@ -23,7 +23,7 @@ BEGIN
 END
 ELSE
 BEGIN
- PRINT 'Database Master Key Alread Exists'
+ PRINT 'Database Master Key Already Exists'
 END 
 
 
@@ -46,7 +46,7 @@ GO
 CREATE DATABASE SCOPED CREDENTIAL AzureStorageCredential
 WITH
 	IDENTITY = 'churn',
-	SECRET = '[replace with storage key]'
+	SECRET = '[storage primary access key]'
 ;
 GO
 
@@ -55,7 +55,7 @@ CREATE EXTERNAL DATA SOURCE AzureStorageHistoricalData
 WITH 
 (  
 	TYPE = Hadoop,
-	LOCATION = 'wasbs://data@[replace with storage account].blob.core.windows.net/',
+	LOCATION = 'wasbs://data@[unique].blob.core.windows.net/',
 	CREDENTIAL = AzureStorageCredential
 ); 
 GO
@@ -115,7 +115,7 @@ CREATE TABLE max_diff WITH (DISTRIBUTION = ROUND_ROBIN) AS
 	SELECT DATEADD(hh, DATEDIFF(hh, 0, max(TransactionTime))/24*24,0) maxTime,
 	DATEADD(hh, DATEDIFF(hh, 0, min(TransactionTime))/24*24,0) minTime,
 		   DATEADD(hh, DATEDIFF(hh,0,GETUTCDATE()) / 24 * 24, 0) currentTime
-   FROM dbo.extActivitiesint
+   FROM dbo.extActivities
 GO
    
 IF OBJECT_ID(N'dbo.Activities', 'U') IS NOT NULL

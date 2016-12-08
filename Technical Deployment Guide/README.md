@@ -124,8 +124,8 @@ These are the steps to get the access key that will be used in the SQL script to
 
 | **Azure Storage Account** |                     |
 |------------------------|---------------------|
-| Storage Account        |[unique string]|
-| Primary access key     |[key]             ||
+| Storage Account        |[unique]|
+| access key     |[key]             ||
 
 #### Create Containers and Upload Data to Azure Storage Account
 These are the steps for creating containers and uploading the data to Azure blob storage:
@@ -163,7 +163,7 @@ These are the steps for creating containers and uploading the data to Azure blob
 
 | **Azure SQL Data Warehouse** |                     |
 |------------------------|---------------------|
-| Server Name            |[unique string]|
+| Server Name            |[unique string].database.windows.net|
 | Database               |[unique string]|
 | User     |                     |
 | Password               |                     ||
