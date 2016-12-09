@@ -32,7 +32,7 @@
           }
         ],
         "policy": {
-          "timeout": "02:00:00",
+          "timeout": "00:50:00",
           "concurrency": 1,
           "executionPriorityOrder": "NewestFirst",
           "retry": 1
