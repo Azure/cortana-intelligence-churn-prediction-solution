@@ -374,10 +374,10 @@ Compare the value in the "SysTime" with the current UTC time. The difference sho
     1. Right click **Drafts**, choose "New pipeline",
         1. Copy the content in [MLPipeline.json](resource/AzureDataFactory/MLPipeline.json) to the editor,
         2. Replace "[unique]" with your unique string  and  "[User]" and "[password]" with their real value in this solution
-        3. Specify an active period that you want the pipeline to run.  Since the data passing through in 15 minutes represents a day's data, and   we have 60 days data in total, we needed only two-day period for the pipeline. An example is like:
+        3. Specify an active period that you want the pipeline to run.  Since the data passing through in 15 minutes represents a day's data, and   we have 60 days data in total, we needed only 15-hour period for the pipeline. You should use the current UTC time as the starttime. An example is like:
         ```
         "start": "2016-12-01T00:00:00Z",
-        "end": "2016-12-03T00:00:00Z",
+        "end": "2016-12-01T15:00:00Z",
         ```
         4.  start the pipeline by setting the value "isPaused" to "false"
         ```
@@ -458,7 +458,7 @@ The default web service endpoint we deployed in the section of "Deploy Azure Mac
 2. Click the data factory you created in this solution
 3. Click ***Author and deploy***
 3. Stop MLPipeline:
-    1.  Click **MLPipeline** in the "Piepelines" list,
+    1.  Click **MLPipeline** in the "Pipelines" list,
     2.  Start the pipeline by setting the value "isPaused" to "true"
     ```
     "isPaused": true
@@ -476,10 +476,10 @@ The default web service endpoint we deployed in the section of "Deploy Azure Mac
     1. Right click **Drafts**, choose "New pipeline",
         1. Copy the content in [RetrainPipeline.json](resource/AzureDataFactoryRetrain/RetrainPipeline.json) to the editor,
         2. Replace "[unique]" with your unique string (two instances of ""[unique]""),  "[User]" and "[password]" with their real value in this solution
-        3. Specify an active period that you want the pipeline to run.  Since the data passing through in 15 minutes represents a day's data, and  we have 60 days data in total, we needed only two-day period for the pipeline. You should set the start time a hour ahead of the current UTC time so that you can see this pipeline working immediately. If the current time is "2016-12-01T19:00:00Z",  An example is like:
+        3. Specify an active period that you want the pipeline to run.  Since the data passing through in 15 minutes represents a day's data, and  we have 60 days data in total, we needed only 15-hour period for the pipeline. You should use the current UTC time as the starttime. An example is like:
         ```
-        "start": "2016-12-01T18:00:00Z",
-        "end": "2016-12-03T18:00:00Z",
+        "start": "2016-12-01T00:00:00Z",
+        "end": "2016-12-01T15:00:00Z",
         ```
         4.  Start the pipeline by setting the value "isPaused" to "false"
         ```
