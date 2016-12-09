@@ -332,7 +332,7 @@ FROM datagen;
     3. Choose **Triggered** for Type
     4. Choose **Manual** for "Trigger"  (Note: because the zip file has the scheduled setting file, we can use manual in this step for scheduled jobs)
     5. Click **OK** at the bottom
-11. Select the job "eventhub15min" and **start** it. Wait until the job finishes.
+
 
 ### Check Data Ingest
 
