@@ -336,8 +336,9 @@ The data generator emits one day's transaction data every 15 minutes to reduce t
     4. Choose **Manual** for "Trigger"  (Note: because the zip file has the scheduled setting file, we can use manual in this step for scheduled jobs)
     5. Click **OK** at the bottom
 
+11. Select the job "eventhub15min" and **start** it. Wait until the job finishes.
 
-Note: at the first time of running , the data generator logs a start time based on which it determines what data will be emitted in a certain period. If data generator run twice within the one period, you will see duplication of the data in data warehouse. 
+
 
 ### Check Data Ingest
 
@@ -354,7 +355,7 @@ you can check if the data is ingested into your data warehouse by using Visual S
 ```
 select top 1 * from Activities order by timestamp desc
 ```
-Compare the value in the "SysTime" with the current UTC time.  Since the web job starts on 0, 15, 30, and 45 of each hour, you may not see any data ingested in. You can continue with the Azure Data Factory and come back here to check the data ingest.
+Compare the value in the "SysTime" with the current UTC time.  The difference should be no more than 15 minutes.
 
 ### Set up Azure Data Factory
 1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
