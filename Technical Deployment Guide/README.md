@@ -295,6 +295,9 @@ FROM datagen;
 12. Go back to the overview of the Stream analytics job, click **start** to start the Stream Analytics job. In the new panel, choose "Now" for the "Job output starttime" and click **Start** at the bottom.  
 
 ### Set up Azure Web Job/Data Generator
+
+The data generator emits one day's transaction data every 15 minutes to reduce the wait time to see the final results.
+
 1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
 2. In ***Overview*** panel, click **+** and enter **Web App** and hit "Enter" key to search
 3. Click **Web App** offered by Microsoft in "Web + Mobile" category
@@ -334,6 +337,8 @@ FROM datagen;
     5. Click **OK** at the bottom
 
 
+Note: at the first time of running , the data generator logs a start time based on which it determines what data will be emitted in a certain period. If data generator run twice within the one period, you will see duplication of the data in data warehouse. 
+
 ### Check Data Ingest
 
 you can check if the data is ingested into your data warehouse by using Visual Studio 2015 with SSDT to run testing queries.
@@ -347,9 +352,9 @@ you can check if the data is ingested into your data warehouse by using Visual S
 6. Right click on the database, choose "New query"
 7. Run this query
 ```
-select top 5 * from Activities order by timestamp desc
+select top 1 * from Activities order by timestamp desc
 ```
-Compare the value in the "SysTime" with the current UTC time. The difference should be no more than 15 minutes.
+Compare the value in the "SysTime" with the current UTC time.  Since the web job starts on 0, 15, 30, and 45 of each hour, you may not see any data ingested in. You can continue with the Azure Data Factory and come back here to check the data ingest.
 
 ### Set up Azure Data Factory
 1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
@@ -374,7 +379,7 @@ Compare the value in the "SysTime" with the current UTC time. The difference sho
     1. Right click **Drafts**, choose "New pipeline",
         1. Copy the content in [MLPipeline.json](resource/AzureDataFactory/MLPipeline.json) to the editor,
         2. Replace "[unique]" with your unique string  and  "[User]" and "[password]" with their real value in this solution
-        3. Specify an active period that you want the pipeline to run.  Since the data passing through in 15 minutes represents a day's data, and   we have 60 days data in total, we needed only 15-hour period for the pipeline. You should use the current UTC time as the starttime. An example is like:
+        3. Specify an active period that you want the pipeline to run.  Since the data passing through in 15 minutes represents a day's data, and we have 60 days data in total, we needed only 15-hour period for the pipeline. You should use the current UTC time as the starttime. An example is like:
         ```
         "start": "2016-12-01T00:00:00Z",
         "end": "2016-12-01T15:00:00Z",

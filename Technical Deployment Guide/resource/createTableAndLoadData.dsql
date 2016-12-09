@@ -128,12 +128,12 @@ CREATE TABLE dbo.Activities WITH (DISTRIBUTION = ROUND_ROBIN) AS
  SELECT 
  currentTime SysTime,
  TransactionId,
-  convert(datetime,DATEADD(hh, DATEDIFF(hh,minTime,currentTime )+ DATEDIFF(hh,maxTime,minTime)/2, TransactionTime),120) AS [Timestamp],
+  convert(datetime,DATEADD(hh, DATEDIFF(hh,minTime,currentTime )+ DATEDIFF(hh,maxTime,minTime)/2-12, TransactionTime),120) AS [Timestamp],
  UserId, 
  ItemId, 
  Quantity,
   Val as Value, ProductCategory, Location FROM dbo.extActivities, max_diff
- WHERE TransactionTime < DATEADD(hh,  DATEDIFF(hh,minTime,maxTime)/2, minTime)  
+ WHERE TransactionTime < DATEADD(hh,  DATEDIFF(hh,minTime,maxTime)/2+12, minTime)
  GO
 
 
