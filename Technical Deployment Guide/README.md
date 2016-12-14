@@ -253,7 +253,7 @@ On the new expanded panel, click ***Event Hubs*** in the ***Entities*** listing.
 2. In ***Overview*** panel, click **+** and enter **Stream Analytics job** and hit "Enter" key to search
 3. Click **Stream Analytics job** offered by Microsoft in "Internet of Things" category
 4. Click **Create** at the bottom of the description panel
-5. Enter **churn** in the "Job name"
+5. Enter your **unique string** in the "Job name"
 6. Click **Create** at the bottom
 7. Go back to your resource group and refresh the listing
 8. Click your **unique string** with the type "Stream Analytics job"
@@ -363,7 +363,7 @@ Compare the value in the "SysTime" with the current UTC time.  The difference sh
 3. Click **Data Factory** offered by Microsoft in "VM Extension" category
 4. Click **Create** at the bottom of the description panel
 5. In the new panel of "New data factory",
-    1. Enter **ddchurn1** for "Name"
+    1. Enter your **unique string** for "Name"
     2. Click **Create** at the bottom
 6. Go back to your resource group and select the data factory that's created through previous steps
 7. Click ***Author and deploy*** on the new panel
