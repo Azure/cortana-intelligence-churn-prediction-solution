@@ -123,7 +123,7 @@ These are the steps for creating containers and uploading the data to Azure Blob
 1. Repeat the last two steps for each of the remaining files:
     - [Activities.csv](resource/Activities.csv)
     - [age.csv](resource/age.csv)
-    - [region.csv](resource/region.csv).
+    - [region.csv](resource/region.csv)
 
 ### Create Azure SQL Data Warehouse
 1. Go to the [Azure Portal](https://ms.portal.azure.com) and navigate to the resource group you just deployed.
@@ -155,12 +155,6 @@ These are the steps for creating containers and uploading the data to Azure Blob
 | User     |                     |
 | Password               |                     ||
 
-
-### Load Historical Data into Azure SQL Data Warehouse
-1. Open the [createTableAndLoadData.dsql](resource/createTableAndLoadData.dsql) (in the resource folder of this git repository) in Visual Studio 2015 with SQL Server Data Tools (SSDT).
-2. Click the green button on the top-left core of the file window.  
-3. Input the corresponding info for this solution. Choose **SQL Server Authentication** for **Authentication**. Set the database name to the unique string you specified earlier.
-4. Wait until all the queries finish executing.
 
 ### Load Historical Data into Azure SQL Data Warehouse
 1. Open the [createTableAndLoadData.dsql](resource/createTableAndLoadData.dsql) (in the resource folder of this git repository) in Visual Studio 2015 with SQL Server Data Tools (SSDT).
@@ -236,14 +230,13 @@ These are the steps for creating containers and uploading the data to Azure Blob
 
 
 ### Create an Azure Stream Analytics Job
-1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
-2. In ***Overview*** panel, click **+** and enter **Stream Analytics job** and hit "Enter" key to search
-3. Click **Stream Analytics job** offered by Microsoft in "Internet of Things" category
-4. Click **Create** at the bottom of the description panel
-5. Enter your **unique string** in the "Job name"
-6. Click **Create** at the bottom
-7. Go back to your resource group and refresh the listing
-8. Click your **unique string** with the type "Stream Analytics job"
+1. Go to the [Azure Portal](https://ms.portal.azure.com) and navigate to your resource group.
+2. In ***Overview*** panel, click **+ Add** to add a new resource. Enter **Stream Analytics job** and hit "Enter" key to search.
+3. Click on **Stream Analytics job** offered by Microsoft in the "Internet of Things" category.
+4. Click **Create** at the bottom of the description panel.
+5. Enter your **unique string** in the "Job name" field.
+6. Click **Create** at the bottom.
+7. Return to your resource group and refresh the listing until your Stream Analytics job appears, indicating that deployment has finished. Click on the Stream Analytics job's name.
 9. In the new panel, click **Inputs** and click **+** in the new panel. In the "New input" panel:
     1. Enter  **datagen** for  "Input alias"
     2. Choose **Data Stream** for "Source type"
