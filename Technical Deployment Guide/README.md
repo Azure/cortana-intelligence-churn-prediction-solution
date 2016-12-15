@@ -13,48 +13,37 @@
 
 ## Introduction
 
-The objective of this tutorial is to demonstrate predictive data pipelines for retailer to predict customer churn.  By combining domain knowledge and predictive analytics, retailers can prevent customer churn by using the predictive result and proper marketing strategies.  It also shows  how retraining of a model works.
+The objective of this tutorial is to demonstrate predictive data pipelines for retailers to predict customer churn.  Retailers can use these predictions to prevent customer churn by using their domain knowledge and proper marketing strategies to address at-risk customers. This tutorial also shows how customer churn models can be retrained to leverage additional data as it becomes available.
 
-The end-to-end solution is implemented in the cloud, using Microsoft Azure. The solution is composed of several Azure components, including data ingest, data storage, data movement, advanced analytics and visualization. The advanced analytics is featured with Azure Machine Learning where you can use Python or R language to  build data science model and also reuse existing in-house or third-party libraries.  With data ingest, the solution can make prediction based on the data that moves in to azure from on-premises environment.
+The end-to-end solution is implemented in the cloud, using Microsoft Azure. The solution is composed of several Azure components, including data ingest, data storage, data movement, advanced analytics and visualization. The advanced analytics are implemented in Azure Machine Learning Studio, where one can use Python or R language to build data science models (or reuse existing in-house or third-party libraries).  With data ingest, the solution can make predictions based on data that being transferred to Azure from an on-premises environment.
 
-This deployment guide will guide you through the process of creating such a customer churn prediction solution. The tutorial will include:
+This deployment guide will walk you through the steps of creating a customer churn prediction solution, including:
 
-- The generation and ingestion of purchase transaction data using  Azure Event Hub and Azure Streaming Analytics.
-- The creation of an Azure SQL Data Warehouse (DW) to store large amount of transaction records in real time
-- Use of PolyBase to load on-premises data to Azure SQL DW
-- Using Azure Machine Learning (AML) to deploy prediction model as web services and run periodic prediction in Azure Data Factory (ADF)
-- Dashboard to display sales and customer churn data
-- Retaining of the machine learning model with new data
+- Generation and ingestion of purchase transaction data using Azure Event Hub and Azure Streaming Analytics
+- Creation of an Azure SQL Data Warehouse (DW) to store large volumes of transaction records in real time
+- Use of PolyBase to transfer on-premises data to Azure SQL DW
+- Use of Azure Machine Learning (AML) to deploy predictive models as web services and schedule periodic predictions via Azure Data Factory (ADF)
+- Creation of a dashboard to display sales and customer churn data
+- Retraining of the machine learning model with new data
 
 ## Prerequisites
 
-The steps described later in this guide  require the
-following prerequisites:
+The steps described later in this guide require the following prerequisites:
 
-1)  Azure subscription with login credentials
-    (https://azure.microsoft.com/en-us/)
-
-2)  Azure Machine learning Studio subscription
-    (https://azure.microsoft.com/en-us/services/machine-learning/)
-
-3)  A Microsoft Power BI account
-    (https://powerbi.microsoft.com/en-us/)
-
-4)  Power BI Desktop installation
-    (https://powerbi.microsoft.com/en-us/desktop/?gated=0&number=0)
-
+1)  An [Azure subscription](https://azure.microsoft.com/en-us/) with login credentials
+2)  A free [Azure Machine Learning Studio](https://azure.microsoft.com/en-us/services/machine-learning/) subscription
+3)  A [Microsoft Power BI](https://powerbi.microsoft.com/en-us/) account
+4)  An installed copy of [Power BI Desktop](https://powerbi.microsoft.com/en-us/desktop/?gated=0&number=0)
 5)  A local installation of <a href="https://azure.microsoft.com/en-us/documentation/articles/sql-data-warehouse-install-visual-studio/">Visual Studio with SQL Server Data Tools (SSDT)</a>
 
+## Architecture
 
-##Architecture
+Figure 1 illustrates the Azure architecture that we will create.
 
-
-Figure 1 illustrates the Azure architecture developed in this sample.
-
-![](media/architecture.png)
+![Figure 1: Architecture](media/architecture.png)
 Figure 1: Architecture
 
-The above figure is the implemented architecture. The historical data as text format will be loaded from Azure Blob Storage into Azure SQL DW though PolyBase.  The real-time event data will be ingested through Event Hub into Azure.  Azure Stream Analytics will store the data in Azure SQL DW. The prediction through AML runs in batch mode and is invoked by Azure Data Factory. AML will import data from Azure SQL DW and output the prediction to Azure Blob Storage. Through PolyBase, the prediction result can be loaded into Azure SQL DW efficiently and fast. Azure SQL DW serves the queries to populate the PowerBI dashboard. We use Azure Data Factory to orchestrate
+The historical data in text format will be loaded from Azure Blob Storage into Azure SQL DW though PolyBase.  The real-time event data will be ingested through Event Hub into Azure.  Azure Stream Analytics will store the data in Azure SQL DW. The prediction through AML runs in batch mode and is invoked by Azure Data Factory. AML will import data from Azure SQL DW and output the prediction to Azure Blob Storage. Through PolyBase, the prediction result can be loaded into Azure SQL DW efficiently and fast. Azure SQL DW serves the queries to populate the PowerBI dashboard. We use Azure Data Factory to orchestrate
 1) AML prediction
 2) Copy the prediction from Azure Blob Storage to  Azure SQL DW.
 
