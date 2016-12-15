@@ -43,46 +43,33 @@ Figure 1 illustrates the Azure architecture that we will create.
 ![Figure 1: Architecture](media/architecture.png)
 Figure 1: Architecture
 
-The historical data in text format will be loaded from Azure Blob Storage into Azure SQL DW though PolyBase.  The real-time event data will be ingested through Event Hub into Azure.  Azure Stream Analytics will store the data in Azure SQL DW. The prediction through AML runs in batch mode and is invoked by Azure Data Factory. AML will import data from Azure SQL DW and output the prediction to Azure Blob Storage. Through PolyBase, the prediction result can be loaded into Azure SQL DW efficiently and fast. Azure SQL DW serves the queries to populate the PowerBI dashboard. We use Azure Data Factory to orchestrate
-1) AML prediction
-2) Copy the prediction from Azure Blob Storage to  Azure SQL DW.
+The historical data (in text format) will be loaded from Azure Blob Storage into Azure SQL DW though PolyBase.  The real-time event data will be ingested into Azure through Event Hub into Azure; Azure Stream Analytics will then store the data in Azure SQL DW. Predictions from Azure Machine Learning models are performed in batches invoked by Azure Data Factory. AML will import data from Azure SQL DW and output the predictions to Azure Blob Storage. Through PolyBase, the prediction result can be loaded into Azure SQL DW quickly and efficiently. Azure SQL DW will serve the queries to populate the PowerBI dashboard. We will use Azure Data Factory to orchestrate:
+1) Generating the AML predictions, and 
+2) Copying the predictions from Azure Blob Storage to Azure SQL DW.
 
-The machine learning model here is used as an example experiment and it shows the general techniques of data science that can be used in customer churn prediction. You can use domain knowledge and combine the available datasets to build more advanced model to meet your business requirements.
+The machine learning model used here shows the general techniques of data science that can be used in customer churn prediction. You can use domain knowledge and combine the available datasets to build more advanced models to meet your business requirements.
 
- For the nature of the problem, customer behavior changes slowly and doesn’t require real-time or near real-time prediction in minute scale. Therefore, we use AML in batch mode.  We use Azure SQL DW for its scalability to query large amount of data, and its elasticity of starting small and scaling up as needed easily.  We chose to use PolyBase to load data into Azure SQL DW because of its high efficiency.
+Customer behavior changes slowly and doesn’t require real-time or near real-time prediction. Therefore, we use AML in batch mode.  We use Azure SQL DW for its scalability to query large databases, and its elasticity for easy scaling as needed.  We chose to use PolyBase to load data into Azure SQL DW because of its high efficiency.
 
-
-##Setup Steps
+## Setup Steps
 
 The following are the steps to deploy the end-to-end solution for the predictive pipelines.
 
-### Instruction for Finding Resource Groups
-
-Going back to your resource group is important over the course of deployment steps. Here is the how we can find the desired resource group:
-
- 1. Log into the Azure Management Portal https://ms.portal.azure.com
- 1. Click  **Resource groups** button on upper left
- 1. Choose the subscription your resource group resides in
- 1. Use keywords to search or directly select your resource group in the list of resource groups
- 1. You need to close the resource description page to add new resources
-
-
-
 ### Unique String
 
- You will need a unique string to identify your deployment because some Azure services, e.g. Azure Storage requires a unique name for each instance across the service. We suggest you use only letters and numbers in this string and the length should not be greater than 9.
- We suggest you use "[UI]churn[N]"  where [UI] is the user's initials,  N is a random integer that you choose and characters must be entered in in lowercase. Please open your memo file and write down "unique:[unique]" with "[unique]" replaced with your actual unique string.
+You will need a unique string to identify your deployment because some Azure services, e.g. Azure Storage requires a unique name for each instance across the service. We suggest you use only letters and numbers in this string and the length should not be greater than 9.
+ 
+We suggest you use "[UI]churn[N]"  where [UI] is the user's initials,  N is a random integer that you choose and characters must be entered in in lowercase. Please open your memo file and write down "unique:[unique]" with "[unique]" replaced with your actual unique string.
 
 ### Create an Azure Resource Group
 
-1. Log into the Azure Management Portal https://ms.portal.azure.com
-1. Click  **Resource groups** button on upper left, and then click **+** to add a resource group.
+1. Log into the [Azure Management Portal](https://ms.portal.azure.com).
+1. Click **Resource groups** button on upper left, and then click **+** button to add a resource group.
 1. Enter your **unique string** for the resource group and choose your subscription.
 1. For **Resource Group Location**, you should choose one of the following as they are the locations that support all the Azure services used in this guide:
   - South Central US
   - West Europe
   - Southeast Asia
-
 
 Please open your memo file and save the information in the form of the following table. Please replace the content in [] with its actual value.  
 
@@ -91,25 +78,36 @@ Please open your memo file and save the information in the form of the following
 | resource group name    |[unique]|
 | region              |[region]||
 
+### Instruction for Finding Your Resource Group Overfiew
+
+In this tutorial, all resources will be generated in the resource group you just created. You can easily access these resources by from the resource group overview, which can be accessed as follows:
+
+1. Log into the [Azure Management Portal](https://ms.portal.azure.com).
+1. Click the **Resource groups** button on the upper-left of the screen.
+1. Choose the subscription your resource group resides in.
+1. Search for (or directly select) your resource group in the list of resource groups.
+ 
+Note that you may need to close the resource description page to add new resources.
+
 In the following steps, if any entry or item is not mentioned in the instruction, please leave it as the default value.
 
-### Create Azure Storage Account
+### Create an Azure Storage Account
 
-1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
-2. In ***Overview*** panel, click **+** and enter **storage account** and hit "Enter" key to search
-3. Click **Storage account** offered by Microsoft in "Storage" category
-4. Click **Create** at the bottom of the description panel
+1. Go to the [Azure Portal](https://ms.portal.azure.com) and navigate to the resource group you just created.
+2. In ***Overview*** panel, click **+** to add a new resource. Enter **Storage Account** and hit "Enter" key to search.
+3. Click on **Storage Account** offered by Microsoft (in the "Storage" category).
+4. Click **Create** at the bottom of the description panel.
 5. Enter your **unique string** for "Name".
 6. Make sure the selected resource group is the one you just created. If not, choose the resource group you created for this solution.
-7. Leave everything else to use the default value
-8. Click **Create** at the bottom. The portal may lead you back to the storage account description panel. Close the panel and DO NOT click "Create".
-9. Go back to your resource group overview and wait until the storage account is created. To check if the resource is created or not, refresh the page or the list of the resources in the resource group as needed.
+7. Leave the default values for all other fields.
+8. Click the **Create** button at the bottom.
+9. Go back to your resource group overview and wait until the storage account is deployed. To check the deployment status, refresh the page or the list of the resources in the resource group as needed.
 
-#### Get the Primary Key of Azure Storage Account
+#### Get the Primary Key for the Azure Storage Account
 These are the steps to get the access key that will be used in the SQL script to load the data into Azure SQL DW:
 
-1. Click the created storage account and in the new panel click **Access keys**
-1. In the new panel, click the icon of "Click to copy" and paste the key in your memo
+1. Click the created storage account. In the new panel, click on **Access keys**.
+1. In the new panel, click the "Click to copy" icon next to `key1`, and paste the key into your memo.
 
 | **Azure Storage Account** |                     |
 |------------------------|---------------------|
@@ -117,14 +115,13 @@ These are the steps to get the access key that will be used in the SQL script to
 | access key     |[key]             ||
 
 #### Create Containers and Upload Data to Azure Storage Account
-These are the steps for creating containers and uploading the data to Azure blob storage:
+These are the steps for creating containers and uploading the data to Azure Blob Storage:
 
-1. Click **Containers** and on the new panel click **+** to add a containers
-1. Enter **data** for "Name" and click **Create** at the bottom
-1. Click the **data** container -> click "Upload" button on the top of the new panel
-1. Choose [Users.csv](resource/Users.csv) file that you can download from "resource" folder
-1. Click **Upload**
-1. Repeat the last two steps for [Actvities.csv](resource/Actvities.csv), [age.csv](resource/age.csv), [region.csv](resource/region.csv).
+1. Click on **Containers** in the left-hand sidebar. In the new panel, click **+ Container** to add a container.
+1. Enter **data** for "Name" and click **Create** at the bottom.
+1. Click on the name of the container **data**, then click the "Upload" button on the top of the new panel.
+1. Choose [Users.csv](resource/Users.csv) file that you can download from "resource" folder. Click **Upload**.
+1. Repeat the last two steps for [Activities.csv](resource/Activities.csv), [age.csv](resource/age.csv), [region.csv](resource/region.csv).
 
 
 
