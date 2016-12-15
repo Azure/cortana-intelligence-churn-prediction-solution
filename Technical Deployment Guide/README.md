@@ -403,23 +403,64 @@ Compare the value in the "SysTime" with the current UTC time.  The difference sh
 
 ## PowerBI Dashboard
 
-1. Download the Power BI Desktop application (https://powerbi.microsoft.com/en-us/desktop)
-2. Download the Power BI template file dashboard.pbix (Click Raw to start downloading) 3. and open it with Power BI application
-3. On the application ribbon menu, choose Edit Queries
-4. Go to Query Settings on the right panel, double click Source
-5. In the SQL Server Database dialog
-    1. Type: Server Name: [unique].database.windows.net
-    1. Type: Database Name: [unique]
-    1. Click: OK
-    1. Choose: Database for Authentication method
-    1. Input:  [user] and [password]
-    1. On the application ribbon menu, click "Close and Apply"
-6. Once data is loaded, On the application ribbon menu, click "Publish"
-7. When prompt with dialog windows, click "Save"
+Power BI is used to create visualizations for monitoring sales and predictions. It can also be used to help detect trend in important factors for predicting churn. The instructions that follow describe how you can use the provided Power BI desktop file (Customer-Churn-Report.pbix) to visualize your data. 
+
+- Download [Power BI Desktop application](https://powerbi.microsoft.com/en-us/desktop) and install it.
+- Download the Power BI template file Customer-Churn-Report.pbix by left-clicking on the file and clicking on "Download" on the page that follows.
+- Double click the downloaded ".pbix" file and it will be opened in Power BI Desktop.
+- The template file connects to a database used in development. You'll need to change some parameters so that it links to your own database. To do this, follow these steps:
+	- Click on "Edit Queries" as shown in the following figure. 
+[![Figure 1][pic 1]][pic 1] 
+
+	- Select a Query from the Queries panel (e.g., Age) and click on "Advanced Editors" as shown in the following figure.
+[![Figure 2][pic 2]][pic 2] 
+
+	- In the pop-up window for Advanced Editor, replace all values "dbchurn" with the name of your database, as shown in the following two figures which assumes that the name of the new database is "mydb." You should use the of name your own database. Click "Done" after making the changes. 
+[![Figure 3][pic 3]][pic 3] 
+[![Figure 4][pic 4]][pic 4] 
+
+	- With the same Query (e.g., Age) selected, click on "Edit Credentials" and enter your your credentials for accessing your database and click on "Connect" as shown in the following figure. 
+[![Figure 5][pic 5]][pic 5] 
+
+	- The data for your table should be displayed if the connection information was correct, as in the following figure.
+[![Figure 6][pic 6]][pic 6]
+
+	- Update the other Queries by replacing "dbchurn" with the name of your database. 
+	- Click on the "Close & Apply" ribbon after all Queries have been updated. You should now see multiple tabs in Power BI Desktop's report page. The "MyDashboard" tab combines the content from the "Activities" and "Predictions" tabs. The "Features" tab look at the important variables for predicting churn: days between transactions, region, and number of transactions.
+
+Now we can publish the report into Power BI online to allow easy sharing with others. Following the following steps to accomplish this: 
+ 
+- Click on "Publish" as shown below. Sign in with your Power BI credentials and choose a destination (e.g., My Workspace). 
+[![Figure 7][pic 7]][pic 7]
+
+- After it's successfully published you should see a window like the following. Click on "Got it."
+[![Figure 8][pic 8]][pic 8]
+
+- Sign into [Power BI](www.powerbi.microsoft.com) and click on the report "Customer-Churn-Report" under Reports to open it. 
+- We'll share the Dashboard tab from the report to create a dashboard. To do this, click on the "MyDashboard" tab and select "Pin Live Page" as shown in the following figure. 
+[![Figure 9][pic 9]][pic 9]
+- Pin the page to a new dashboard named "Customer Churn Dashboard" as shown in the following figure.
+
+[![Figure 10][pic 10]][pic 10]
+
+- Now you should see a new dashboard titled "Customer Churn Dashboard" under Dashboards group in Power BI online, which should look like the following figure.
+[![Figure 11][pic 11]][pic 11]
+
+[pic 1]: https://cloud.githubusercontent.com/assets/9322661/21234603/5c05440c-c2c1-11e6-9f2d-c93f2add350b.PNG
+[pic 2]: https://cloud.githubusercontent.com/assets/9322661/21234604/5c09ee62-c2c1-11e6-8f8a-2b17090ffe9a.PNG
+[pic 3]: https://cloud.githubusercontent.com/assets/9322661/21234609/5c0d783e-c2c1-11e6-8812-f69a85a909e5.PNG
+[pic 4]: https://cloud.githubusercontent.com/assets/9322661/21234605/5c0a1a0e-c2c1-11e6-809f-4b37ad48895c.PNG
+[pic 5]: https://cloud.githubusercontent.com/assets/9322661/21234606/5c0ad1d8-c2c1-11e6-90f7-ad1b7427971c.PNG
+[pic 6]: https://cloud.githubusercontent.com/assets/9322661/21234608/5c0b73d6-c2c1-11e6-90bf-15306fd84c60.PNG
+[pic 7]: https://cloud.githubusercontent.com/assets/9322661/21239433/e4142f76-c2d4-11e6-9b95-7a94136c5d01.PNG
+[pic 8]: https://cloud.githubusercontent.com/assets/9322661/21234610/5c108682-c2c1-11e6-9c04-6bc9e72ca182.PNG
+[pic 9]: https://cloud.githubusercontent.com/assets/9322661/21240779/bede1a0e-c2da-11e6-994b-cf5e16352bc5.PNG
+[pic 10]: https://cloud.githubusercontent.com/assets/9322661/21234612/5c1a6788-c2c1-11e6-9b4f-2409d2dc0e1b.PNG
+[pic 11]: https://cloud.githubusercontent.com/assets/9322661/21234611/5c18f510-c2c1-11e6-8dcb-b96929be517d.PNG
 
 If you reach here, you have a working solution that runs the customer churn prediction. Over the time, you might have accumulate customer transaction data that display a different buying behavior and therefore you need to retrain your model. The following steps show you how to set up a retrain pipeline which updates the model with new data every 1 hour.
 
-## Retain
+## Retrain
 
 ### Deploy Training Machine Learning Web Service
 1. Go to https://gallery.cortanaintelligence.com/Experiment/Retail-Churn-Train-1
@@ -465,7 +506,8 @@ The default web service endpoint we deployed in the section of "Deploy Azure Mac
 3. Click ***Author and deploy***
 3. Stop MLPipeline:
     1.  Click **MLPipeline** in the "Pipelines" list,
-    2.  Start the pipeline by setting the value "isPaused" to "true"
+    2.  Start the pipeline by setting the value "isPause
+    3.  d" to "true"
     ```
     "isPaused": true
     ```
