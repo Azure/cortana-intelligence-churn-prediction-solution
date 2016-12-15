@@ -162,69 +162,70 @@ These are the steps for creating containers and uploading the data to Azure Blob
 3. Input the corresponding info for this solution. Choose **SQL Server Authentication** for **Authentication**. Set the database name to the unique string you specified earlier.
 4. Wait until all the queries finish executing.
 
+### Load Historical Data into Azure SQL Data Warehouse
+1. Open the [createTableAndLoadData.dsql](resource/createTableAndLoadData.dsql) (in the resource folder of this git repository) in Visual Studio 2015 with SQL Server Data Tools (SSDT).
+2. Click the green button on the top-left core of the file window.  
+3. Input the corresponding info for this solution. Choose **SQL Server Authentication** for **Authentication**. Set the database name to the unique string you specified earlier.
+4. Wait until all the queries finish executing.
+
 ### Set up Azure Machine Learning
 
 #### Create Azure Machine Learning Workspace
 
-1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
-2. In ***Overview*** panel, click **+** and enter **Machine Learning Workspace** and hit "Enter" key to search
-3. Click **Machine Learning Workspace** offered by Microsoft in "Intelligence + analytics" category
-4. Click **Create** at the bottom of the description panel
-5. In the Machine Learning workspace panel,
-    1. Enter your **unique string** for "Workspace name"
-    2. Leave "subscription", "Resource group", and "Location" as the default
-    3. Choose **Use existing** for "Storage account" and select your unique string as the storage account.  
-    4. Choose **standard** for "Workspace pricing tier"
-    5. Choose **Create new** for "Web service plan"
-    6. Click on **Web service plan tier**, choose **S1 Standard** and click **Select** at the bottom
-    7. Click **Create** at the bottom
+1. Go to the [Azure Portal](https://ms.portal.azure.com) and navigate to the resource group you created.
+2. In ***Overview*** panel, click **+** to add a new resource. Enter **Machine Learning Workspace** and hit "Enter" key to search.
+3. Click on **Machine Learning Workspace** offered by Microsoft in the "Intelligence + analytics" category.
+4. Click the **Create** button at the bottom of the description panel.
+5. In the Machine Learning workspace panel:
+    1. Enter your **unique string** for "Workspace name".
+    2. Leave "Subscription", "Resource group", and "Location" as the default.
+    3. Choose **Use existing** for "Storage account" and select the storage account you created earlier.  
+    4. Choose **Standard** for "Workspace pricing tier".
+    5. Choose **Create new** for "Web service plan".
+    6. Click on **Web service plan tier**, choose **S1 Standard** and click **Select** at the bottom.
+    7. Click **Create** at the bottom.
 
 #### Deploy Azure Machine Learning Predictive Web Service
-1. Go to
-https://gallery.cortanaintelligence.com/Experiment/Retail-Churn-Predictive-Exp-1
-2. Click **Open in Studio** on the right. Login as needed.
-3. Choose the region and workspace. For region, you should choose the region that your resource group resides. You can get the information from table "Azure Resource Group".  For workspace, you should choose the workspace with the name the same as your unique string.
-4. Wait until the experiment is copied
-5. Input database information in the two **Import Data** modules at the top of the experiment. Select the module to change its parameters. You only need to change **Database server name**,**Database name**, **User name** and **Password**. Use the information you collected in the table  "Azure SQL Data Warehouse". Leave the query as it is
+1. Go to the [Retail Churn Predictive Experiment](https://gallery.cortanaintelligence.com/Experiment/Retail-Churn-Predictive-Exp-1) web page in the Cortana Intelligence Gallery.
+2. Click the **Open in Studio** button on the right. Log in if needed.
+3. Choose the region and workspace. For region, you should choose the region that your resource group resides. You can get the information from table "Azure Resource Group".  For workspace, choose the workspace you just created.
+4. Wait until the experiment is copied.
+5. Input database information in the two **Import Data** modules at the top of the experiment. Select the module to change its parameters. You only need to change **Database server name**,**Database name**, **User name** and **Password**. Use the information you collected in the table "Azure SQL Data Warehouse". Leave the query as it is.
 6. Click **Run** at the bottom of the page. It takes around three minutes to run the experiment.
-7. Click **Deploy Web Service**  at the bottom of the page,  choose **classic** web service, and click "Yes" to publish the web service. This will lead you to the web service page.  The web service home page can also be found by clicking the ***WEB SERVICES*** button on the left menu once you log in your workspace.
-8.  Copy the ***API key*** from the web service home page and save it to your memo
+7. Click **Deploy Web Service** at the bottom of the page, choose **classic** web service, and click "Yes" to publish the web service. This will lead you to the web service page.  The web service home page can also be found by clicking the ***WEB SERVICES*** button on the left-hand menu bar in your workspace.
+8. Copy the ***API key*** from the web service home page and save it in the memo table given below.
 9. Click the link ***BATCH EXECUTION*** under the ***API HELP PAGE*** section. On the BATCH EXECUTION help page, copy the
 ***Request URI*** under the ***Request*** section and add it to the table below as you will need this information later
-. Copy only the URI part https:… /jobs, ignoring the URI parameters starting with "?". Here is an example of what is should look like: https://ussouthcentral.services.azureml.net/workspaces/xxxx/services/xxxx/jobs
+. Copy only the URI part (`https:… /jobs`), ignoring the URI parameters starting with "?". Here is an example of what it should look like: `https://ussouthcentral.services.azureml.net/workspaces/xxxx/services/xxxx/jobs`
 
 |**Machine learning Web Service** |      |
 | --------------------------- |--------------------------:|
 | apiKey                     | [API key from API help page]|
-| mlEndpint              |        [Batch Request URI]                   ||
+| mlEndpoint              |        [Batch Request URI]                   ||
 
 ### Create an Azure Event Hub
-1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
-2. In "Overview" panel, click **+** and enter **Event Hubs** and hit "Enter" key to search
-3. Click **Event Hubs** offered by Microsoft in "Internet of Things" category
-4. Click **Create** at the bottom of the description panel
-5. In the new panel of "create namespace":
-  1. Enter your **unique string** for "Name"
-  2. Leave everything else as default
-6. Go back to your resource group overview
-7. Look into the ***Type*** and choose the one with type ***Event hubs***. Select the service bus namespace created through the previous steps. If the resource is not listed, wait until the resource is created.
-8. On the new expanded panel, click ***Event Hubs*** in the ***Entities*** listing.
-9. Click **+** to add an event hub
+1. Go to the [Azure Portal](https://ms.portal.azure.com) and navigate to your resource group.
+2. In "Overview" panel, click **+ Add** to add a new resource. Enter **Event Hubs** and hit "Enter" key to search.
+3. Click on **Event Hubs** offered by Microsoft in the "Internet of Things" category.
+4. Click **Create** at the bottom of the description panel.
+5. In the new panel for creating a namespace, enter your **unique string** for "Name". Leave the default values for all other fields.
+6. Return to your resource group's overview page. When it has finished deploying, click on the resource of type "Event hubs".
+9. Click the **+ Event Hub** button to add an event hub.
 10. In the new panel:
-    1. Enter **churn** for "Name"
-    2. Enter **4** for "Partition Count"
-    3. Enter **2** for "Message Retention"
-    4. Click **Create** at the bottom
-11. Go back to your resource group and look into the ***Type*** and choose the one with type ***Event hubs***. Select the service bus namespace created through the previous steps.
-On the new expanded panel, click ***Event Hubs*** in the ***Entities*** listing.
-12. Click event hub **churn** created through the previous steps. In the new panel
-    1. Click ***Shared access policies*** in the ***SETTING*** listing
-    2. In the new panel,  click **+** to add a new policy. In the new panel
-        1. Enter **sendreceive** for the "Policy name"
-        2. Check **Send** and **Listen**
-        3. Click **Create** at the bottom of the panel
-        4. Wait until the new policy is created and shown in the listing of "Shared access policies"
-        5. Click the policy **sendreceive**, and save "PRIMARY KEY"  to your memo
+    1. Enter **churn** for "Name".
+    2. Enter **4** for "Partition Count".
+    3. Enter **2** for "Message Retention".
+    4. Click **Create** at the bottom.
+11. Click on the ***Event Hubs*** option in the menu bar at left (under the "Entities" heading).
+12. Click on the event hub named **churn** created through the previous steps. In the new panel:
+    1. Click ***Shared access policies*** in the left-hand menu bar (under the ***SETTINGS*** heading).
+    2. In the new panel,  click **+ Add** to add a new policy.
+    3. In the new panel:
+        1. Enter **sendreceive** for the "Policy name".
+        2. Check **Send** and **Listen**.
+        3. Click **Create** at the bottom of the panel.
+        4. Wait until the new policy is created and shown in the listing of "Shared access policies".
+        5. Click the policy **sendreceive**, and save the "PRIMARY KEY" to the memo table given below.
 
 | **Azure Event Hub** |                        |
 |---------------------|------------------------|
