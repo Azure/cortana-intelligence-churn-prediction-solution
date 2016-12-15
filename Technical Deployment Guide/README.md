@@ -99,9 +99,8 @@ In the following steps, if any entry or item is not mentioned in the instruction
 4. Click **Create** at the bottom of the description panel.
 5. Enter your **unique string** for "Name".
 6. Make sure the selected resource group is the one you just created. If not, choose the resource group you created for this solution.
-7. Leave the default values for all other fields.
-8. Click the **Create** button at the bottom.
-9. Go back to your resource group overview and wait until the storage account is deployed. To check the deployment status, refresh the page or the list of the resources in the resource group as needed.
+7. Leaving the default values for all other fields, click the **Create** button at the bottom.
+8. Go back to your resource group overview and wait until the storage account is deployed. To check the deployment status, refresh the page or the list of the resources in the resource group as needed.
 
 #### Get the Primary Key for the Azure Storage Account
 These are the steps to get the access key that will be used in the SQL script to load the data into Azure SQL DW:
@@ -112,7 +111,7 @@ These are the steps to get the access key that will be used in the SQL script to
 | **Azure Storage Account** |                     |
 |------------------------|---------------------|
 | Storage Account        |[unique string]|
-| access key     |[key]             ||
+| Access Key     |[key]             ||
 
 #### Create Containers and Upload Data to Azure Storage Account
 These are the steps for creating containers and uploading the data to Azure Blob Storage:
@@ -120,32 +119,34 @@ These are the steps for creating containers and uploading the data to Azure Blob
 1. Click on **Containers** in the left-hand sidebar. In the new panel, click **+ Container** to add a container.
 1. Enter **data** for "Name" and click **Create** at the bottom.
 1. Click on the name of the container **data**, then click the "Upload" button on the top of the new panel.
-1. Choose [Users.csv](resource/Users.csv) file that you can download from "resource" folder. Click **Upload**.
-1. Repeat the last two steps for [Activities.csv](resource/Activities.csv), [age.csv](resource/age.csv), [region.csv](resource/region.csv).
-
-
+1. Choose the [Users.csv](resource/Users.csv) file that you obtained from the "resource" folder of this git repository. Click **Upload**.
+1. Repeat the last two steps for each of the remaining files:
+    - [Activities.csv](resource/Activities.csv)
+    - [age.csv](resource/age.csv)
+    - [region.csv](resource/region.csv).
 
 ### Create Azure SQL Data Warehouse
-1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
-2. In ***Overview*** panel, click **+** and enter **SQL Data Warehouse** and hit "Enter" key to search
-3. Click **SQL Data Warehouse** offered by Microsoft in "Databases" category
-4. Click **Create** at the bottom of the description panel
-5. Enter your **unique string** for "Database Name"
+1. Go to the [Azure Portal](https://ms.portal.azure.com) and navigate to the resource group you just deployed.
+2. In the ***Overview*** panel, click **+** to add a new resource. Enter **SQL Data Warehouse** and hit "Enter" key to search.
+3. Click on the **SQL Data Warehouse** option offered by Microsoft in the "Databases" category.
+4. Click **Create** at the bottom of the description panel.
+5. Enter your **unique string** for "Database Name".
 6. Make sure the selected resource group is the one you just created. If not, choose the resource group you created for this solution.
-7. Leave **Select source** as the default value "Blank database"
-7. Click **Server**. In the new panel, click  **Create a new server**
-8. In the new panel for "New Server"
-    1. Enter **unique string** for "Server name"
-    2. Use **azureadmin** or any of your preferred admin name. Please write it down in your memo: [User]:[the value you entered]
-    3. Use **pass@word1**  or any of your preferred password. Please write it down in your memo: [Password]:[the value you entered]
-    4. Click **Create**
+7. Leave **Select source** as the default value, "Blank database".
+7. Click **Server**. In the new panel, click **Create a new server**.
+8. In the "New Server" panel:
+    1. Enter **unique string** for "Server name".
+    2. Use **azureadmin** (or your own preferred username) as the admin username. Record the username in the memo table given below.
+    3. Use **pass@word1** (or your own preferred password) as the password. Record the password in the memo table given below.
+    4. Click **Create**.
 8. Adjust Performance to **300** DWU by dragging the sliding bar to the left. See  [Manage compute power in Azure SQL Data Warehouse (Overview)](https://docs.microsoft.com/en-us/azure/sql-data-warehouse/sql-data-warehouse-manage-compute-overview) for more information about DWU.
-9. Click **Create** at the bottom. The portal may lead you back to the SQL Data Warehouse description panel. Close the panel and DO NOT click "Create".
-9. Go back to your resource group overview and wait until the resource is created.  To check if the resource is created or not, refresh the page or the list of the resources in the resource group as needed.
+9. Click **Create** at the bottom.
+9. Navigate to your resource group overview and wait until the resource is deployed. To check whether the resource is ready, refresh the page or the list of the resources in the resource group as needed until the resource name appears.
 10. In the list of resources, click on the SQL Server that was just created.
-11. Under ***Settings*** for the new server, click ***Firewall*** and create a rule called ***open*** with the IP range of **0.0.0.0** to **255.255.255.255**. This will allow you to access the database from your desktop. Click ***Save*** at the top of the panel.
+11. Under ***Settings*** for the new server, click ***Firewall***.
+12. Create a rule called ***open*** with the IP range of **0.0.0.0** to **255.255.255.255**. This will allow you to access the database from your desktop. Click ***Save*** at the top of the panel.
 
-    **[Note]: This firewall rule is not recommended for production level systems but for this demo it is acceptable. You will want to change this rule to only allow the IPs with trust.**
+    **[Note]: This firewall rule is not recommended for production-level systems, but for this demo, it is acceptable. You may change this rule to only allow connections from IP addresses that you trust.**
 
 | **Azure SQL Data Warehouse** |                     |
 |------------------------|---------------------|
@@ -156,11 +157,10 @@ These are the steps for creating containers and uploading the data to Azure Blob
 
 
 ### Load Historical Data into Azure SQL Data Warehouse
-1. Open the [createTableAndLoadData.dsql](resource/createTableAndLoadData.dsql) in the resources in Visual Studio 2015 with SQL Server Data Tools (SSDT)
+1. Open the [createTableAndLoadData.dsql](resource/createTableAndLoadData.dsql) (in the resource folder of this git repository) in Visual Studio 2015 with SQL Server Data Tools (SSDT).
 2. Click the green button on the top-left core of the file window.  
-3. Input the corresponding info for this solution. Choose **SQL Server Authentication** for **Authentication**. Choose the database with name of the unique string you specified earlier.
-4. Wait until all the queries finishes.
-
+3. Input the corresponding info for this solution. Choose **SQL Server Authentication** for **Authentication**. Set the database name to the unique string you specified earlier.
+4. Wait until all the queries finish executing.
 
 ### Set up Azure Machine Learning
 
