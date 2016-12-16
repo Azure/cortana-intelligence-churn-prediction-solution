@@ -7,6 +7,7 @@
 - [Prerequisites](#prerequisites)
 - [Architecture](#architecture)
 - [Setup Steps](#setup-steps)
+   - [General](#setup-steps)
    - [Azure Storage](#storage)
    - [Azure SQL Data Warehouse](#dw)
    - [Azure Machine Learning](#aml)
@@ -438,14 +439,13 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
 	4. Set the value "isPaused" to "false".
         5. Click the up arrow button to deploy the pipeline.
 
-
+<a name="pbilocal"></a>
 ## PowerBI Dashboard
 
 Power BI is used to create visualizations for monitoring sales and predictions. It can also be used to help detect trends in important factors for predicting churn. The instructions that follow describe how you can use the provided Power BI desktop file (Customer-Churn-Report.pbix) to visualize your data. 
 
-<a name="pbilocal"></a>
 1. If you have not already done so, download and install the [Power BI Desktop application](https://powerbi.microsoft.com/en-us/desktop).
-1, Download the Power BI template file `Customer-Churn-Report.pbix` (available in the `Power BI` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)) by left-clicking on the file and clicking on "Download" on the page that follows.
+1. Download the Power BI template file `Customer-Churn-Report.pbix` (available in the `Power BI` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)) by left-clicking on the file and clicking on "Download" on the page that follows.
 1. Double click the downloaded ".pbix" file to open it in Power BI Desktop.
 1. The template file connects to a database used in development. You'll need to change some parameters so that it links to your own database. To do this, follow these steps:
     1. Click on "Edit Queries" as shown in the following figure.
