@@ -372,7 +372,7 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
 9. Create the datasets:
     1. Create the Azure Blob Storage dataset:
          1. Click **New Dataset** and choose ***Azure Blob Storage***.
-	 2. Replace the content in the editor with the content in [AzureBlobDataset.json](resource/AzureDataFactory/AzureBlobDataset.json) (available in the resources folder of this git repository).
+         2. Replace the content in the editor with the content in [AzureBlobDataset.json](resource/AzureDataFactory/AzureBlobDataset.json) (available in the resources folder of this git repository).
          3. Click the up arrow button to deploy the dataset.
     1. Create the user dataset:
          1. Click **New Dataset** and choose ***Azure SQL Data Warehouse***.
@@ -392,13 +392,16 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
         2. Copy the content in [MLPipeline.json](resource/AzureDataFactory/MLPipeline.json) (available in the resources folder of this git repository) to the editor.
         3. Replace "[unique]" with your unique string and  "[User]" and "[password]" with the values chosen earlier (recorded in the Azure SQL Data Warehouse memo table).
         4. Specify an active period for the pipeline. You should use the current UTC time as the start time. Our data-generating web job will create data every 15 minutes for up to 15 hours, so it is not necessary to choose a duration longer than fifteen hours. As an example, if the current UTC time were midnight on December 1, 2016, one would enter:
-	
+	    ````
             "start": "2016-12-01T00:00:00Z",
             "end": "2016-12-01T15:00:00Z",
+	    ```
 	    
         5.  Set the value "isPaused" to "false":
 	
-            "isPaused": false
+            ```
+	    "isPaused": false
+	    ```
 	    
         6.  Click the up arrow button to deploy the pipeline.
 
