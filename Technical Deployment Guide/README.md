@@ -562,7 +562,7 @@ The default web service endpoint we deployed in the section of "Deploy Azure Mac
         1. Click the up arrow button to deploy the dataset.
     1. Create the Placeholder Retrain dataset:
         1. Click **New Dataset** and choose ***Azure Blob Storage***.
-	1. Replace the default content in the editor with the content in [PlaceHolderRetrain.json](resource/AzureDataFactoryRetrain/PlaceHolderRetrain.json) (available in the `resource/AzureDataFactoryRetrain` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
+        1. Replace the default content in the editor with the content in [PlaceHolderRetrain.json](resource/AzureDataFactoryRetrain/PlaceHolderRetrain.json) (available in the `resource/AzureDataFactoryRetrain` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
         1. Click the up arrow button to deploy the dataset.
 6. Create pipelines
     1. Create the retraining pipeline:
@@ -574,6 +574,7 @@ The default web service endpoint we deployed in the section of "Deploy Azure Mac
         "start": "2016-12-01T00:00:00Z",
         "end": "2016-12-01T15:00:00Z",
         ```
+	
         4.  Set the value of "isPaused" to "false":
             ```
             "isPaused": false
