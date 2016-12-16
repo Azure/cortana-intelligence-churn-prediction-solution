@@ -488,15 +488,15 @@ At this point, you have a working solution that runs the customer churn predicti
 
 ## Retrain the Predictive Model
 
-### Deploy Training Machine Learning Web Service
+### Deploy the Training Machine Learning Web Service
 1. Go to https://gallery.cortanaintelligence.com/Experiment/Retail-Churn-Train-1
 2. Click ***Open in Studio*** on the right. Log in if needed.
 3. Choose the region and workspace where the experiment should be copied. Choose the region where your resource group resides and the Azure ML workspace you created earlier. Wait until the experiment is copied.
 5. Add your database information in the two **Import Data** modules. You only need to change "Database server name", "Database name", "User name", and "Password". Use the information you collected in the "Azure SQL Data Warehouse" memo table. Leave the query as it is.
 6. Click **Run** at the bottom of the page. It takes around three minutes to run the experiment.
-7. Click **Deploy Web Service** at the bottom of the page, choose classic web service, and click "Yes" to publish the web service. This will lead you to the web service page. The web service page can also be found by clicking the WEB SERVICES button on the left menu once logged into your workspace.
+7. Click **Deploy Web Service** at the bottom of the page, choose a classic web service, and click "Yes" to publish the web service. This will lead you to the web service page. The web service page can also be found by clicking the WEB SERVICES button on the left menu once logged into your workspace.
 8. Copy the API key from the web service home page and save it to the memo table given below.
-9. Click the ***BATCH EXECUTION*** link under the ***API HELP PAGE section***. On the BATCH EXECUTION help page, copy the Request URI under the Request section and add it to the table below as you will need this information later. Copy only the URI part https:… /jobs, ignoring the URI parameters starting with ? .
+9. Click the ***BATCH EXECUTION*** link under the ***API HELP PAGE section***. On the BATCH EXECUTION help page, copy the Request URI under the Request section and add it to the table below as you will need this information later. Copy only the URI part (`https:… /jobs`), ignoring the URI parameters starting with a question mark (`?`).
 
   | **Train Machine Learning Web Service** |                           |
   | --------------------------- |--------------------------|
@@ -504,11 +504,12 @@ At this point, you have a working solution that runs the customer churn predicti
   | mlEndpint              |        [Batch Request URI]                   ||
 
 
-### Create Updatable Predictive Machine Learning Web Service
+### Modify the Predictive Machine Learning Web Service to allow updates
 The default web service endpoint we deployed in the section of "Deploy Azure Machine Learning Predictive Web Service" is associated with the experiment itself. In order to have a updatable endpoint, we need to create an additional service endpoint.
 
 1. Go to https://studio.azureml.net, and choose workspace with the name of your unique string. You can change the workspace by clicking drop-down list on the top right of the web page.
-2. On the left side, choose **Web Service** and click the service that you deployed in the section "Deploy Azure Machine Learning Predictive Web Service" with name "Retail Churn [Predictive Exp.]".
+2. On the left sidebar, navigate to the **Web Services** page by clicking the globe icon.
+3. Click on "Retail Churn [Predictive Exp.]" (the first web service that you deployed in this tutorial).
 3. Click ***Manage endpoints*** at the bottom of the page in the "Additional endpoints" section.
 4. On the newly loaded page, click **+New**.
     1. Enter **update** for "Name".
@@ -516,7 +517,7 @@ The default web service endpoint we deployed in the section of "Deploy Azure Mac
     3. Click **Save**.
 5. After the endpoint is created, click the "update" service endpoint.
     1. Click ***Use endpoint*** under the **BASICS** picture. Record the "**Primary key**", "**Batch requests**" (only need to copy up to "jobs") and "**Patch**" in the memo table given below.
-    2. Click ***API help*** under ***Patch*** URI, in the new page. Record the **Resource Name** in the ***Updatable Resources*** section to the memo table below. (The resource name starts with "Retail Churn Template".) This name will be used in an Azure Data Factory pipeline to update the model. An example pipeline can be found in the ([AzureMLLinkedService.json](resource/AzureDataFactoryRetrain/AzureMLLinkedService.json)) file in the resource/AzureDataFactoryRetrain folder of the git repository.
+    2. Click on the ***API help*** link under the ***Patch*** URI. Record the **Resource Name** in the ***Updatable Resources*** section to the memo table below. (The resource name starts with "Retail Churn Template".) This name will be used in an Azure Data Factory pipeline to update the model.
 
     | **Updatable Predictive Machine Learning Web Service** |                           |
     | --------------------------- |--------------------------:|
