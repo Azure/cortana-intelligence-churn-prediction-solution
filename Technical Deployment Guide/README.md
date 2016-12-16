@@ -446,12 +446,15 @@ Power BI is used to create visualizations for monitoring sales and predictions. 
         [![Figure 5][pic 5]][pic 5] 
 
     1. The data for your table should be displayed if the connection information was correct, as in the following figure.
-[![Figure 6][pic 6]][pic 6]
 
-	- Update the other Queries by replacing "dbchurn" with the name of your database. 
-	- Click on the "Close & Apply" ribbon after all Queries have been updated. You should now see multiple tabs in Power BI Desktop's report page. The "MyDashboard" tab combines the content from the "Activities" and "Predictions" tabs. The "Features" tab look at the important variables for predicting churn: days between transactions, region, and number of transactions.
+        [![Figure 6][pic 6]][pic 6]
 
-Now we can publish the report into Power BI online to allow easy sharing with others. Following the following steps to accomplish this: 
+    1. Update the other Queries by replacing "dbchurn" with the name of your database. 
+    1. Click on the "Close & Apply" ribbon after all Queries have been updated.
+    
+You should now see multiple tabs in Power BI Desktop's report page. The "MyDashboard" tab combines the content from the "Activities" and "Predictions" tabs. The "Features" tab displays the important variables for predicting churn: days between transactions, region, and number of transactions.
+
+Now we can publish the report into Power BI online to allow easy sharing with others: 
  
 - Click on "Publish" as shown below. Sign in with your Power BI credentials and choose a destination (e.g., My Workspace). 
 [![Figure 7][pic 7]][pic 7]
