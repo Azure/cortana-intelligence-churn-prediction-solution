@@ -20,8 +20,6 @@
    - [Publishing](#pbipublish)
 - [Retrain the Predictive Model](#retrain)
    - [Azure Machine Learning](#amlupdates)
-      - [Deploy the Training Web Service](#retrainingwebservice)
-      - [Modify the Predictive Web Service to allow updates](#updatablewebservice)
    - [Azure Data Factory](#adfmodifications)
 
 
