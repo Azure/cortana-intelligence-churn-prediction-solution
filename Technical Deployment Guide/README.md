@@ -179,8 +179,8 @@ These are the steps for creating containers and uploading the data to Azure Blob
 ### Load Historical Data into Azure SQL Data Warehouse
 1. Open the [createTableAndLoadData.dsql](resource/createTableAndLoadData.dsql) (available in the resource folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)) in Visual Studio 2015 with SQL Server Data Tools (SSDT).
 2. Modify the query by inserting your Azure Storage account name and access key (recorded earlier in your memo table) for the IDENTITY and SECRET values on lines 48 and 49. On line 58, type your Azure Storage account name in place of "[unique]" in the LOCATION value.
-2. Click the green button on the top-left core of the file window.  
-3. Input the corresponding info for this solution. Choose **SQL Server Authentication** for **Authentication**. Set the database name to the unique string you specified earlier.
+2. Click the green button on the top-left corner of the file window to execute the query.
+3. You will be prompted for the server name, database name, and login credentials: use the values stored in your SQL DW memo table. Choose **SQL Server Authentication** for **Authentication**.
 4. Wait until all the queries finish executing.
 
 <a name="aml"></a>
