@@ -355,10 +355,10 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
 7. Click on ***Author and deploy*** in the new panel.
 8. Create Linked services:
     1. Create the Azure Storage Linked service:
-        1. Click **New Data Store** and choose **Azure Storage**.
-	1. Replace the content in the editor with the content in [AzureStorageLinkedService.json](resource/AzureDataFactory/AzureStorageLinkedService.json) (available in the resources folder of this git repository).
-	1. Replace "[unique]" with your unique string and "[Key]" with your storage key.
-	1. Click the up arrow button to deploy this linked service.
+         1. Click **New Data Store** and choose **Azure Storage**.
+	 2. Replace the content in the editor with the content in [AzureStorageLinkedService.json](resource/AzureDataFactory/AzureStorageLinkedService.json) (available in the resources folder of this git repository).
+	 3. Replace "[unique]" with your unique string and "[Key]" with your storage key.
+	 4. Click the up arrow button to deploy this linked service.
     2. Create the Azure SQL DW Linked service:
         1. Click **New Data Store** and choose **Azure SQL Data Warehouse**.
 	1. Replace the content in the editor with the content in [AzureSqlDWLinkedService.json](resource/AzureDataFactory/AzureSqlDWLinkedService.json) (available in the resources folder of this git repository).
