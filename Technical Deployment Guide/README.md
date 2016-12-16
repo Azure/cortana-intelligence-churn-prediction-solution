@@ -7,8 +7,21 @@
 - [Prerequisites](#prerequisites)
 - [Architecture](#architecture)
 - [Setup Steps](#setup-steps)
+   - [Azure Storage](#storage)
+   - [Azure SQL Data Warehouse](#dw)
+   - [Azure Machine Learning](#aml)
+   - [Azure Event Hubs](#eventhub)
+   - [Azure Stream Analytics](#asa)
+   - [Azure Web App](#webapp)
+   - [Azure Data Factory](#adf)
 - [PowerBI Dashboard](#powerbi-dashboard)
-- [Retrain](#retrain)
+   - [Local setup](#pbilocal)
+   - [Publishing](#pbipublish)
+- [Retrain the Predictive Model](#retrain)
+   - [Azure Machine Learning](#amlupdates)
+      - [Deploy the Training Web Service](#retrainingwebservice)
+      - [Modify the Predictive Web Service to allow updates](#updatablewebservice)
+   - [Azure Data Factory](#adfmodifications)
 
 
 ## Introduction
@@ -97,6 +110,7 @@ Note that you may need to close the resource description page to add new resourc
 
 In the following steps, if any entry or item is not mentioned in the instruction, please leave it as the default value.
 
+<a name="storage"></a>
 ### Create an Azure Storage Account
 
 1. Go to the [Azure Portal](https://ms.portal.azure.com) and navigate to the resource group you just created.
@@ -131,6 +145,7 @@ These are the steps for creating containers and uploading the data to Azure Blob
     - [age.csv](resource/age.csv)
     - [region.csv](resource/region.csv)
 
+<a name="dw"></a>
 ### Create Azure SQL Data Warehouse
 1. Go to the [Azure Portal](https://ms.portal.azure.com) and navigate to the resource group you just deployed.
 2. In the ***Overview*** panel, click **+** to add a new resource. Enter **SQL Data Warehouse** and hit "Enter" key to search.
@@ -169,6 +184,7 @@ These are the steps for creating containers and uploading the data to Azure Blob
 3. Input the corresponding info for this solution. Choose **SQL Server Authentication** for **Authentication**. Set the database name to the unique string you specified earlier.
 4. Wait until all the queries finish executing.
 
+<a name="aml"></a>
 ### Set up Azure Machine Learning
 
 #### Create Azure Machine Learning Workspace
@@ -204,6 +220,7 @@ These are the steps for creating containers and uploading the data to Azure Blob
 | apiKey                     | [API key from API help page]|
 | mlEndpoint              |        [Batch Request URI]                   ||
 
+<a name="eventhub"></a>
 ### Create an Azure Event Hub
 1. Go to the [Azure Portal](https://ms.portal.azure.com) and navigate to your resource group.
 2. In "Overview" panel, click **+ Add** to add a new resource. Type **Event Hubs** and hit "Enter" key to search.
@@ -236,7 +253,7 @@ These are the steps for creating containers and uploading the data to Azure Blob
 | EventHubServicePolicy  |     sendreceive                 |
 | EventHubServiceKey       |  [PrimaryKey]     ||
 
-
+<a name="asa"></a>
 ### Create an Azure Stream Analytics Job
 1. Go to the [Azure Portal](https://ms.portal.azure.com) and navigate to your resource group.
 2. In ***Overview*** panel, click **+ Add** to add a new resource. Enter **Stream Analytics job** and hit "Enter" key to search.
@@ -287,6 +304,7 @@ These are the steps for creating containers and uploading the data to Azure Blob
 13. In the new panel, choose "Now" for the "Job output start time".
 14. Click the **Start** button at the bottom.  
 
+<a name="webapp"></a>
 ### Set up Azure Web Job/Data Generator
 
 The data generator emits one day's transaction data every 15 minutes to reduce the wait time for viewing results in this demo.
@@ -349,6 +367,7 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
     
 8. Compare the value in the "SysTime" with the current UTC time.  The difference should be no more than 15 minutes.
 
+<a name="adf"></a>
 ### Set up Azure Data Factory
 1. Go to the [Azure Portal](https://ms.portal.azure.com) and navigate to your resource group.
 2. In ***Overview*** panel, click **+ Add** to add a new resource. Type **Data Factory** and hit "Enter" key to search.
@@ -424,6 +443,7 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
 
 Power BI is used to create visualizations for monitoring sales and predictions. It can also be used to help detect trends in important factors for predicting churn. The instructions that follow describe how you can use the provided Power BI desktop file (Customer-Churn-Report.pbix) to visualize your data. 
 
+<a name="pbilocal"></a>
 1. If you have not already done so, download and install the [Power BI Desktop application](https://powerbi.microsoft.com/en-us/desktop).
 1, Download the Power BI template file `Customer-Churn-Report.pbix` (available in the `Power BI` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)) by left-clicking on the file and clicking on "Download" on the page that follows.
 1. Double click the downloaded ".pbix" file to open it in Power BI Desktop.
@@ -454,6 +474,7 @@ Power BI is used to create visualizations for monitoring sales and predictions. 
     
 You should now see multiple tabs in Power BI Desktop's report page. The "MyDashboard" tab combines the content from the "Activities" and "Predictions" tabs. The "Features" tab displays the important variables for predicting churn: days between transactions, region, and number of transactions.
 
+<a name="pbipublish"></a>
 Now we can publish the report into Power BI online to easily share with others: 
  
 1. Click on "Publish" as shown below. Sign in with your Power BI credentials and choose a destination (e.g., My Workspace). 
@@ -486,9 +507,12 @@ Now you should see a new dashboard titled "Customer Churn Dashboard" under the D
 
 At this point, you have a working solution that runs the customer churn prediction. Customer behavior patterns may change over time;   prediction accuracy can then be improved by retraining the model. The following steps show how to set up a retraining pipeline which updates the model using new data every 1 hour.
 
+<a name="retrain"></a>
 ## Retrain the Predictive Model
 
-### Deploy the Training Machine Learning Web Service
+<a name="amlupdates"></a>
+<a name="trainingwebservice"></a>
+### Deploy the Training Web Service
 1. Go to https://gallery.cortanaintelligence.com/Experiment/Retail-Churn-Train-1
 2. Click ***Open in Studio*** on the right. Log in if needed.
 3. Choose the region and workspace where the experiment should be copied. Choose the region where your resource group resides and the Azure ML workspace you created earlier. Wait until the experiment is copied.
@@ -504,7 +528,8 @@ At this point, you have a working solution that runs the customer churn predicti
   | mlEndpint              |        [Batch Request URI]                   ||
 
 
-### Modify the Predictive Machine Learning Web Service to allow updates
+<a name="updatablewebservice"></a>
+### Modify the Predictive Web Service to allow updates
 The default web service endpoint we deployed in the section of "Deploy Azure Machine Learning Predictive Web Service" is associated with the experiment itself. In order to have a updatable endpoint, we need to create an additional service endpoint.
 
 1. Go to https://studio.azureml.net, and choose workspace with the name of your unique string. You can change the workspace by clicking drop-down list on the top right of the web page.
@@ -526,6 +551,7 @@ The default web service endpoint we deployed in the section of "Deploy Azure Mac
     | updateResourceEndpoint |   [Patch URI]|
     | trainedModelName | [Resource Name]|
 
+<a name="adfmodifications"></a>
 ### Modify the Azure Data Factory For Retraining and Updating
 1. Go to the [Azure Portal](https://ms.portal.azure.com) and navigate to your resource group.
 2. Click on the data factory you created earlier in this solution.
@@ -543,10 +569,10 @@ The default web service endpoint we deployed in the section of "Deploy Azure Mac
          2. Replace the default content in the editor with the content in [AzureMLLinkedServiceTraining.json](resource/AzureDataFactoryRetrain/AzureMLLinkedServiceTraining.json)  (available in the `resource/AzureDataFactoryRetrain` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
          3. Replace the content in "mlEndpoint" and "apikey" with the values from the "Train Machine learning Web Service" memo table.
          4. Click the up arrow button to deploy the linked service.
-    2. Create the Updatable Azure ML Linked Service:
+    2. Make the Azure ML Linked Service updatable:
          1. Click on the existing **AzureMLLinkedService**.
          2. Remove the contents of the editor and paste in the contents of [AzureMLLinkedService.json](resource/AzureDataFactoryRetrain/AzureMLLinkedService.json) (available in the `resource/AzureDataFactoryRetrain` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
-         3. Fill in the "mlEndpoint" , "apikey" and "updateResourceEndpoint" using values from the "Updatable Predictive Machine learning Web Service" memo table.
+         3. Fill in the "mlEndpoint" (Batch Requests), "apikey" and "updateResourceEndpoint" (Patch) values from the "Updatable Predictive Machine learning Web Service" memo table.
          4. Click the up arrow button to deploy the modified linked service.
 5. Create datasets:
     1.  Create the Trained Model Blob dataset:
