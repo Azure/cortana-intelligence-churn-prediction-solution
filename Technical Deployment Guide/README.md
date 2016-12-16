@@ -454,22 +454,22 @@ Power BI is used to create visualizations for monitoring sales and predictions. 
     
 You should now see multiple tabs in Power BI Desktop's report page. The "MyDashboard" tab combines the content from the "Activities" and "Predictions" tabs. The "Features" tab displays the important variables for predicting churn: days between transactions, region, and number of transactions.
 
-Now we can publish the report into Power BI online to allow easy sharing with others: 
+Now we can publish the report into Power BI online to easily share with others: 
  
-- Click on "Publish" as shown below. Sign in with your Power BI credentials and choose a destination (e.g., My Workspace). 
+1. Click on "Publish" as shown below. Sign in with your Power BI credentials and choose a destination (e.g., My Workspace). 
 [![Figure 7][pic 7]][pic 7]
 
-- After it's successfully published you should see a window like the following. Click on "Got it."
+1. After the report is successfully published, you should see a window like the following. Click on "Got it."
 [![Figure 8][pic 8]][pic 8]
 
-- Sign into [Power BI](www.powerbi.microsoft.com) and click on the report "Customer-Churn-Report" under Reports to open it. 
-- We'll share the Dashboard tab from the report to create a dashboard. To do this, click on the "MyDashboard" tab and select "Pin Live Page" as shown in the following figure. 
+1. Sign into [Power BI](www.powerbi.microsoft.com) and click on the "Customer-Churn-Report" report (under Reports) to open it. 
+1. We'll share the MyDashboard tab from the report to create a dashboard. To do this, click on the "MyDashboard" tab and select "Pin Live Page" as shown in the following figure. 
 [![Figure 9][pic 9]][pic 9]
-- Pin the page to a new dashboard named "Customer Churn Dashboard" as shown in the following figure.
 
-[![Figure 10][pic 10]][pic 10]
+1. Pin the page to a new dashboard named "Customer Churn Dashboard" as shown in the following figure.
+    [![Figure 10][pic 10]][pic 10]
 
-- Now you should see a new dashboard titled "Customer Churn Dashboard" under Dashboards group in Power BI online, which should look like the following figure.
+Now you should see a new dashboard titled "Customer Churn Dashboard" under the Dashboards group in Power BI Online, which should look like the following figure:
 [![Figure 11][pic 11]][pic 11]
 
 [pic 1]: https://cloud.githubusercontent.com/assets/9322661/21234603/5c05440c-c2c1-11e6-9f2d-c93f2add350b.PNG
@@ -484,22 +484,21 @@ Now we can publish the report into Power BI online to allow easy sharing with ot
 [pic 10]: https://cloud.githubusercontent.com/assets/9322661/21234612/5c1a6788-c2c1-11e6-9b4f-2409d2dc0e1b.PNG
 [pic 11]: https://cloud.githubusercontent.com/assets/9322661/21234611/5c18f510-c2c1-11e6-8dcb-b96929be517d.PNG
 
-If you reach here, you have a working solution that runs the customer churn prediction. Over the time, you might have accumulate customer transaction data that display a different buying behavior and therefore you need to retrain your model. The following steps show you how to set up a retrain pipeline which updates the model with new data every 1 hour.
+At this point, you have a working solution that runs the customer churn prediction. Customer behavior patterns may change over time;   prediction accuracy can then be improved by retraining the model. The following steps show how to set up a retraining pipeline which updates the model using new data every 1 hour.
 
-## Retrain
+## Retrain the Predictive Model
 
 ### Deploy Training Machine Learning Web Service
 1. Go to https://gallery.cortanaintelligence.com/Experiment/Retail-Churn-Train-1
-2. Click ***Open in Studio*** on the right. Login as needed.
-3. Choose the region and workspace. For region, you should choose the region that your resource group resides. For workspace, you should choose the workspace with the name the same as your unique string.
-4. Wait until the experiment is copied
-5. Input database information in the two **Import Data** modules. You only need to change "Database server name", "Database name", "User name" and "Password". Use the information you collected in the "Azure SQL Data Warehouse" table. Leave the query as it is.
+2. Click ***Open in Studio*** on the right. Log in if needed.
+3. Choose the region and workspace where the experiment should be copied. Choose the region where your resource group resides and the Azure ML workspace you created earlier. Wait until the experiment is copied.
+5. Add your database information in the two **Import Data** modules. You only need to change "Database server name", "Database name", "User name", and "Password". Use the information you collected in the "Azure SQL Data Warehouse" memo table. Leave the query as it is.
 6. Click **Run** at the bottom of the page. It takes around three minutes to run the experiment.
-7. Click **Deploy Web Service** at the bottom of the page, choose classic web service, and click "Yes" to publish the web service. This will lead you to the web service page. The web service home page can also be found by clicking the WEB SERVICES button on the left menu once logged in your workspace.
-8. Copy the API key from the web service home page and save it to your memo
-9. Click the link ***BATCH EXECUTION*** under the ***API HELP PAGE section***. On the BATCH EXECUTION help page, copy the Request URI under the Request section and add it to the table below as you will need this information later . Copy only the URI part https:… /jobs, ignoring the URI parameters starting with ? .
+7. Click **Deploy Web Service** at the bottom of the page, choose classic web service, and click "Yes" to publish the web service. This will lead you to the web service page. The web service page can also be found by clicking the WEB SERVICES button on the left menu once logged into your workspace.
+8. Copy the API key from the web service home page and save it to the memo table given below.
+9. Click the ***BATCH EXECUTION*** link under the ***API HELP PAGE section***. On the BATCH EXECUTION help page, copy the Request URI under the Request section and add it to the table below as you will need this information later. Copy only the URI part https:… /jobs, ignoring the URI parameters starting with ? .
 
-  | **Train Machine learning Web Service** |                           |
+  | **Train Machine Learning Web Service** |                           |
   | --------------------------- |--------------------------|
   | apiKey                     | [API key from API help page]|
   | mlEndpint              |        [Batch Request URI]                   ||
@@ -509,15 +508,15 @@ If you reach here, you have a working solution that runs the customer churn pred
 The default web service endpoint we deployed in the section of "Deploy Azure Machine Learning Predictive Web Service" is associated with the experiment itself. In order to have a updatable endpoint, we need to create an additional service endpoint.
 
 1. Go to https://studio.azureml.net, and choose workspace with the name of your unique string. You can change the workspace by clicking drop-down list on the top right of the web page.
-2. On the left side, choose **Web Service** and click the service that you deployed in the section "Deploy Azure Machine Learning Predictive Web Service" with name "Retail Churn [Predictive Exp.]"
+2. On the left side, choose **Web Service** and click the service that you deployed in the section "Deploy Azure Machine Learning Predictive Web Service" with name "Retail Churn [Predictive Exp.]".
 3. Click ***Manage endpoints*** at the bottom of the page in the "Additional endpoints" section.
-4. On the newly loaded page, click **+New**,
-    1. Enter **update** for "Name"
-    2. Leave everything else as default
-    3. Click **Save**
-5. After the endpoint is created, click the "update" service endpoint
-    1. click ***Use endpoint*** under the **BASICS** picture, save to the memo the "**Primary key**", "**Batch requests**" (only need to copy up to "jobs") and also "**Patch**"
-    2. Click ***API help*** under ***Patch*** URI, in the new page, save to the memo the **Resource Name** in the ***Updatable Resources*** section. It starts with "Retail Churn Template". This will be used in Azure Data Factory pipeline to update the model. An example can be found in ([AzureMLLinkedService.json](resource/AzureDataFactoryRetrain/AzureMLLinkedService.json)).
+4. On the newly loaded page, click **+New**.
+    1. Enter **update** for "Name".
+    2. Leave the default values for everything else.
+    3. Click **Save**.
+5. After the endpoint is created, click the "update" service endpoint.
+    1. Click ***Use endpoint*** under the **BASICS** picture. Record the "**Primary key**", "**Batch requests**" (only need to copy up to "jobs") and "**Patch**" in the memo table given below.
+    2. Click ***API help*** under ***Patch*** URI, in the new page. Record the **Resource Name** in the ***Updatable Resources*** section to the memo table below. (The resource name starts with "Retail Churn Template".) This name will be used in an Azure Data Factory pipeline to update the model. An example pipeline can be found in the ([AzureMLLinkedService.json](resource/AzureDataFactoryRetrain/AzureMLLinkedService.json)) file in the resource/AzureDataFactoryRetrain folder of the git repository.
 
     | **Updatable Predictive Machine Learning Web Service** |                           |
     | --------------------------- |--------------------------:|
@@ -526,20 +525,23 @@ The default web service endpoint we deployed in the section of "Deploy Azure Mac
     | updateResourceEndpoint |   [Patch URI]|
     | trainedModelName | [Resource Name]|
 
-### Create Azure Data Factory For Retraining and Updating
-1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
-2. Click the data factory you created in this solution
-3. Click ***Author and deploy***
+### Modify the Azure Data Factory For Retraining and Updating
+1. Go to the [Azure Portal](https://ms.portal.azure.com) and navigate to your resource group.
+2. Click on the data factory you created earlier in this solution.
+3. Click ***Author and deploy***.
 3. Stop MLPipeline:
-    1.  Click **MLPipeline** in the "Pipelines" list,
-    2.  Start the pipeline by setting the value "isPause
-    3.  d" to "true"
-    ```
-    "isPaused": true
-    ```
-    3.  Click the upper arrow button to  deploy it
+    1.  Click **MLPipeline** in the "Pipelines" list.
+    2.  Stop the pipeline by setting the value "isPaused" to "true":
+        ```
+        "isPaused": true
+        ```
+    3.  Click the up arrow button to deploy the modified (paused) pipeline.
 4. Create/Update Linked services:
-    1. Click **New Compute**, choose ***Azure ML***,  replay the content in the editor with  the content in [AzureMLLinkedServiceTraining.json](resource/AzureDataFactoryRetrain/AzureMLLinkedServiceTraining.json), replace  the content in "mlEndpoint" and "apikey" with  the real value in the "Train Machine learning Web Service" section of your memo , and click the upper arrow button to  deploy it. You can check the value from your memo in the Azure Machine learning Web service part.
+    1. Create the Azure ML Training Linked Service:
+        1. Click **New Compute** and choose ***Azure ML***.
+	2. Replace the content in the editor with the content in the [AzureMLLinkedServiceTraining.json](resource/AzureDataFactoryRetrain/AzureMLLinkedServiceTraining.json) (available in the resource/AzureDataFactoryRetrain folder of the git repository).
+	3. Replace the content in "mlEndpoint" and "apikey" with the values from the "Train Machine learning Web Service" memo table.
+	4. Click the up arrow button to deploy the linked service.
     2. Click **AzureMLLinkedService**, remove the content in the editor, copy  the content in [AzureMLLinkedService.json](resource/AzureDataFactoryRetrain/AzureMLLinkedService.json) in the retrain folder  to the editor, replace  the content in "mlEndpoint" , "apikey" and "updateResourceEndpoint" with  the real value in the "Updatable Predictive Machine learning Web Service" section of your memo , and click the upper arrow button to  deploy it.
 5. Create datasets
     1.  Click **New Dataset**, choose ***Azure Blob Storage***, replace the content in the editor with the content in [TrainedModelBlob.json](resource/AzureDataFactoryRetrain/TrainedModelBlob.json) to the editor, and click the upper arrow button to  deploy it
