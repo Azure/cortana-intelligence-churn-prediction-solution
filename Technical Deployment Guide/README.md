@@ -336,9 +336,11 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
 6. After connecting to the server, click the arrow beside its entry in the left-hand menu to expand it.  In the "Databases" section, choose the database you create in this solution, which has the same name as the unique string.
 6. Right-click on the database and choose "New query".
 7. Run the following query:
-```
-select top 1 * from Activities order by timestamp desc
-```
+
+    ```
+    select top 1 * from Activities order by timestamp desc
+    ```
+    
 8. Compare the value in the "SysTime" with the current UTC time.  The difference should be no more than 15 minutes.
 
 ### Set up Azure Data Factory
