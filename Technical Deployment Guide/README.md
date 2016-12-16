@@ -400,9 +400,7 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
 	    
         i.  Set the value "isPaused" to "false":
 	
-            ```
             "isPaused": false
-            ```
 	    
         i.  Click the up arrow button to deploy the pipeline.
 
