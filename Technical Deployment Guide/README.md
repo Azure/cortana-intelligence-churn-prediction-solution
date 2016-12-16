@@ -353,58 +353,62 @@ select top 1 * from Activities order by timestamp desc
 7. Click on ***Author and deploy*** in the new panel.
 8. Create Linked services:
     1. Create the Azure Storage Linked service:
-        a. Click **New Data Store** and choose **Azure Storage**.
-	b. Replace the content in the editor with the content in [AzureStorageLinkedService.json](resource/AzureDataFactory/AzureStorageLinkedService.json) (available in the resources folder of this git repository).
-	c. Replace "[unique]" with your unique string and "[Key]" with your storage key.
-	d. Click the up arrow button to deploy this linked service.
+        i. Click **New Data Store** and choose **Azure Storage**.
+	i. Replace the content in the editor with the content in [AzureStorageLinkedService.json](resource/AzureDataFactory/AzureStorageLinkedService.json) (available in the resources folder of this git repository).
+	i. Replace "[unique]" with your unique string and "[Key]" with your storage key.
+	i. Click the up arrow button to deploy this linked service.
     2. Create the Azure SQL DW Linked service:
-        a. Click **New Data Store** and choose **Azure SQL Data Warehouse**.
-	b. Replace the content in the editor with the content in [AzureSqlDWLinkedService.json](resource/AzureDataFactory/AzureSqlDWLinkedService.json) (available in the resources folder of this git repository).
-	c. Replace "[unique]" with your unique string and "[User]" and "[password]" with the values you chose earlier (recorded in the SQL Data Warehouse memo table). Note that there are two instances of "[unique]".
-	d. Click the up arrow button to deploy this linked service.
+        i. Click **New Data Store** and choose **Azure SQL Data Warehouse**.
+	i. Replace the content in the editor with the content in [AzureSqlDWLinkedService.json](resource/AzureDataFactory/AzureSqlDWLinkedService.json) (available in the resources folder of this git repository).
+	i. Replace "[unique]" with your unique string and "[User]" and "[password]" with the values you chose earlier (recorded in the SQL Data Warehouse memo table). Note that there are two instances of "[unique]".
+	i. Click the up arrow button to deploy this linked service.
     3.  Create the Azure ML Linked Service:
-        a. Click **New Compute** and choose **Azure ML**.
-	b. Replace the content in the editor with the content in [AzureMLLinkedService.json](resource/AzureDataFactory/AzureMLLinkedService.json) (available in the resources folder of this git repository).
-	c. Replace  the content in "mlEndpoint" and "apikey" with the values recorded in the Azure ML memo table.
-	d. Click the up arrow button to deploy this linked service.
+        i. Click **New Compute** and choose **Azure ML**.
+	i. Replace the content in the editor with the content in [AzureMLLinkedService.json](resource/AzureDataFactory/AzureMLLinkedService.json) (available in the resources folder of this git repository).
+	i. Replace  the content in "mlEndpoint" and "apikey" with the values recorded in the Azure ML memo table.
+	i. Click the up arrow button to deploy this linked service.
 9. Create the datasets:
     1. Create the Azure Blob Storage dataset:
-        a. Click **New Dataset** and choose ***Azure Blob Storage***.
-	b. Replace the content in the editor with the content in [AzureBlobDataset.json](resource/AzureDataFactory/AzureBlobDataset.json) (available in the resources folder of this git repository).
-	c. Click the up arrow button to deploy the dataset.
+        i. Click **New Dataset** and choose ***Azure Blob Storage***.
+	i. Replace the content in the editor with the content in [AzureBlobDataset.json](resource/AzureDataFactory/AzureBlobDataset.json) (available in the resources folder of this git repository).
+	i. Click the up arrow button to deploy the dataset.
     1. Create the user dataset:
-        a. Click **New Dataset** and choose ***Azure SQL Data Warehouse***.
-	b. Replace the content in the editor with the content in [AzureSqlDWInputUser.json](resource/AzureDataFactory/AzureSqlDWInputUser.json) (available in the resources folder of this git repository).
-	c. Click the up arrow button to deploy the dataset.
+        i. Click **New Dataset** and choose ***Azure SQL Data Warehouse***.
+	i. Replace the content in the editor with the content in [AzureSqlDWInputUser.json](resource/AzureDataFactory/AzureSqlDWInputUser.json) (available in the resources folder of this git repository).
+	i. Click the up arrow button to deploy the dataset.
     1. Create the activity dataset:
-        a. Click **New Dataset** and choose ***Azure SQL Data Warehouse***.
-	b. Replace the content in the editor with the content in [AzureSqlDWInputActivity.json](resource/AzureDataFactory/AzureSqlDWInputActivity.json) (available in the resources folder of this git repository).
-	c. Click the up arrow button to deploy the dataset.
+        i. Click **New Dataset** and choose ***Azure SQL Data Warehouse***.
+	i. Replace the content in the editor with the content in [AzureSqlDWInputActivity.json](resource/AzureDataFactory/AzureSqlDWInputActivity.json) (available in the resources folder of this git repository).
+	i. Click the up arrow button to deploy the dataset.
     1. Create the prediction dataset:
-        a. Click **New Dataset** and choose ***Azure SQL Data Warehouse***.
-	b. Replace the content in the editor with the content in [AzureSqlDWOutputPrediction.json](resource/AzureDataFactory/AzureSqlDWOutputPrediction.json) (available in the resources folder of this git repository).
-	c. Click the up arrow button to deploy the solution.
+        i. Click **New Dataset** and choose ***Azure SQL Data Warehouse***.
+	i. Replace the content in the editor with the content in [AzureSqlDWOutputPrediction.json](resource/AzureDataFactory/AzureSqlDWOutputPrediction.json) (available in the resources folder of this git repository).
+	i. Click the up arrow button to deploy the solution.
 10. Create the pipelines:
     1. Create the pipeline from SQL Data Warehouse to Azure ML:
-        a. Right-click **Drafts** and choose ***New pipeline***.
-        b. Copy the content in [MLPipeline.json](resource/AzureDataFactory/MLPipeline.json) (available in the resources folder of this git repository) to the editor.
-        c. Replace "[unique]" with your unique string and  "[User]" and "[password]" with the values chosen earlier (recorded in the Azure SQL Data Warehouse memo table).
-        d. Specify an active period for the pipeline. You should use the current UTC time as the start time. Our data-generating web job will create data every 15 minutes for up to 15 hours, so it is not necessary to choose a duration longer than fifteen hours. As an example, if the current UTC time were midnight on December 1, 2016, one would enter:
+        i. Right-click **Drafts** and choose ***New pipeline***.
+        i. Copy the content in [MLPipeline.json](resource/AzureDataFactory/MLPipeline.json) (available in the resources folder of this git repository) to the editor.
+        i. Replace "[unique]" with your unique string and  "[User]" and "[password]" with the values chosen earlier (recorded in the Azure SQL Data Warehouse memo table).
+        i. Specify an active period for the pipeline. You should use the current UTC time as the start time. Our data-generating web job will create data every 15 minutes for up to 15 hours, so it is not necessary to choose a duration longer than fifteen hours. As an example, if the current UTC time were midnight on December 1, 2016, one would enter:
+	
             ```
             "start": "2016-12-01T00:00:00Z",
             "end": "2016-12-01T15:00:00Z",
             ```
-        e.  Set the value "isPaused" to "false":
+	    
+        i.  Set the value "isPaused" to "false":
+	
             ```
             "isPaused": false
             ```
-        f.  Click the up arrow button to deploy the pipeline.
+	    
+        i.  Click the up arrow button to deploy the pipeline.
 
     2. Create the pipeline from Blob Storage to SQL Data Warehouse:
-        a. Right-click **Drafts** and choose "New pipeline",
-        b. Copy the content in [BlobToSqlDW.json](resource/AzureDataFactory/BlobToSqlDW.json) (available in the resources folder of this git repository) to the editor.
-        c. Specify an active period that you want the pipeline to run. The active period should be the same as what you chose above.
-        d. Set the value "isPaused" to "false".
+        i. Right-click **Drafts** and choose "New pipeline",
+        i. Copy the content in [BlobToSqlDW.json](resource/AzureDataFactory/BlobToSqlDW.json) (available in the resources folder of this git repository) to the editor.
+        i. Specify an active period that you want the pipeline to run. The active period should be the same as what you chose above.
+        i. Set the value "isPaused" to "false".
         3. Click the up arrow button to deploy the pipeline.
 
 
