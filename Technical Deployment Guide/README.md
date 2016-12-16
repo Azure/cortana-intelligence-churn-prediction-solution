@@ -538,45 +538,58 @@ The default web service endpoint we deployed in the section of "Deploy Azure Mac
     3.  Click the up arrow button to deploy the modified (paused) pipeline.
 4. Create/Update Linked services:
     1. Create the Azure ML Training Linked Service:
-        1. Click **New Compute** and choose ***Azure ML***.
-	2. Replace the content in the editor with the content in the [AzureMLLinkedServiceTraining.json](resource/AzureDataFactoryRetrain/AzureMLLinkedServiceTraining.json) (available in the resource/AzureDataFactoryRetrain folder of the git repository).
-	3. Replace the content in "mlEndpoint" and "apikey" with the values from the "Train Machine learning Web Service" memo table.
-	4. Click the up arrow button to deploy the linked service.
-    2. Click **AzureMLLinkedService**, remove the content in the editor, copy  the content in [AzureMLLinkedService.json](resource/AzureDataFactoryRetrain/AzureMLLinkedService.json) in the retrain folder  to the editor, replace  the content in "mlEndpoint" , "apikey" and "updateResourceEndpoint" with  the real value in the "Updatable Predictive Machine learning Web Service" section of your memo , and click the upper arrow button to  deploy it.
-5. Create datasets
-    1.  Click **New Dataset**, choose ***Azure Blob Storage***, replace the content in the editor with the content in [TrainedModelBlob.json](resource/AzureDataFactoryRetrain/TrainedModelBlob.json) to the editor, and click the upper arrow button to  deploy it
-    1.  Click **New Dataset**, choose ***Azure SQL Data Warehouse***, replace the content in the editor with the content in [AzureSqlDWInputUserRetrain.json](resource/AzureDataFactoryRetrain/AzureSqlDWInputUserRetrain.json) to the editor, and click the upper arrow button to  deploy it
-    1. Click **New Dataset**, choose ***Azure SQL Data Warehouse***, replace the content in [AzureSqlDWInputActivityRetain.json](resource/AzureDataFactoryRetrain/AzureSqlDWInputActivityRetrain.json) to the editor, and click the upper arrow button to  deploy it
-    1. Click **New Dataset**, choose ***Azure Blob Storage***, replace the content in the editor with the content in [PlaceHolderRetrain.json](resource/AzureDataFactoryRetrain/PlaceHolderRetrain.json) to the editor, and click the upper arrow button to deploy it
+         1. Click **New Compute** and choose ***Azure ML***.
+         2. Replace the default content in the editor with the content in [AzureMLLinkedServiceTraining.json](resource/AzureDataFactoryRetrain/AzureMLLinkedServiceTraining.json)  (available in the `resource/AzureDataFactoryRetrain` folder of the git repository).
+         3. Replace the content in "mlEndpoint" and "apikey" with the values from the "Train Machine learning Web Service" memo table.
+         4. Click the up arrow button to deploy the linked service.
+    2. Create the Updatable Azure ML Linked Service:
+         1. Click on the existing **AzureMLLinkedService**.
+         2. Remove the contents of the editor and paste in the contents of [AzureMLLinkedService.json](resource/AzureDataFactoryRetrain/AzureMLLinkedService.json) (available in the `resource/AzureDataFactoryRetrain` folder of the git repository).
+         3. Fill in the "mlEndpoint" , "apikey" and "updateResourceEndpoint" using values from the "Updatable Predictive Machine learning Web Service" memo table.
+         4. Click the up arrow button to deploy the modified linked service.
+5. Create datasets:
+    1.  Create the Trained Model Blob dataset:
+        1. Click **New Dataset** and choose ***Azure Blob Storage***.
+        2. Replace the default content in the editor with the content in [TrainedModelBlob.json](resource/AzureDataFactoryRetrain/TrainedModelBlob.json) (available in the `resource/AzureDataFactoryRetrain` folder of the git repository).
+        3. Click the up arrow button to deploy the dataset.
+    1.  Create the User Retrain dataset:
+        1. Click **New Dataset** and choose ***Azure SQL Data Warehouse***.
+        1. Replace the default content in the editor with the content in [AzureSqlDWInputUserRetrain.json](resource/AzureDataFactoryRetrain/AzureSqlDWInputUserRetrain.json) (available in the `resource/AzureDataFactoryRetrain` folder of the git repository).
+        1. Click the up arrow button to deploy the dataset.
+    1. Create the Activity Retrain dataset:
+        1. Click **New Dataset** and choose ***Azure SQL Data Warehouse***.
+        1. Replace the default content in the editor with the content in [AzureSqlDWInputActivityRetain.json](resource/AzureDataFactoryRetrain/AzureSqlDWInputActivityRetrain.json) (available in the `resource/AzureDataFactoryRetrain` folder of the git repository).
+        1. Click the up arrow button to deploy the dataset.
+    1. Create the Placeholder Retrain dataset:
+        1. Click **New Dataset** and choose ***Azure Blob Storage***.
+	1. Replace the default content in the editor with the content in [PlaceHolderRetrain.json](resource/AzureDataFactoryRetrain/PlaceHolderRetrain.json) (available in the `resource/AzureDataFactoryRetrain` folder of the git repository).
+        1. Click the up arrow button to deploy the dataset.
 6. Create pipelines
-    1. Right click **Drafts**, choose "New pipeline",
-        1. Copy the content in [RetrainPipeline.json](resource/AzureDataFactoryRetrain/RetrainPipeline.json) to the editor,
-        2. Replace "[unique]" with your unique string (two instances of ""[unique]""),  "[User]" and "[password]" with their real value in this solution
-        3. Specify an active period that you want the pipeline to run.  Since the data passing through in 15 minutes represents a day's data, and  we have 60 days data in total, we needed only 15-hour period for the pipeline. You should use the current UTC time as the starttime. An example is like:
+    1. Create the retraining pipeline:
+        1. Right-click **Drafts** and choose "New pipeline".
+        1. Replace the default content in the editor with the content in [RetrainPipeline.json](resource/AzureDataFactoryRetrain/RetrainPipeline.json) (available in the `resource/AzureDataFactoryRetrain` folder of the git repository).
+        2. Replace both instances of "[unique]" with your unique string. Insert the SQL DW username and password in place of "[User]" and "[password]", respectively.
+        3. Specify an active period for the pipeline.  You should use the current UTC time as the start time. Our data-generating web job will create data every 15 minutes for up to 15 hours, so it is not necessary to choose a duration longer than fifteen hours. As an example, if the current UTC time were midnight on December 1, 2016, one would enter:
         ```
         "start": "2016-12-01T00:00:00Z",
         "end": "2016-12-01T15:00:00Z",
         ```
-        4.  Start the pipeline by setting the value "isPaused" to "false"
-        ```
-        "isPaused": false
-        ```
-        4.  Click the upper arrow button to  deploy it
+        4.  Set the value of "isPaused" to "false":
+            ```
+            "isPaused": false
+            ```
+	    
+        4.  Click the up arrow button to deploy the pipeline.
 
-    2. Right click **Drafts**, choose "New pipeline",
-        1. Copy the content in [UpdatePipeline.json](resource/AzureDataFactoryRetrain/UpdatePipeline.json) to the editor,
-        2. Specify an active period that you want the pipeline to run. It should be the same as the RetrainPipeline.
-        3.  Start the pipeline by setting the value "isPaused" to "false"
-        ```
-        "isPaused": false
-        ```
-        4. Click the upper arrow button to  deploy it
-7. Start MLPipeline
-    1.  Click **MLPipeline** in the "Piepelines" list,
-    2.  Start the pipeline by setting the value "isPaused" to "false"
-        ```
-        "isPaused": false
-        ```
-    3.  Click the upper arrow button to  deploy it
+    2. Create the update pipeline:
+        1. Right=click **Drafts** and choose "New pipeline".
+        1. Replace the default content in the editor with the content in [UpdatePipeline.json](resource/AzureDataFactoryRetrain/UpdatePipeline.json) (available in the `resource/AzureDataFactoryRetrain` folder of the git repository).
+        2. Specify an active period that you want the pipeline to run. It should be the same as for the retrain pipeline just created.
+        3. Set the value of "isPaused" to "false".
+        4. Click the up arrow button to deploy the pipeline.
+7. Restart MLPipeline
+    1.  Click **MLPipeline** in the "Pipelines" list.
+    2.  Set the value of "isPaused" to "false".
+    3.  Click the up arrow button to deploy the modified pipeline.
 
-To get more information about retrainng, please go to [Updating models using Update Resource Activity](https://docs.microsoft.com/en-us/azure/data-factory/data-factory-azure-ml-batch-execution-activity#updating-models-using-update-resource-activity).
+To get more information about retraining, please go to [Updating models using Update Resource Activity](https://docs.microsoft.com/en-us/azure/data-factory/data-factory-azure-ml-batch-execution-activity#updating-models-using-update-resource-activity).
