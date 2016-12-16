@@ -393,16 +393,16 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
         3. Replace "[unique]" with your unique string and  "[User]" and "[password]" with the values chosen earlier (recorded in the Azure SQL Data Warehouse memo table).
         4. Specify an active period for the pipeline. You should use the current UTC time as the start time. Our data-generating web job will create data every 15 minutes for up to 15 hours, so it is not necessary to choose a duration longer than fifteen hours. As an example, if the current UTC time were midnight on December 1, 2016, one would enter:
 	
-	    ```
+            ```
             "start": "2016-12-01T00:00:00Z",
             "end": "2016-12-01T15:00:00Z",
-	    ```
+            ```
 	    
         5.  Set the value "isPaused" to "false":
 	
             ```
-	    "isPaused": false
-	    ```
+            "isPaused": false
+            ```
 	    
         6.  Click the up arrow button to deploy the pipeline.
 
