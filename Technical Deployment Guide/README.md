@@ -321,31 +321,30 @@ The data generator emits one day's transaction data every 15 minutes to reduce t
 
 ### Check Data Ingest
 
-you can check if the data is ingested into your data warehouse by using Visual Studio 2015 with SSDT to run testing queries.
+You can check whether the data is being ingested into your SQL Data Warehouse by using Visual Studio 2015 with SSDT to run testing queries.
 
-1. Open Visual Studio 2015 with SSDT
-2. Click "View" in the menu
-3. Choose "SQL Server Object Explorer"
-4. Click "Add" icon to add the SQL server that's created in this solution
-5. Filling info on the dialogue as needed. Choose "SQL Server Authentication" for ***Authentication***
-6. After connecting to the server, expand the server,  in "Databases", choose the database you create in this solution, which has the same name as the unique string.
-6. Right click on the database, choose "New query"
-7. Run this query
+1. Open Visual Studio 2015 with SSDT.
+2. In the top menu bar, click "View" and select "SQL Server Object Explorer" in the drop-down menu.
+4. Click the "Add SQL Server" icon (green plus sign over a gray, rectangular server) to add the SQL server that you created earlier.
+5. Fill in the server name, credentials, and database name recorded in your SQL Data Warehouse memo table. Choose "SQL Server Authentication" for the **Authentication** type.
+6. After connecting to the server, click the arrow beside its entry in the left-hand menu to expand it.  In the "Databases" section, choose the database you create in this solution, which has the same name as the unique string.
+6. Right-click on the database and choose "New query".
+7. Run the following query:
 ```
 select top 1 * from Activities order by timestamp desc
 ```
-Compare the value in the "SysTime" with the current UTC time.  The difference should be no more than 15 minutes.
+8. Compare the value in the "SysTime" with the current UTC time.  The difference should be no more than 15 minutes.
 
 ### Set up Azure Data Factory
-1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
-2. In ***Overview*** panel, click **+** and enter **Data Factory** and hit "Enter" key to search
-3. Click **Data Factory** offered by Microsoft in "VM Extension" category
-4. Click **Create** at the bottom of the description panel
-5. In the new panel of "New data factory",
-    1. Enter your **unique string** for "Name"
-    2. Click **Create** at the bottom
-6. Go back to your resource group and select the data factory that's created through previous steps
-7. Click ***Author and deploy*** on the new panel
+1. Go to the [Azure Portal](https://ms.portal.azure.com) and navigate to your resource group.
+2. In ***Overview*** panel, click **+ Add** to add a new resource. Type **Data Factory** and hit "Enter" key to search.
+3. Click on **Data Factory** offered by Microsoft in the "VM Extension" category.
+4. Click the **Create** button at the bottom of the description panel.
+5. In the "New data factory" panel:
+    1. Enter your **unique string** for "Name".
+    2. Click the **Create** button at the bottom.
+6. Navigate to your resource group's overview page and refresh until the Data Factory's deployment concludes. Click on the Data Factory in the resource listing.
+7. Click on ***Author and deploy*** in the new panel.
 8. Create Linked services:
     1. Click **New Data Store**, choose ***Azure Storage***, replace the content in the editor with the content in [AzureStorageLinkedService.json](resource/AzureDataFactory/AzureStorageLinkedService.json) to the editor, replace "[unique]" with your unique string and "[Key]" with your storage key, and click the upper arrow button to  deploy it
     2. Click **New Data Store**, choose ***Azure SQL Data Warehouse***, replace the content in the editor with    the content in [AzureSqlDWLinkedService.json](resource/AzureDataFactory/AzureSqlDWLinkedService.json) to the editor, replace "[unique]" with your unique string  and  "[User]" and "[password]" with their real value in this solution, and click the upper arrow button to  deploy it. Note that there are two instances of "[unique]".
