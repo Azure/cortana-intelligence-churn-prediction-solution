@@ -238,22 +238,22 @@ These are the steps for creating containers and uploading the data to Azure Blob
 6. Click **Create** at the bottom.
 7. Return to your resource group and refresh the listing until your Stream Analytics job appears, indicating that deployment has finished. Click on the Stream Analytics job's name.
 9. In the new panel, click **Inputs** and click **+** in the new panel. In the "New input" panel:
-    1. Enter  **datagen** for  "Input alias"
-    2. Choose **Data Stream** for "Source type"
-    3. Choose **Event hub** for "Source"
-    4. Leave subscription to the default
-    5. Choose your **unique string** for the "Service bus namespace"
-    6. Choose **churn** for "Event hub name"
-    7. Choose **sendreceive** as "Event hub policy name"
-    8. Level everything else as default and click **Create** at the bottom
-10. In the new panel, click **Outputs** and click **+** in the new panel. In the "New output" panel:
-    1. Enter  **sqldw** for "Output alias"
-    2. Choose **SQL database** for  "Sink"
-    3. Leave subscription to the default
-    4. choose your **unique string** for the "Database"
-    5. Enter your username and password for the database
-    6. Enter **Activities** for "Table" and  click **Create** at the bottom
-11. In the new panel, click **Query** and click **+** in the new panel. In the new panel, remove the default content and  enter
+    1. Enter  **datagen** for the "Input alias".
+    2. Choose **Data Stream** for the "Source type".
+    3. Choose **Event hub** for the "Source".
+    5. Choose your **unique string** for the "Service bus namespace".
+    6. Choose **churn** for the "Event hub name".
+    7. Choose **sendreceive** as the "Event hub policy name".
+    8. Leaving other fields on their default values, click the **Create** button at the bottom.
+10. In the new panel, click **Outputs** and then click **+** in the new panel to add an output.
+11. In the "New output" panel:
+    1. Enter  **sqldw** for the "Output alias".
+    2. Choose **SQL database** for the "Sink".
+    4. Choose your **unique string** for the "Database".
+    5. Enter your username and password (recorded in the Azure SQL Data Warehouse memo table) for the database.
+    6. Enter **Activities** for the "Table".
+    7. Click the **Create** button at the bottom.
+11. In the new panel, click **Query** and click **+** in the new panel. Remove the default query content and enter:
 ```
 SELECT
 System.Timestamp systime,
@@ -269,34 +269,34 @@ INTO
     sqldw
 FROM datagen;
 ```
-  Click the **save** icon to save the query.
-  **[Note]: The input alias and output alias are used in the query, and the selected column should have name or alias exactly the same as in Activities table.**
+  Click the **Save** icon to save the query.
+  **[Note]: The input and output aliases are used in the query, and the selected column names must exactly match those in the Activities table.**
 
-12. Go back to the overview of the Stream analytics job, click **start** to start the Stream Analytics job. In the new panel, choose "Now" for the "Job output starttime" and click **Start** at the bottom.  
+12. Return to the overview of the Stream Analytics job.
+13. Click **start** to start the Stream Analytics job. In the new panel, choose "Now" for the "Job output starttime" and click **Start** at the bottom.  
 
 ### Set up Azure Web Job/Data Generator
 
-The data generator emits one day's transaction data every 15 minutes to reduce the wait time to see the final results.
+The data generator emits one day's transaction data every 15 minutes to reduce the wait time for viewing results in this demo.
 
-1. Go to Azure Portal https://ms.portal.azure.com and choose the resource group you just deployed
-2. In ***Overview*** panel, click **+** and enter **Web App** and hit "Enter" key to search
-3. Click **Web App** offered by Microsoft in "Web + Mobile" category
-4. Click **Create** at the bottom of the description panel
-5. In the new panel,
-    1. Enter your **unique string** for "App name"
-    2. Leave "subscription" and "Resource group" as the default
-    3. Click **App Service Plan/Location** and in the new panel of ***App Service Plan***
-        1. Click **Create New** and enter your unique string for the ***App Service Plan*** in the new panel
-        2. Choose the region where your resource group resides
-        3. Click **OK** at the bottom of the panel
-6. Click **Create** at the bottom
-7. Go back to your resource group until the Web App is created. You can check the notification. It takes around two minutes to create the web app.
-8. Refresh the resource listing in your resource group and select the web Service
-8. On the side panel, search "Application Settings" and click ***Application Settings*** and on the new panel
-    1. Choose **2.7** for the Python version
-    2. Choose **64-bit** for the Platform
-    3. Toggle **On** for "Always on"
-    4. In the ***App Setting***, add the following key-value pairs:
+1. Go to the [Azure Portal](https://ms.portal.azure.com) and navigate to your resource group.
+2. In ***Overview*** panel, click **+ Add** to add a new resource. Enter **Web App** and hit "Enter" key to search.
+3. In the result list, click on **Web App** offered by Microsoft in the "Web + Mobile" category.
+4. Click the **Create** button at the bottom of the description panel.
+5. In the new panel:
+    1. Enter your **unique string** for the "App name".
+    3. Click **App Service Plan/Location**. In the new **App Service Plan** panel:
+        1. Click **Create New** and enter your unique string for the **App Service Plan**.
+        2. Choose the region where your resource group resides.
+        3. Click **OK** at the bottom of the panel.
+6. Click the **Create** button at the bottom.
+7. Return to the resource group overview. Refresh the resource listing until the web app deployment completes (usually takes around two minutes).
+8. Click on the web service resource in your resource group.
+8. In the side panel, search "Application Settings" and click on the **Application Settings** result. In the new panel:
+    1. Choose **2.7** for the Python version.
+    2. Choose **64-bit** for the Platforml
+    3. Toggle **On** for the "Always on" setting.
+    4. In the ***App Setting***, add the following key-value pairs (recorded in your Azure Event Hub memo table):
 
       | **Azure App Service Settings** |             |
       |------------------------|---------------------|
@@ -306,18 +306,17 @@ The data generator emits one day's transaction data every 15 minutes to reduce t
       | EventHubServicePolicy              |sendreceive         |
       |    EventHubServiceKey           |[unique string]            ||
 
-  Click **save** and close the panel
+  Click **Save** and close the panel.
 
-9. On the side panel, search "WebJobs" and click **WebJobs**
-10. Click **+** and in the new panel
-    1. Enter **eventhub15min** for "Name". Space character is not allowed in the name.
-    2. Select the downloaded [eventhub_15min.zip](resource/eventhub_15min.zip) for "File Upload". Click "Raw" on the github page to download the zip file.
-    3. Choose **Triggered** for Type
-    4. Choose **Manual** for "Trigger"  (Note: because the zip file has the scheduled setting file, we can use manual in this step for scheduled jobs)
-    5. Click **OK** at the bottom
+9. On the side panel, search "WebJobs" and click **WebJobs**.
+10. Click **+** to add a WebJob. In the new panel:
+    1. Enter **eventhub15min** for the "Name".
+    2. Select the [eventhub_15min.zip](resource/eventhub_15min.zip) file (available in the resources folder of this git repository) for "File Upload".
+    3. Choose **Triggered** for Type.
+    4. Choose **Manual** for the "Trigger".  (Note: the uploaded zip file contains a scheduled settings file, so we do not need to specify the schedule settings when submitting the WebJob.)
+    5. Click the **OK** button at the bottom.
 
-11. Select the job "eventhub15min" and **start** it. Wait until the job finishes.
-
+11. Select the job "eventhub15min" and click **start**. Wait until the job finishes.
 
 
 ### Check Data Ingest
