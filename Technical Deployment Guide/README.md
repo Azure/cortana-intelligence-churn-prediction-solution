@@ -187,7 +187,7 @@ These are the steps for creating containers and uploading the data to Azure Blob
 4. Wait until the experiment is copied.
 5. Input database information in the two **Import Data** modules at the top of the experiment. Select the module to change its parameters. You only need to change **Database server name**,**Database name**, **User name** and **Password**. Use the information you collected in the table "Azure SQL Data Warehouse". Leave the query as it is.
 6. Click **Run** at the bottom of the page. It takes around three minutes to run the experiment.
-7. Click **Deploy Web Service** at the bottom of the page, choose **classic** web service, and click "Yes" to publish the web service. This will lead you to the web service page.  The web service home page can also be found by clicking the ***WEB SERVICES*** button on the left-hand menu bar in your workspace.
+7. Click **Deploy Web Service** at the bottom of the page, choose **classic** web service, and click "Yes" to publish the web service. (You may receive a warning message that the web service input has not been selected: you can ignore this message.) This will lead you to the web service page.  The web service home page can also be found by clicking the ***WEB SERVICES*** button on the left-hand menu bar in your workspace.
 8. Copy the ***API key*** from the web service home page and save it in the memo table given below.
 9. Click the link ***BATCH EXECUTION*** under the ***API HELP PAGE*** section. On the BATCH EXECUTION help page, copy the
 ***Request URI*** under the ***Request*** section and add it to the table below as you will need this information later
