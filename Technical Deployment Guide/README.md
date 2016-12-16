@@ -200,11 +200,12 @@ These are the steps for creating containers and uploading the data to Azure Blob
 
 ### Create an Azure Event Hub
 1. Go to the [Azure Portal](https://ms.portal.azure.com) and navigate to your resource group.
-2. In "Overview" panel, click **+ Add** to add a new resource. Enter **Event Hubs** and hit "Enter" key to search.
+2. In "Overview" panel, click **+ Add** to add a new resource. Type **Event Hubs** and hit "Enter" key to search.
 3. Click on **Event Hubs** offered by Microsoft in the "Internet of Things" category.
 4. Click **Create** at the bottom of the description panel.
-5. In the new panel for creating a namespace, enter your **unique string** for "Name". Leave the default values for all other fields.
-6. Return to your resource group's overview page. When it has finished deploying, click on the resource of type "Event hubs".
+5. In the new panel for creating a namespace, enter your **unique string** for "Name".
+6. Leaving the default values for all other fields, click the **Create** button at the bottom of the panel.
+7. Return to your resource group's overview page. When it has finished deploying, click on the resource of type "Event hubs".
 9. Click the **+ Event Hub** button to add an event hub.
 10. In the new panel:
     1. Enter **churn** for "Name".
@@ -238,7 +239,8 @@ These are the steps for creating containers and uploading the data to Azure Blob
 5. Enter your **unique string** in the "Job name" field.
 6. Click **Create** at the bottom.
 7. Return to your resource group and refresh the listing until your Stream Analytics job appears, indicating that deployment has finished. Click on the Stream Analytics job's name.
-9. In the new panel, click **Inputs** and click **+** in the new panel. In the "New input" panel:
+9. In the Stream Analytics job overview panel, click **Inputs**.
+10. In the new panel, click **+ Add** to add an input. In the "New input" panel:
     1. Enter  **datagen** for the "Input alias".
     2. Choose **Data Stream** for the "Source type".
     3. Choose **Event hub** for the "Source".
@@ -246,35 +248,36 @@ These are the steps for creating containers and uploading the data to Azure Blob
     6. Choose **churn** for the "Event hub name".
     7. Choose **sendreceive** as the "Event hub policy name".
     8. Leaving other fields on their default values, click the **Create** button at the bottom.
-10. In the new panel, click **Outputs** and then click **+** in the new panel to add an output.
-11. In the "New output" panel:
-    1. Enter  **sqldw** for the "Output alias".
+10. Return to the Stream Analytics job overview panel and click **Outputs**.
+10. In the new panel, click **+ Add** to add an output. In the "New output" panel:
+    1. Enter **sqldw** for the "Output alias".
     2. Choose **SQL database** for the "Sink".
     4. Choose your **unique string** for the "Database".
     5. Enter your username and password (recorded in the Azure SQL Data Warehouse memo table) for the database.
     6. Enter **Activities** for the "Table".
     7. Click the **Create** button at the bottom.
+11. Return to the Stream Analytics job overview panel and click **Query**.
 11. In the new panel, click **Query** and click **+** in the new panel. Remove the default query content and enter:
-```
-SELECT
-System.Timestamp systime,
-TransactionId,
-"Timestamp",
-UserId,
-ItemId,
-Quantity,
-Value,
-ProductCategory,
-Location
-INTO
-    sqldw
-FROM datagen;
-```
-  Click the **Save** icon to save the query.
-  **[Note]: The input and output aliases are used in the query, and the selected column names must exactly match those in the Activities table.**
-
-12. Return to the overview of the Stream Analytics job.
-13. Click **start** to start the Stream Analytics job. In the new panel, choose "Now" for the "Job output starttime" and click **Start** at the bottom.  
+    ```
+    SELECT
+    System.Timestamp systime,
+    TransactionId,
+    "Timestamp",
+    UserId,
+    ItemId,
+    Quantity,
+    Value,
+    ProductCategory,
+    Location
+    INTO
+        sqldw
+    FROM datagen;
+    ```
+    Click the **Save** icon to save the query.
+    **[Note]: The input and output aliases are used in the query, and the selected column names must exactly match those in the Activities table.**
+12. Return to the overview of the Stream Analytics job and click the "Start" button.
+13. In the new panel, choose "Now" for the "Job output start time".
+14. Click the **Start** button at the bottom.  
 
 ### Set up Azure Web Job/Data Generator
 
