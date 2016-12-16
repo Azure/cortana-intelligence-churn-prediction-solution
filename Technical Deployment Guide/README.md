@@ -258,6 +258,7 @@ These are the steps for creating containers and uploading the data to Azure Blob
     7. Click the **Create** button at the bottom.
 11. Return to the Stream Analytics job overview panel and click **Query**.
 11. In the new panel, click **Query** and click **+** in the new panel. Remove the default query content and enter:
+
     ```
     SELECT
     System.Timestamp systime,
@@ -273,6 +274,7 @@ These are the steps for creating containers and uploading the data to Azure Blob
         sqldw
     FROM datagen;
     ```
+    
     Click the **Save** icon to save the query.
     **[Note]: The input and output aliases are used in the query, and the selected column names must exactly match those in the Activities table.**
 12. Return to the overview of the Stream Analytics job and click the "Start" button.
