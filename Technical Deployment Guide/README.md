@@ -355,15 +355,15 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
 7. Click on ***Author and deploy*** in the new panel.
 8. Create Linked services:
     1. Create the Azure Storage Linked service:
-        i. Click **New Data Store** and choose **Azure Storage**.
-	i. Replace the content in the editor with the content in [AzureStorageLinkedService.json](resource/AzureDataFactory/AzureStorageLinkedService.json) (available in the resources folder of this git repository).
-	i. Replace "[unique]" with your unique string and "[Key]" with your storage key.
-	i. Click the up arrow button to deploy this linked service.
+        1. Click **New Data Store** and choose **Azure Storage**.
+	1. Replace the content in the editor with the content in [AzureStorageLinkedService.json](resource/AzureDataFactory/AzureStorageLinkedService.json) (available in the resources folder of this git repository).
+	1. Replace "[unique]" with your unique string and "[Key]" with your storage key.
+	1. Click the up arrow button to deploy this linked service.
     2. Create the Azure SQL DW Linked service:
-        i. Click **New Data Store** and choose **Azure SQL Data Warehouse**.
-	i. Replace the content in the editor with the content in [AzureSqlDWLinkedService.json](resource/AzureDataFactory/AzureSqlDWLinkedService.json) (available in the resources folder of this git repository).
-	i. Replace "[unique]" with your unique string and "[User]" and "[password]" with the values you chose earlier (recorded in the SQL Data Warehouse memo table). Note that there are two instances of "[unique]".
-	i. Click the up arrow button to deploy this linked service.
+        1. Click **New Data Store** and choose **Azure SQL Data Warehouse**.
+	1. Replace the content in the editor with the content in [AzureSqlDWLinkedService.json](resource/AzureDataFactory/AzureSqlDWLinkedService.json) (available in the resources folder of this git repository).
+	1. Replace "[unique]" with your unique string and "[User]" and "[password]" with the values you chose earlier (recorded in the SQL Data Warehouse memo table). Note that there are two instances of "[unique]".
+	1. Click the up arrow button to deploy this linked service.
     3.  Create the Azure ML Linked Service:
         i. Click **New Compute** and choose **Azure ML**.
 	i. Replace the content in the editor with the content in [AzureMLLinkedService.json](resource/AzureDataFactory/AzureMLLinkedService.json) (available in the resources folder of this git repository).
