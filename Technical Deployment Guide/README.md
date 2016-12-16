@@ -30,11 +30,11 @@ This deployment guide will walk you through the steps of creating a customer chu
 
 The steps described later in this guide require the following prerequisites:
 
-1)  An [Azure subscription](https://azure.microsoft.com/en-us/) with login credentials
-2)  A free [Azure Machine Learning Studio](https://azure.microsoft.com/en-us/services/machine-learning/) subscription
-3)  A [Microsoft Power BI](https://powerbi.microsoft.com/en-us/) account
-4)  An installed copy of [Power BI Desktop](https://powerbi.microsoft.com/en-us/desktop/?gated=0&number=0)
-5)  A local installation of <a href="https://azure.microsoft.com/en-us/documentation/articles/sql-data-warehouse-install-visual-studio/">Visual Studio with SQL Server Data Tools (SSDT)</a>
+1.  An [Azure subscription](https://azure.microsoft.com/en-us/) with login credentials
+2.  A free [Azure Machine Learning Studio](https://azure.microsoft.com/en-us/services/machine-learning/) subscription
+3.  A [Microsoft Power BI](https://powerbi.microsoft.com/en-us/) account
+4.  An installed copy of [Power BI Desktop](https://powerbi.microsoft.com/en-us/desktop/?gated=0&number=0)
+5.  A local installation of <a href="https://azure.microsoft.com/en-us/documentation/articles/sql-data-warehouse-install-visual-studio/">Visual Studio with SQL Server Data Tools (SSDT)</a>
 
 ## Architecture
 
@@ -55,7 +55,13 @@ Customer behavior changes slowly and doesn’t require real-time or near real-ti
 
 The following are the steps to deploy the end-to-end solution for the predictive pipelines.
 
-### Unique String
+### Accessing Files in the Git Repository
+
+This tutorial will refer to files available in the Technical Deployment Guide section of the [Cortana Intelligence Churn Prediction git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution). You can download all of these files at once by clicking the "Clone or download" button on the repository.
+
+You can download or view individual files by navigating through the repository folders. If you choose this option, be sure to download the "raw" version of each file by clicking the filename to view it, then cliking Download.
+
+### Choose a Unique String
 
 You will need a unique string to identify your deployment because some Azure services, e.g. Azure Storage requires a unique name for each instance across the service. We suggest you use only letters and numbers in this string and the length should not be greater than 9.
  
@@ -78,9 +84,9 @@ Please open your memo file and save the information in the form of the following
 | resource group name    |[unique]|
 | region              |[region]||
 
-### Instruction for Finding Your Resource Group Overfiew
+### Instruction for Finding Your Resource Group Overview
 
-In this tutorial, all resources will be generated in the resource group you just created. You can easily access these resources by from the resource group overview, which can be accessed as follows:
+In this tutorial, all resources will be generated in the resource group you just created. You can easily access these resources from the resource group overview page, which can be accessed as follows:
 
 1. Log into the [Azure Management Portal](https://ms.portal.azure.com).
 1. Click the **Resource groups** button on the upper-left of the screen.
@@ -356,40 +362,40 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
 8. Create Linked services:
     1. Create the Azure Storage Linked service:
          1. Click **New Data Store** and choose **Azure Storage**.
-         2. Replace the content in the editor with the content in [AzureStorageLinkedService.json](resource/AzureDataFactory/AzureStorageLinkedService.json) (available in the resources folder of this git repository).
+         2. Replace the content in the editor with the content in [AzureStorageLinkedService.json](resource/AzureDataFactory/AzureStorageLinkedService.json) (available in the resource folder of this git repository).
          3. Replace "[unique]" with your unique string and "[Key]" with your storage key.
          4. Click the up arrow button to deploy this linked service.
     2. Create the Azure SQL DW Linked service:
          1. Click **New Data Store** and choose **Azure SQL Data Warehouse**.
-         2. Replace the content in the editor with the content in [AzureSqlDWLinkedService.json](resource/AzureDataFactory/AzureSqlDWLinkedService.json) (available in the resources folder of this git repository).
+         2. Replace the content in the editor with the content in [AzureSqlDWLinkedService.json](resource/AzureDataFactory/AzureSqlDWLinkedService.json) (available in the resource folder of this git repository).
          3. Replace "[unique]" with your unique string and "[User]" and "[password]" with the values you chose earlier (recorded in the SQL Data Warehouse memo table). Note that there are two instances of "[unique]".
          4. Click the up arrow button to deploy this linked service.
     3.  Create the Azure ML Linked Service:
          1. Click **New Compute** and choose **Azure ML**.
-         2. Replace the content in the editor with the content in [AzureMLLinkedService.json](resource/AzureDataFactory/AzureMLLinkedService.json) (available in the resources folder of this git repository).
+         2. Replace the content in the editor with the content in [AzureMLLinkedService.json](resource/AzureDataFactory/AzureMLLinkedService.json) (available in the resource folder of this git repository).
          3. Replace  the content in "mlEndpoint" and "apikey" with the values recorded in the Azure ML memo table.
          4. Click the up arrow button to deploy this linked service.
 9. Create the datasets:
     1. Create the Azure Blob Storage dataset:
          1. Click **New Dataset** and choose ***Azure Blob Storage***.
-         2. Replace the content in the editor with the content in [AzureBlobDataset.json](resource/AzureDataFactory/AzureBlobDataset.json) (available in the resources folder of this git repository).
+         2. Replace the content in the editor with the content in [AzureBlobDataset.json](resource/AzureDataFactory/AzureBlobDataset.json) (available in the resource folder of this git repository).
          3. Click the up arrow button to deploy the dataset.
     1. Create the user dataset:
          1. Click **New Dataset** and choose ***Azure SQL Data Warehouse***.
-         2. Replace the content in the editor with the content in [AzureSqlDWInputUser.json](resource/AzureDataFactory/AzureSqlDWInputUser.json) (available in the resources folder of this git repository).
+         2. Replace the content in the editor with the content in [AzureSqlDWInputUser.json](resource/AzureDataFactory/AzureSqlDWInputUser.json) (available in the resource folder of this git repository).
          3. Click the up arrow button to deploy the dataset.
     1. Create the activity dataset:
         1. Click **New Dataset** and choose ***Azure SQL Data Warehouse***.
-        2. Replace the content in the editor with the content in [AzureSqlDWInputActivity.json](resource/AzureDataFactory/AzureSqlDWInputActivity.json) (available in the resources folder of this git repository).
+        2. Replace the content in the editor with the content in [AzureSqlDWInputActivity.json](resource/AzureDataFactory/AzureSqlDWInputActivity.json) (available in the resource folder of this git repository).
         3. Click the up arrow button to deploy the dataset.
     1. Create the prediction dataset:
         1. Click **New Dataset** and choose ***Azure SQL Data Warehouse***.
-        2. Replace the content in the editor with the content in [AzureSqlDWOutputPrediction.json](resource/AzureDataFactory/AzureSqlDWOutputPrediction.json) (available in the resources folder of this git repository).
+        2. Replace the content in the editor with the content in [AzureSqlDWOutputPrediction.json](resource/AzureDataFactory/AzureSqlDWOutputPrediction.json) (available in the resource folder of this git repository).
         3. Click the up arrow button to deploy the solution.
 10. Create the pipelines:
     1. Create the pipeline from SQL Data Warehouse to Azure ML:
         1. Right-click **Drafts** and choose ***New pipeline***.
-        2. Copy the content in [MLPipeline.json](resource/AzureDataFactory/MLPipeline.json) (available in the resources folder of this git repository) to the editor.
+        2. Copy the content in [MLPipeline.json](resource/AzureDataFactory/MLPipeline.json) (available in the resource folder of this git repository) to the editor.
         3. Replace "[unique]" with your unique string and  "[User]" and "[password]" with the values chosen earlier (recorded in the Azure SQL Data Warehouse memo table).
         4. Specify an active period for the pipeline. You should use the current UTC time as the start time. Our data-generating web job will create data every 15 minutes for up to 15 hours, so it is not necessary to choose a duration longer than fifteen hours. As an example, if the current UTC time were midnight on December 1, 2016, one would enter:
 	
@@ -408,7 +414,7 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
 
     2. Create the pipeline from Blob Storage to SQL Data Warehouse:
         1. Right-click **Drafts** and choose "New pipeline",
-        2. Copy the content in [BlobToSqlDW.json](resource/AzureDataFactory/BlobToSqlDW.json) (available in the resources folder of this git repository) to the editor.
+        2. Copy the content in [BlobToSqlDW.json](resource/AzureDataFactory/BlobToSqlDW.json) (available in the resource folder of this git repository) to the editor.
         3. Specify an active period that you want the pipeline to run. The active period should be the same as what you chose above.
 	4. Set the value "isPaused" to "false".
         5. Click the up arrow button to deploy the pipeline.
@@ -416,26 +422,30 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
 
 ## PowerBI Dashboard
 
-Power BI is used to create visualizations for monitoring sales and predictions. It can also be used to help detect trend in important factors for predicting churn. The instructions that follow describe how you can use the provided Power BI desktop file (Customer-Churn-Report.pbix) to visualize your data. 
+Power BI is used to create visualizations for monitoring sales and predictions. It can also be used to help detect trends in important factors for predicting churn. The instructions that follow describe how you can use the provided Power BI desktop file (Customer-Churn-Report.pbix) to visualize your data. 
 
-- Download [Power BI Desktop application](https://powerbi.microsoft.com/en-us/desktop) and install it.
-- Download the Power BI template file Customer-Churn-Report.pbix by left-clicking on the file and clicking on "Download" on the page that follows.
-- Double click the downloaded ".pbix" file and it will be opened in Power BI Desktop.
-- The template file connects to a database used in development. You'll need to change some parameters so that it links to your own database. To do this, follow these steps:
-	- Click on "Edit Queries" as shown in the following figure. 
-[![Figure 1][pic 1]][pic 1] 
+1. If you have not already done so, download and install the [Power BI Desktop application](https://powerbi.microsoft.com/en-us/desktop).
+1, Download the Power BI template file `Customer-Churn-Report.pbix` (available in the Power BI folder of the git repository) by left-clicking on the file and clicking on "Download" on the page that follows.
+1. Double click the downloaded ".pbix" file to open it in Power BI Desktop.
+1. The template file connects to a database used in development. You'll need to change some parameters so that it links to your own database. To do this, follow these steps:
+    1. Click on "Edit Queries" as shown in the following figure.
+       
+        [![Figure 1][pic 1]][pic 1] 
 
-	- Select a Query from the Queries panel (e.g., Age) and click on "Advanced Editors" as shown in the following figure.
-[![Figure 2][pic 2]][pic 2] 
+    1. Select a Query from the Queries panel (e.g., Age) and click on "Advanced Editors" as shown in the following figure.
 
-	- In the pop-up window for Advanced Editor, replace all values "dbchurn" with the name of your database, as shown in the following two figures which assumes that the name of the new database is "mydb." You should use the of name your own database. Click "Done" after making the changes. 
-[![Figure 3][pic 3]][pic 3] 
-[![Figure 4][pic 4]][pic 4] 
+        [![Figure 2][pic 2]][pic 2] 
 
-	- With the same Query (e.g., Age) selected, click on "Edit Credentials" and enter your your credentials for accessing your database and click on "Connect" as shown in the following figure. 
-[![Figure 5][pic 5]][pic 5] 
+    1. In the pop-up window for Advanced Editor, replace all "dbchurn" values with your "unique string" (database and server name). This process is shown in the following two figures, which assumes that the unique string is "mydb". (You should use the of name your own database.) Click "Done" after making the changes.
 
-	- The data for your table should be displayed if the connection information was correct, as in the following figure.
+        [![Figure 3][pic 3]][pic 3] 
+        [![Figure 4][pic 4]][pic 4] 
+
+    1. With the same Query (e.g., Age) selected, click on "Edit Credentials" and enter your your credentials for accessing your database (recorded in the SQL Data Warehouse memo table). Click on "Connect" as shown in the following figure.
+
+        [![Figure 5][pic 5]][pic 5] 
+
+    1. The data for your table should be displayed if the connection information was correct, as in the following figure.
 [![Figure 6][pic 6]][pic 6]
 
 	- Update the other Queries by replacing "dbchurn" with the name of your database. 
