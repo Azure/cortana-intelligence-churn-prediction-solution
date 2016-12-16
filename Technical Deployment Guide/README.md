@@ -125,7 +125,7 @@ These are the steps for creating containers and uploading the data to Azure Blob
 1. Click on **Containers** in the left-hand sidebar. In the new panel, click **+ Container** to add a container.
 1. Enter **data** for "Name" and click **Create** at the bottom.
 1. Click on the name of the container **data**, then click the "Upload" button on the top of the new panel.
-1. Choose the [Users.csv](resource/Users.csv) file that you obtained from the "resource" folder of this git repository. Click **Upload**.
+1. Choose the [Users.csv](resource/Users.csv) file that you obtained from the `resource` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide). Click **Upload**.
 1. Repeat the last two steps for each of the remaining files:
     - [Activities.csv](resource/Activities.csv)
     - [age.csv](resource/age.csv)
@@ -163,7 +163,7 @@ These are the steps for creating containers and uploading the data to Azure Blob
 
 
 ### Load Historical Data into Azure SQL Data Warehouse
-1. Open the [createTableAndLoadData.dsql](resource/createTableAndLoadData.dsql) (in the resource folder of this git repository) in Visual Studio 2015 with SQL Server Data Tools (SSDT).
+1. Open the [createTableAndLoadData.dsql](resource/createTableAndLoadData.dsql) (available in the resource folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)) in Visual Studio 2015 with SQL Server Data Tools (SSDT).
 2. Modify the query by inserting your Azure Storage account name and access key (recorded earlier in your memo table) for the IDENTITY and SECRET values on lines 48 and 49. On line 58, type your Azure Storage account name in place of "[unique]" in the LOCATION value.
 2. Click the green button on the top-left core of the file window.  
 3. Input the corresponding info for this solution. Choose **SQL Server Authentication** for **Authentication**. Set the database name to the unique string you specified earlier.
@@ -323,7 +323,7 @@ The data generator emits one day's transaction data every 15 minutes to reduce t
 9. On the side panel, search for "WebJobs" and click on the **WebJobs** result.
 10. Click on the **+ Add** button to add a WebJob. In the new panel:
     1. Enter **eventhub15min** for the "Name".
-    2. Select the [eventhub_15min.zip](resource/eventhub_15min.zip) file (available in the resources folder of this git repository) for "File Upload".
+    2. Select the [eventhub_15min.zip](resource/eventhub_15min.zip) file (available in the `resource` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)) for "File Upload".
     3. Choose **Triggered** for Type.
     4. Choose the **Manual** setting from the "Triggers" drop-down menu.  (Note: the uploaded zip file contains a scheduled settings file, so we do not need to specify the schedule settings when submitting the WebJob.)
     5. Click the **OK** button at the bottom.
@@ -362,40 +362,40 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
 8. Create Linked services:
     1. Create the Azure Storage Linked service:
          1. Click **New Data Store** and choose **Azure Storage**.
-         2. Replace the content in the editor with the content in [AzureStorageLinkedService.json](resource/AzureDataFactory/AzureStorageLinkedService.json) (available in the resource folder of this git repository).
+         2. Replace the content in the editor with the content in [AzureStorageLinkedService.json](resource/AzureDataFactory/AzureStorageLinkedService.json) (available in the `resource/AzureDataFactory` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
          3. Replace "[unique]" with your unique string and "[Key]" with your storage key.
          4. Click the up arrow button to deploy this linked service.
     2. Create the Azure SQL DW Linked service:
          1. Click **New Data Store** and choose **Azure SQL Data Warehouse**.
-         2. Replace the content in the editor with the content in [AzureSqlDWLinkedService.json](resource/AzureDataFactory/AzureSqlDWLinkedService.json) (available in the resource folder of this git repository).
+         2. Replace the content in the editor with the content in [AzureSqlDWLinkedService.json](resource/AzureDataFactory/AzureSqlDWLinkedService.json) (available in the `resource/AzureDataFactory` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
          3. Replace "[unique]" with your unique string and "[User]" and "[password]" with the values you chose earlier (recorded in the SQL Data Warehouse memo table). Note that there are two instances of "[unique]".
          4. Click the up arrow button to deploy this linked service.
     3.  Create the Azure ML Linked Service:
          1. Click **New Compute** and choose **Azure ML**.
-         2. Replace the content in the editor with the content in [AzureMLLinkedService.json](resource/AzureDataFactory/AzureMLLinkedService.json) (available in the resource folder of this git repository).
+         2. Replace the content in the editor with the content in [AzureMLLinkedService.json](resource/AzureDataFactory/AzureMLLinkedService.json) (available in the `resource/AzureDataFactory` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
          3. Replace  the content in "mlEndpoint" and "apikey" with the values recorded in the Azure ML memo table.
          4. Click the up arrow button to deploy this linked service.
 9. Create the datasets:
     1. Create the Azure Blob Storage dataset:
          1. Click **New Dataset** and choose ***Azure Blob Storage***.
-         2. Replace the content in the editor with the content in [AzureBlobDataset.json](resource/AzureDataFactory/AzureBlobDataset.json) (available in the resource folder of this git repository).
+         2. Replace the content in the editor with the content in [AzureBlobDataset.json](resource/AzureDataFactory/AzureBlobDataset.json) (available in the `resource/AzureDataFactory` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
          3. Click the up arrow button to deploy the dataset.
     1. Create the user dataset:
          1. Click **New Dataset** and choose ***Azure SQL Data Warehouse***.
-         2. Replace the content in the editor with the content in [AzureSqlDWInputUser.json](resource/AzureDataFactory/AzureSqlDWInputUser.json) (available in the resource folder of this git repository).
+         2. Replace the content in the editor with the content in [AzureSqlDWInputUser.json](resource/AzureDataFactory/AzureSqlDWInputUser.json) (available in the `resource/AzureDataFactory` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
          3. Click the up arrow button to deploy the dataset.
     1. Create the activity dataset:
         1. Click **New Dataset** and choose ***Azure SQL Data Warehouse***.
-        2. Replace the content in the editor with the content in [AzureSqlDWInputActivity.json](resource/AzureDataFactory/AzureSqlDWInputActivity.json) (available in the resource folder of this git repository).
+        2. Replace the content in the editor with the content in [AzureSqlDWInputActivity.json](resource/AzureDataFactory/AzureSqlDWInputActivity.json) (available in the `resource/AzureDataFactory` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
         3. Click the up arrow button to deploy the dataset.
     1. Create the prediction dataset:
         1. Click **New Dataset** and choose ***Azure SQL Data Warehouse***.
-        2. Replace the content in the editor with the content in [AzureSqlDWOutputPrediction.json](resource/AzureDataFactory/AzureSqlDWOutputPrediction.json) (available in the resource folder of this git repository).
+        2. Replace the content in the editor with the content in [AzureSqlDWOutputPrediction.json](resource/AzureDataFactory/AzureSqlDWOutputPrediction.json) (available in the `resource/AzureDataFactory` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
         3. Click the up arrow button to deploy the solution.
 10. Create the pipelines:
     1. Create the pipeline from SQL Data Warehouse to Azure ML:
         1. Right-click **Drafts** and choose ***New pipeline***.
-        2. Copy the content in [MLPipeline.json](resource/AzureDataFactory/MLPipeline.json) (available in the resource folder of this git repository) to the editor.
+        2. Copy the content in [MLPipeline.json](resource/AzureDataFactory/MLPipeline.json) (available in the `resource/AzureDataFactory` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)) to the editor.
         3. Replace "[unique]" with your unique string and  "[User]" and "[password]" with the values chosen earlier (recorded in the Azure SQL Data Warehouse memo table).
         4. Specify an active period for the pipeline. You should use the current UTC time as the start time. Our data-generating web job will create data every 15 minutes for up to 15 hours, so it is not necessary to choose a duration longer than fifteen hours. As an example, if the current UTC time were midnight on December 1, 2016, one would enter:
 	
@@ -414,7 +414,7 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
 
     2. Create the pipeline from Blob Storage to SQL Data Warehouse:
         1. Right-click **Drafts** and choose "New pipeline",
-        2. Copy the content in [BlobToSqlDW.json](resource/AzureDataFactory/BlobToSqlDW.json) (available in the resource folder of this git repository) to the editor.
+        2. Copy the content in [BlobToSqlDW.json](resource/AzureDataFactory/BlobToSqlDW.json) (available in the `resource/AzureDataFactory` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)) to the editor.
         3. Specify an active period that you want the pipeline to run. The active period should be the same as what you chose above.
 	4. Set the value "isPaused" to "false".
         5. Click the up arrow button to deploy the pipeline.
@@ -425,7 +425,7 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
 Power BI is used to create visualizations for monitoring sales and predictions. It can also be used to help detect trends in important factors for predicting churn. The instructions that follow describe how you can use the provided Power BI desktop file (Customer-Churn-Report.pbix) to visualize your data. 
 
 1. If you have not already done so, download and install the [Power BI Desktop application](https://powerbi.microsoft.com/en-us/desktop).
-1, Download the Power BI template file `Customer-Churn-Report.pbix` (available in the Power BI folder of the git repository) by left-clicking on the file and clicking on "Download" on the page that follows.
+1, Download the Power BI template file `Customer-Churn-Report.pbix` (available in the `Power BI` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)) by left-clicking on the file and clicking on "Download" on the page that follows.
 1. Double click the downloaded ".pbix" file to open it in Power BI Desktop.
 1. The template file connects to a database used in development. You'll need to change some parameters so that it links to your own database. To do this, follow these steps:
     1. Click on "Edit Queries" as shown in the following figure.
@@ -539,35 +539,35 @@ The default web service endpoint we deployed in the section of "Deploy Azure Mac
 4. Create/Update Linked services:
     1. Create the Azure ML Training Linked Service:
          1. Click **New Compute** and choose ***Azure ML***.
-         2. Replace the default content in the editor with the content in [AzureMLLinkedServiceTraining.json](resource/AzureDataFactoryRetrain/AzureMLLinkedServiceTraining.json)  (available in the `resource/AzureDataFactoryRetrain` folder of the git repository).
+         2. Replace the default content in the editor with the content in [AzureMLLinkedServiceTraining.json](resource/AzureDataFactoryRetrain/AzureMLLinkedServiceTraining.json)  (available in the `resource/AzureDataFactoryRetrain` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
          3. Replace the content in "mlEndpoint" and "apikey" with the values from the "Train Machine learning Web Service" memo table.
          4. Click the up arrow button to deploy the linked service.
     2. Create the Updatable Azure ML Linked Service:
          1. Click on the existing **AzureMLLinkedService**.
-         2. Remove the contents of the editor and paste in the contents of [AzureMLLinkedService.json](resource/AzureDataFactoryRetrain/AzureMLLinkedService.json) (available in the `resource/AzureDataFactoryRetrain` folder of the git repository).
+         2. Remove the contents of the editor and paste in the contents of [AzureMLLinkedService.json](resource/AzureDataFactoryRetrain/AzureMLLinkedService.json) (available in the `resource/AzureDataFactoryRetrain` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
          3. Fill in the "mlEndpoint" , "apikey" and "updateResourceEndpoint" using values from the "Updatable Predictive Machine learning Web Service" memo table.
          4. Click the up arrow button to deploy the modified linked service.
 5. Create datasets:
     1.  Create the Trained Model Blob dataset:
         1. Click **New Dataset** and choose ***Azure Blob Storage***.
-        2. Replace the default content in the editor with the content in [TrainedModelBlob.json](resource/AzureDataFactoryRetrain/TrainedModelBlob.json) (available in the `resource/AzureDataFactoryRetrain` folder of the git repository).
+        2. Replace the default content in the editor with the content in [TrainedModelBlob.json](resource/AzureDataFactoryRetrain/TrainedModelBlob.json) (available in the `resource/AzureDataFactoryRetrain` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
         3. Click the up arrow button to deploy the dataset.
     1.  Create the User Retrain dataset:
         1. Click **New Dataset** and choose ***Azure SQL Data Warehouse***.
-        1. Replace the default content in the editor with the content in [AzureSqlDWInputUserRetrain.json](resource/AzureDataFactoryRetrain/AzureSqlDWInputUserRetrain.json) (available in the `resource/AzureDataFactoryRetrain` folder of the git repository).
+        1. Replace the default content in the editor with the content in [AzureSqlDWInputUserRetrain.json](resource/AzureDataFactoryRetrain/AzureSqlDWInputUserRetrain.json) (available in the `resource/AzureDataFactoryRetrain` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
         1. Click the up arrow button to deploy the dataset.
     1. Create the Activity Retrain dataset:
         1. Click **New Dataset** and choose ***Azure SQL Data Warehouse***.
-        1. Replace the default content in the editor with the content in [AzureSqlDWInputActivityRetain.json](resource/AzureDataFactoryRetrain/AzureSqlDWInputActivityRetrain.json) (available in the `resource/AzureDataFactoryRetrain` folder of the git repository).
+        1. Replace the default content in the editor with the content in [AzureSqlDWInputActivityRetain.json](resource/AzureDataFactoryRetrain/AzureSqlDWInputActivityRetrain.json) (available in the `resource/AzureDataFactoryRetrain` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
         1. Click the up arrow button to deploy the dataset.
     1. Create the Placeholder Retrain dataset:
         1. Click **New Dataset** and choose ***Azure Blob Storage***.
-	1. Replace the default content in the editor with the content in [PlaceHolderRetrain.json](resource/AzureDataFactoryRetrain/PlaceHolderRetrain.json) (available in the `resource/AzureDataFactoryRetrain` folder of the git repository).
+	1. Replace the default content in the editor with the content in [PlaceHolderRetrain.json](resource/AzureDataFactoryRetrain/PlaceHolderRetrain.json) (available in the `resource/AzureDataFactoryRetrain` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
         1. Click the up arrow button to deploy the dataset.
 6. Create pipelines
     1. Create the retraining pipeline:
         1. Right-click **Drafts** and choose "New pipeline".
-        1. Replace the default content in the editor with the content in [RetrainPipeline.json](resource/AzureDataFactoryRetrain/RetrainPipeline.json) (available in the `resource/AzureDataFactoryRetrain` folder of the git repository).
+        1. Replace the default content in the editor with the content in [RetrainPipeline.json](resource/AzureDataFactoryRetrain/RetrainPipeline.json) (available in the `resource/AzureDataFactoryRetrain` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
         2. Replace both instances of "[unique]" with your unique string. Insert the SQL DW username and password in place of "[User]" and "[password]", respectively.
         3. Specify an active period for the pipeline.  You should use the current UTC time as the start time. Our data-generating web job will create data every 15 minutes for up to 15 hours, so it is not necessary to choose a duration longer than fifteen hours. As an example, if the current UTC time were midnight on December 1, 2016, one would enter:
         ```
@@ -583,7 +583,7 @@ The default web service endpoint we deployed in the section of "Deploy Azure Mac
 
     2. Create the update pipeline:
         1. Right=click **Drafts** and choose "New pipeline".
-        1. Replace the default content in the editor with the content in [UpdatePipeline.json](resource/AzureDataFactoryRetrain/UpdatePipeline.json) (available in the `resource/AzureDataFactoryRetrain` folder of the git repository).
+        1. Replace the default content in the editor with the content in [UpdatePipeline.json](resource/AzureDataFactoryRetrain/UpdatePipeline.json) (available in the `resource/AzureDataFactoryRetrain` folder of the the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
         2. Specify an active period that you want the pipeline to run. It should be the same as for the retrain pipeline just created.
         3. Set the value of "isPaused" to "false".
         4. Click the up arrow button to deploy the pipeline.
