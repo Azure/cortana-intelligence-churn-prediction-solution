@@ -296,13 +296,13 @@ The data generator emits one day's transaction data every 15 minutes to reduce t
         2. Choose the region where your resource group resides.
         3. Click **OK** at the bottom of the panel.
 6. Click the **Create** button at the bottom.
-7. Return to the resource group overview. Refresh the resource listing until the web app deployment completes (usually takes around two minutes).
-8. Click on the web service resource in your resource group.
-8. In the side panel, search "Application Settings" and click on the **Application Settings** result. In the new panel:
+7. Return to the resource group overview. Refresh the resource listing until the app service deployment completes (usually takes around two minutes).
+8. Click on the App Service resource in your resource group to load its overview panel.
+8. In the left-side panel, search for "Application Settings" and click on the **Application Settings** result. In the new panel:
     1. Choose **2.7** for the Python version.
-    2. Choose **64-bit** for the Platforml
+    2. Choose **64-bit** for the Platform.
     3. Toggle **On** for the "Always on" setting.
-    4. In the ***App Setting***, add the following key-value pairs (recorded in your Azure Event Hub memo table):
+    4. In the **App settings** section, add the following key-value pairs (using values recorded in your Azure Event Hub memo table):
 
       | **Azure App Service Settings** |             |
       |------------------------|---------------------|
@@ -312,17 +312,17 @@ The data generator emits one day's transaction data every 15 minutes to reduce t
       | EventHubServicePolicy              |sendreceive         |
       |    EventHubServiceKey           |[unique string]            ||
 
-  Click **Save** and close the panel.
+  Click **Save** and return to the App Service overview panel.
 
-9. On the side panel, search "WebJobs" and click **WebJobs**.
-10. Click **+** to add a WebJob. In the new panel:
+9. On the side panel, search for "WebJobs" and click on the **WebJobs** result.
+10. Click on the **+ Add** button to add a WebJob. In the new panel:
     1. Enter **eventhub15min** for the "Name".
     2. Select the [eventhub_15min.zip](resource/eventhub_15min.zip) file (available in the resources folder of this git repository) for "File Upload".
     3. Choose **Triggered** for Type.
-    4. Choose **Manual** for the "Trigger".  (Note: the uploaded zip file contains a scheduled settings file, so we do not need to specify the schedule settings when submitting the WebJob.)
+    4. Choose the **Manual** setting from the "Triggers" drop-down menu.  (Note: the uploaded zip file contains a scheduled settings file, so we do not need to specify the schedule settings when submitting the WebJob.)
     5. Click the **OK** button at the bottom.
-
-11. Select the job "eventhub15min" and click **start**. Wait until the job finishes.
+11. If necessary, refresh the listing until the new WebJob appears.
+11. Select the job "eventhub15min" and click the **Run** button. Wait until the job finishes. To check the job's status, click the **Refresh** button until the status changes to "Completed".
 
 
 ### Check Data Ingest
