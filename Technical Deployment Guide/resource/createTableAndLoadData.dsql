@@ -1,4 +1,4 @@
-﻿IF EXISTS (SELECT * FROM sys.external_tables where name='extActivities')
+IF EXISTS (SELECT * FROM sys.external_tables where name='extActivities')
   DROP EXTERNAL TABLE [dbo].extActivities
 GO
 
