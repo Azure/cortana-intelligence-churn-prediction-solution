@@ -18,14 +18,14 @@
 - [PowerBI Dashboard](#powerbi-dashboard)
    - [Local setup](#pbilocal)
    - [Publishing](#pbipublish)
-- [Retrain the Predictive Model](#retrain)
+- [Retrain the Predictive Model Manually](#retrainmanually)
+- [Retrain the Predictive Model with ADF](#retrain)
    - [Azure Machine Learning](#amlupdates)
    - [Azure Data Factory](#adfmodifications)
 
-
 ## Introduction
 
-The objective of this tutorial is to demonstrate predictive data pipelines for retailers to predict customer churn.  Retailers can use these predictions to prevent customer churn by using their domain knowledge and proper marketing strategies to address at-risk customers. This tutorial also shows how customer churn models can be retrained to leverage additional data as it becomes available.
+The objective of this Guide is to demonstrate predictive data pipelines for retailers to predict customer churn.  Retailers can use these predictions to prevent customer churn by using their domain knowledge and proper marketing strategies to address at-risk customers. This tutorial also shows how customer churn models can be retrained to leverage additional data as it becomes available.
 
 The end-to-end solution is implemented in the cloud, using Microsoft Azure. The solution is composed of several Azure components, including data ingest, data storage, data movement, advanced analytics and visualization. The advanced analytics are implemented in Azure Machine Learning Studio, where one can use Python or R language to build data science models (or reuse existing in-house or third-party libraries).  With data ingest, the solution can make predictions based on data that being transferred to Azure from an on-premises environment.
 
@@ -55,9 +55,12 @@ Figure 1 illustrates the Azure architecture that we will create.
 ![Figure 1: Architecture](media/architecture.png)
 Figure 1: Architecture
 
-The historical data (in text format) will be loaded from Azure Blob Storage into Azure SQL DW though PolyBase.  The real-time event data will be ingested into Azure through Event Hub into Azure; Azure Stream Analytics will then store the data in Azure SQL DW. Predictions from Azure Machine Learning models are performed in batches invoked by Azure Data Factory. AML will import data from Azure SQL DW and output the predictions to Azure Blob Storage. Through PolyBase, the prediction result can be loaded into Azure SQL DW quickly and efficiently. Azure SQL DW will serve the queries to populate the PowerBI dashboard. We will use Azure Data Factory to orchestrate:
-1) Generating the AML predictions, and 
-2) Copying the predictions from Azure Blob Storage to Azure SQL DW.
+The historical data (in text format) will be loaded from Azure Blob Storage into Azure SQL DW though PolyBase.  The real-time event data will be ingested through Event Hub into Azure SQL DW; Azure Stream Analytics will then store the data in Azure SQL DW. Predictions from Azure Machine Learning models are performed in batches invoked by Azure Data Factory. AML will import data from Azure SQL DW and output the predictions to Azure Blob Storage. Through PolyBase, the prediction result can be loaded into Azure SQL DW quickly and efficiently. Power BI will source data from Azure SQL DW to generate reports. We will use Azure Data Factory to orchestrate:
+
+1. Generating the AML predictions, 
+1. Copying the predictions from Azure Blob Storage to Azure SQL DW,
+1. Retraining model, and 
+1. Updating web service with the retrained model
 
 The machine learning model used here shows the general techniques of data science that can be used in customer churn prediction. You can use domain knowledge and combine the available datasets to build more advanced models to meet your business requirements.
 
@@ -135,7 +138,7 @@ These are the steps to get the access key that will be used in the SQL script to
 #### Create Containers and Upload Data to Azure Storage Account
 These are the steps for creating containers and uploading the data to Azure Blob Storage:
 
-1. Click on **Containers** in the left-hand sidebar. In the new panel, click **+ Container** to add a container.
+1. Click on **Containers** in the **BLOB SERVICE** group in the left-hand sidebar. In the new panel, click **+ Container** to add a container.
 1. Enter **data** for "Name" and click **Create** at the bottom.
 1. Click on the name of the container **data**, then click the "Upload" button on the top of the new panel.
 1. Choose the [Users.csv](resource/Users.csv) file that you obtained from the `resource` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide). Click **Upload**.
@@ -180,11 +183,16 @@ These are the steps for creating containers and uploading the data to Azure Blob
 1. Open the [createTableAndLoadData.dsql](resource/createTableAndLoadData.dsql) (available in the resource folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)) in Visual Studio 2015 with SQL Server Data Tools (SSDT).
 2. Modify the query by inserting your Azure Storage account name and access key (recorded earlier in your memo table) for the IDENTITY and SECRET values on lines 48 and 49. On line 58, type your Azure Storage account name in place of "[unique]" in the LOCATION value.
 2. Click the green button on the top-left corner of the file window to execute the query.
-3. You will be prompted for the server name, database name, and login credentials: use the values stored in your SQL DW memo table. Choose **SQL Server Authentication** for **Authentication**.
+3. You will be prompted for the server name, database name, and login credentials: use the values stored in your SQL DW memo table. Make sure to use the full path for the server name by including the part ".database.windows.net" as well. Choose **SQL Server Authentication** for **Authentication**.
 4. Wait until all the queries finish executing.
 
 <a name="aml"></a>
 ### Set up Azure Machine Learning
+
+#### The Azure ML Model
+The model used in this Guide is based on the [Retail Customer Churn Prediction Template](https://gallery.cortanaintelligence.com/Collection/Retail-Customer-Churn-Prediction-Template-1). Specifically, the model (two-class boosted decision tree) and features are the same as the template. Example features include: days between most recent activity date and current date, total purchases by each customer, average number of days between 2 consecutive purchases, etc.  
+
+The data used by the Template include 4 months' activities information. This Guide generates history data from the first 2 months data and streams the remaining 2 months data. 
 
 #### Create Azure Machine Learning Workspace
 
@@ -320,22 +328,21 @@ The data generator emits one day's transaction data every 15 minutes to reduce t
         3. Click **OK** at the bottom of the panel.
 6. Click the **Create** button at the bottom.
 7. Return to the resource group overview. Refresh the resource listing until the app service deployment completes (usually takes around two minutes).
-8. Click on the App Service resource in your resource group to load its overview panel.
+8. Click on the App Service resource whose type is "App Service" (not "App Service Plan") in your resource group to load its overview panel.
 8. In the left-side panel, search for "Application Settings" and click on the **Application Settings** result. In the new panel:
     1. Choose **2.7** for the Python version.
     2. Choose **64-bit** for the Platform.
     3. Toggle **On** for the "Always on" setting.
-    4. In the **App settings** section, add the following key-value pairs (using values recorded in your Azure Event Hub memo table):
+    4. In the **App settings** section, add the following key-value pairs (using values recorded in your Azure Event Hub memo table) and leave the default entry as it is:
 
-      | **Azure App Service Settings** |             |
+      | **Key** | **Value**       | 
       |------------------------|---------------------|
-      | Key                    | Value               |
       | EventHubServiceNamespace |[unique string]          |
       | EventHub              |churn         |
       | EventHubServicePolicy              |sendreceive         |
       |    EventHubServiceKey           |[unique string]            ||
 
-  Click **Save** and return to the App Service overview panel.
+  Note that the value for "EventHubServiceNamespace" is the **unique string** only, without the extension "servicebus.windows.net." Click **Save** and return to the App Service overview panel.
 
 9. On the side panel, search for "WebJobs" and click on the **WebJobs** result.
 10. Click on the **+ Add** button to add a WebJob. In the new panel:
@@ -364,7 +371,7 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
     select top 1 * from Activities order by timestamp desc
     ```
     
-8. Compare the value in the "SysTime" with the current UTC time.  The difference should be no more than 15 minutes.
+8. Compare the value in the "SysTime" with the current UTC time.  The difference should be no more than 15 minutes. Two columns in the activities dataset ("ProductCategory" and "Location") has a single "Unknown" value and this is the way data are provided in the [Template](https://gallery.cortanaintelligence.com/Collection/Retail-Customer-Churn-Prediction-Template-1). 
 
 <a name="adf"></a>
 ### Set up Azure Data Factory
@@ -389,7 +396,7 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
          3. Replace "[unique]" with your unique string and "[User]" and "[password]" with the values you chose earlier (recorded in the SQL Data Warehouse memo table). Note that there are two instances of "[unique]".
          4. Click the up arrow button to deploy this linked service.
     3.  Create the Azure ML Linked Service:
-         1. Click **New Compute** and choose **Azure ML**.
+         1. Click **...More** -> **New Compute** and choose **Azure ML**.
          2. Replace the content in the editor with the content in [AzureMLLinkedService.json](resource/AzureDataFactory/AzureMLLinkedService.json) (available in the `resource/AzureDataFactory` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
          3. Replace  the content in "mlEndpoint" and "apikey" with the values recorded in the Azure ML memo table.
          4. Click the up arrow button to deploy this linked service.
@@ -434,7 +441,7 @@ You can check whether the data is being ingested into your SQL Data Warehouse by
         1. Right-click **Drafts** and choose "New pipeline",
         2. Copy the content in [BlobToSqlDW.json](resource/AzureDataFactory/BlobToSqlDW.json) (available in the `resource/AzureDataFactory` folder of the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)) to the editor.
         3. Specify an active period that you want the pipeline to run. The active period should be the same as what you chose above.
-	4. Set the value "isPaused" to "false".
+        4. Set the value "isPaused" to "false".
         5. Click the up arrow button to deploy the pipeline.
 
 <a name="pbilocal"></a>
@@ -454,7 +461,7 @@ Power BI is used to create visualizations for monitoring sales and predictions. 
 
         [![Figure 2][pic 2]][pic 2] 
 
-    1. In the pop-up window for Advanced Editor, replace all "dbchurn" values with your "unique string" (database and server name). This process is shown in the following two figures, which assumes that the unique string is "mydb". (You should use the of name your own database.) Click "Done" after making the changes.
+    1. In the pop-up window for Advanced Editor, replace all "dbchurn" values with your "unique string" (database and server name). This process is shown in the following two figures, which assumes that the unique string is "mydb". (You should use the name of your own database.) Click "Done" after making the changes.
 
         [![Figure 3][pic 3]][pic 3] 
         [![Figure 4][pic 4]][pic 4] 
@@ -486,10 +493,30 @@ Now we can publish the report into Power BI online to easily share with others:
 [![Figure 9][pic 9]][pic 9]
 
 1. Pin the page to a new dashboard named "Customer Churn Dashboard" as shown in the following figure.
-    [![Figure 10][pic 10]][pic 10]
+[![Figure 10][pic 10]][pic 10]
 
 Now you should see a new dashboard titled "Customer Churn Dashboard" under the Dashboards group in Power BI Online, which should look like the following figure:
 [![Figure 11][pic 11]][pic 11]
+
+At this point, you have a working solution that runs the customer churn prediction. Customer behavior patterns may change over time; prediction accuracy can then be improved by retraining the model. Two approaches for retraining the web services are described below: updating manually, and updating through a pipeline every 1 hour.
+
+<a name="retrainmanually"></a>
+## Retrain the Predictive Model Manually
+1. Go to https://gallery.cortanaintelligence.com/Experiment/Retail-Churn-Train-1
+2. Click ***Open in Studio*** on the right. Log in if needed.
+3. Choose the region and workspace where the experiment should be copied. Choose the region where your resource group resides and the Azure ML workspace you created earlier. Wait until the experiment is copied.
+5. Add your database information in the two **Import Data** modules. You only need to change "Database server name", "Database name", "User name", and "Password". Use the information you collected in the "Azure SQL Data Warehouse" memo table. Leave the query as it is.
+6. Click **Run** at the bottom of the page. It takes around three minutes to run the experiment.
+7. Click **SET UP WEB SERVICE** then **Predictive Web Service [Recommended]** at the bottom of the page to publish the web service. A **Predictive experiment** will be generated automatically. 
+8. In the **Predictive experiment** select the trained model (as in the following figure) and press CTRL+C to copy it. 
+[![Figure 12][pic 12]][pic 12]
+9. On the left sidebar, navigate to the **EXPERIMENTS** page
+10. Click on "Retain Churn [Predictive Exp.]" to open the experiment used previously.
+11. Press CTRL+P to paste the newly trained model to this experiment. 
+12. Delete the existing trained model and link the newly trained model to the "Score Model" module as shown in the following figure. 
+[![Figure 13][pic 13]][pic 13]
+13. Click **Run** at the bottom of the page. Wait until it finishes in about 3 minutes.
+14. Click **DEPLOY WEB SERVICE** at the bottom of the page, choose **classic** web service, click **Yes** for the warning message saying that web service input or output is not selected and **Yes** for overwriting service. Now the web service has been updated. The API key for the web service remains the same.
 
 [pic 1]: https://cloud.githubusercontent.com/assets/9322661/21234603/5c05440c-c2c1-11e6-9f2d-c93f2add350b.PNG
 [pic 2]: https://cloud.githubusercontent.com/assets/9322661/21234604/5c09ee62-c2c1-11e6-8f8a-2b17090ffe9a.PNG
@@ -502,11 +529,12 @@ Now you should see a new dashboard titled "Customer Churn Dashboard" under the D
 [pic 9]: https://cloud.githubusercontent.com/assets/9322661/21240779/bede1a0e-c2da-11e6-994b-cf5e16352bc5.PNG
 [pic 10]: https://cloud.githubusercontent.com/assets/9322661/21234612/5c1a6788-c2c1-11e6-9b4f-2409d2dc0e1b.PNG
 [pic 11]: https://cloud.githubusercontent.com/assets/9322661/21234611/5c18f510-c2c1-11e6-8dcb-b96929be517d.PNG
+[pic 12]: https://cloud.githubusercontent.com/assets/9322661/21438148/a84b86f2-c855-11e6-9168-f9f674715f48.PNG
+[pic 13]: https://cloud.githubusercontent.com/assets/9322661/21438147/a83f0166-c855-11e6-9aa1-3882cfeb25de.PNG
 
-At this point, you have a working solution that runs the customer churn prediction. Customer behavior patterns may change over time;   prediction accuracy can then be improved by retraining the model. The following steps show how to set up a retraining pipeline which updates the model using new data every 1 hour.
 
 <a name="retrain"></a>
-## Retrain the Predictive Model
+## Retrain the Predictive Model with ADF
 
 <a name="amlupdates"></a>
 <a name="trainingwebservice"></a>
@@ -610,7 +638,8 @@ The default web service endpoint we deployed in the section of "Deploy Azure Mac
     2. Create the update pipeline:
         1. Right=click **Drafts** and choose "New pipeline".
         1. Replace the default content in the editor with the content in [UpdatePipeline.json](resource/AzureDataFactoryRetrain/UpdatePipeline.json) (available in the `resource/AzureDataFactoryRetrain` folder of the the [git repository](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide)).
-        2. Specify an active period that you want the pipeline to run. It should be the same as for the retrain pipeline just created.
+        2. Replace the value for "trainedModelName" with the value from the memo table. 
+        3. Specify an active period that you want the pipeline to run. It should be the same as for the retrain pipeline just created.
         3. Set the value of "isPaused" to "false".
         4. Click the up arrow button to deploy the pipeline.
 7. Restart MLPipeline
