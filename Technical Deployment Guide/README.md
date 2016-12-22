@@ -335,7 +335,7 @@ The data generator emits one day's transaction data every 15 minutes to reduce t
     3. Toggle **On** for the "Always on" setting.
     4. In the **App settings** section, add the following key-value pairs (using values recorded in your Azure Event Hub memo table) and leave the default entry as it is:
 
-      | **Key** | **Value**       | 
+      | **Azure App Service Settings** |        | 
       |------------------------|---------------------|
       | EventHubServiceNamespace |[unique string]          |
       | EventHub              |churn         |
