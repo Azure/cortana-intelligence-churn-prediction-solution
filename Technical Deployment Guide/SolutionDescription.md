@@ -11,7 +11,7 @@ Through feature engineering we developed around 20 features to be used in the mo
 - variations in money spent per visit
 2. Data Sources
 ===============
-The solution demo uses the public [Tafeng](ttp://recsyswiki.com/wiki/Grocery_shopping_datasets) dataset which can be found in this GitHub repository's [resource folder](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide/resource). The data contain 4 months transaction information. Out of these, the first 2 months data are used as historical data and the last 2 months data are used to emulate live data stream over time. 
+The solution demo uses the public [Tafeng](http://recsyswiki.com/wiki/Grocery_shopping_datasets) dataset which can be found in this GitHub repository's [resource folder](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide/resource). The data contain 4 months transaction information. Out of these, the first 2 months data are used as historical data and the last 2 months data are used to emulate live data stream over time. 
 3. ML Implementation
 ===============
 The machine learning model of the solution is implemented using [Azure ML studio](https://studio.azureml.net/). The training experiments use a two class boosted decision tree, selecting variables using the Azure ML Studio "Filter Based Feature Selection" module.
