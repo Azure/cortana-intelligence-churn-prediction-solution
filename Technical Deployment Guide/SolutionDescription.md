@@ -22,6 +22,6 @@ When adapting this solution to other datasets, the ML section can be expanded as
 - More preprocessing [Azure ML Studio](https://studio.azureml.net/) modules for [feature engineering](https://msdn.microsoft.com/en-us/library/azure/dn905834.aspx) can be added.  
 - Different machine learning [algorithms](https://msdn.microsoft.com/en-us/library/azure/dn905812.aspx) for Classification or Regression can be added and compared.  
 
-The model used in this solution is based on an Azure ML collection of experiments is published [here](https://gallery.cortanaintelligence.com/Collection/Retail-Customer-Churn-Prediction-Template-1). The collection of experiments include details on how to prepare data sources, create features, set up machine learning models, and evaluating models.
+The model used in this solution is based on an Azure ML collection of experiments is published [here](https://gallery.cortanaintelligence.com/Collection/Retail-Customer-Churn-Prediction-Template-1). The collection of experiments include details on how to prepare data sources, create features, set up machine learning models, and evaluate models.
 
 
