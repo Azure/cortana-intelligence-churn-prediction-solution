@@ -8,7 +8,7 @@ predicted churn rate. This information empowers businesses with actionable intel
 
 ## Solution Dashboard
 The snapshot below shows an example PowerBI dashboard that gives insights into the the predicted churn rates across the customer base.
-![Insights](put dashboard here)
+![Insights](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/blob/master/Technical%20Deployment%20Guide/media/customer-churn-dashboard-1.png)
 
 ## Solution Architecture
 ![Solution Diagram Picture](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/blob/master/Technical%20Deployment%20Guide/media/architecture.png)
@@ -18,7 +18,7 @@ This solution package contains materials to help both technical and business aud
 
 ## Business Audiences
 
-In this repository you will find a folder labeled [*Solution Overview for Business Audiences*]() which contains a  presentation covering this solution and benefits of using the Cortana Intelligence Suite
+In this repository you will find a folder labeled [*Solution Overview for Business Audiences*](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Solution%20Overview%20for%20Business%20Audiences) which contains a  presentation covering this solution and benefits of using the Cortana Intelligence Suite
 
 For more information on how to tailor Cortana Intelligence to your needs [connect with one of our partners](http://aka.ms/CISFindPartner).
 
