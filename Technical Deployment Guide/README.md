@@ -489,14 +489,37 @@ Now we can publish the report into Power BI online to easily share with others:
 [![Figure 8][pic 8]][pic 8]
 
 1. Sign into [Power BI](www.powerbi.microsoft.com) and click on the "Customer-Churn-Report" report (under Reports) to open it. 
-1. We'll share the MyDashboard tab from the report to create a dashboard. To do this, click on the "MyDashboard" tab and select "Pin Live Page" as shown in the following figure. 
+1. We'll share the Churn Rate Overview tab from the report to create a dashboard. To do this, click on the "MyDashboard" tab and select "Pin Live Page" as shown in the following figure. 
 [![Figure 9][pic 9]][pic 9]
 
 1. Pin the page to a new dashboard named "Customer Churn Dashboard" as shown in the following figure.
 [![Figure 10][pic 10]][pic 10]
 
-Now you should see a new dashboard titled "Customer Churn Dashboard" under the Dashboards group in Power BI Online, which should look like the following figure:
+1. Pin the remaining 3 tabs using the same approach: Churn Rate Drill Down, Sales Overview, and Machine Learning. 
+1. Locate the newly created "Customer Churn Dashboard" under Dashboards group. You can share it with others by clicking on the Share button, as shown in the following figure.
 [![Figure 11][pic 11]][pic 11]
+
+Below is an overview of the different reports:
+
+1. The Churn Rate Overview report shows the number of customers in 3 churn risk groups: low risk (no more than 30% churn rate), moderate risk (30% 50% churn rate) and high risk (more than 30% churn rate) on each prediction date. 
+
+1. The Churn Rate Drill Down report shows that two regions Northeast, and Mountain-Prairie have a high percentage of high risk users. Marketing managers in these regions can thus be notified to take churn prevention actions. 
+
+1. The Sales Overview report provides sales information by different dimensions: date, region, and age.
+
+1. The Machine Learning report demonstrates how Azure Machine Learning can help users identify important variables. 
+
+In this dashboard, we used cutoff points 0.3 and 0.5 to generate 3 churn risk groups: low risk, moderate risk, and high risk. These cutoff points can be modified when necessary. The following screen shot shows how this can be done. 
+
+1. Click on the bar chart.
+ 
+1. Click on the Churn Risk variable in the Prediction table.
+
+1. Change the cutoff points and labels.
+
+1. Click on the check mark to confirm the changes.
+
+[![Figure a][pic a]][pic a]
 
 At this point, you have a working solution that runs the customer churn prediction. Customer behavior patterns may change over time; prediction accuracy can then be improved by retraining the model. Two approaches for retraining the web services are described below: updating manually, and updating through a pipeline every 1 hour.
 
@@ -526,12 +549,12 @@ At this point, you have a working solution that runs the customer churn predicti
 [pic 6]: https://cloud.githubusercontent.com/assets/9322661/21234608/5c0b73d6-c2c1-11e6-90bf-15306fd84c60.PNG
 [pic 7]: https://cloud.githubusercontent.com/assets/9322661/21239433/e4142f76-c2d4-11e6-9b95-7a94136c5d01.PNG
 [pic 8]: https://cloud.githubusercontent.com/assets/9322661/21234610/5c108682-c2c1-11e6-9c04-6bc9e72ca182.PNG
-[pic 9]: https://cloud.githubusercontent.com/assets/9322661/21240779/bede1a0e-c2da-11e6-994b-cf5e16352bc5.PNG
-[pic 10]: https://cloud.githubusercontent.com/assets/9322661/21234612/5c1a6788-c2c1-11e6-9b4f-2409d2dc0e1b.PNG
-[pic 11]: https://cloud.githubusercontent.com/assets/9322661/21234611/5c18f510-c2c1-11e6-8dcb-b96929be517d.PNG
+[pic 9]: https://cloud.githubusercontent.com/assets/9322661/22650292/8d59b22c-ec4c-11e6-9f22-c3e3182cd41a.PNG
+[pic 10]: https://cloud.githubusercontent.com/assets/9322661/22650290/8d582f9c-ec4c-11e6-95fd-1943da0a2de9.PNG
+[pic 11]: https://cloud.githubusercontent.com/assets/9322661/22650291/8d58e91e-ec4c-11e6-9c8f-494929ddf0be.PNG
 [pic 12]: https://cloud.githubusercontent.com/assets/9322661/21438148/a84b86f2-c855-11e6-9168-f9f674715f48.PNG
 [pic 13]: https://cloud.githubusercontent.com/assets/9322661/21438147/a83f0166-c855-11e6-9aa1-3882cfeb25de.PNG
-
+[pic a]: https://cloud.githubusercontent.com/assets/9322661/22650293/8d59f804-ec4c-11e6-9caf-35a212e0556c.PNG
 
 <a name="retrain"></a>
 ## Retrain the Predictive Model with ADF
