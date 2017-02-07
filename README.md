@@ -13,7 +13,7 @@ The end-to-end solution is implemented in the cloud, using Microsoft Azure. The 
 
 ## Solution Dashboard
 The snapshot below shows an example PowerBI dashboard that gives insights into the the predicted churn rates across the customer base.
-![Insights](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/blob/master/Technical%20Deployment%20Guide/media/customer-churn-dashboard-1.png)
+![Insights](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/blob/master/Technical%20Deployment%20Guide/media/customer-churn-dashboard-2.png)
 
 ## Solution Architecture
 ![Solution Diagram Picture](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/blob/master/Technical%20Deployment%20Guide/media/architecture.png)
