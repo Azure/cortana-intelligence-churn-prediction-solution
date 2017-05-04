@@ -1,7 +1,6 @@
 # Retail Customer Churn Prediction - A Cortana Intelligence Solution How-to Guide
 
-Keeping existing customers is five times cheaper than the cost of attaining new ones.[1] For this reason, marketing executives often find themselves trying to estimate the likelihood of customer
-churn and finding the necessary actions to minimize the churn rate. 
+Keeping existing customers is five times cheaper than the cost of attaining new ones. For this reason, marketing executives often find themselves trying to estimate the likelihood of customer churn and finding the necessary actions to minimize the churn rate. 
 
 Customer Churn Prediction uses Azure Machine Learning to predict churn probability and helps find patterns in existing data associated with the
 predicted churn rate. This information empowers businesses with actionable intelligence to improve customer retention and profit margins.
