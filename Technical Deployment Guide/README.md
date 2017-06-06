@@ -352,7 +352,7 @@ The data generator emits one day's transaction data every 15 minutes to reduce t
     4. Choose the **Manual** setting from the "Triggers" drop-down menu.  (Note: the uploaded zip file contains a scheduled settings file, so we do not need to specify the schedule settings when submitting the WebJob.)
     5. Click the **OK** button at the bottom.
 11. If necessary, refresh the listing until the new WebJob appears.
-11. Select the job "eventhub15min" and click the **Run** button. Wait until the job finishes. To check the job's status, click the **Refresh** button until the status changes to "Completed".
+12. Select the job "eventhub15min" and click the **Run** button. Wait until the job finishes. To check the job's status, click the **Refresh** button until the status changes to "Completed".
 
 
 ### Check Data Ingest
