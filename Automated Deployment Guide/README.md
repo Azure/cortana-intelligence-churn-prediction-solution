@@ -16,7 +16,3 @@ The snapshot below shows an example PowerBI dashboard that gives insights into t
 
 ## Solution Architecture
 ![Solution Diagram Picture](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/blob/master/Technical%20Deployment%20Guide/media/architecture.png)
-
-## Disclaimer
-
-©2017 Microsoft Corporation. All rights reserved. This information is provided "as-is" and may change without notice. Microsoft makes no warranties, express or implied, with respect to the information provided here. Third party data was used to generate the solution. You are responsible for respecting the rights of others, including procuring and complying with relevant licenses in order to create similar datasets.
