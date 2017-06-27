@@ -43,17 +43,13 @@ The end-to-end solution is implemented in the cloud, using Microsoft Azure. The 
 
 ## Technical details and workflow
 
-1.  The sample data is streamed by newly deployed **Azure Web Jobs**. The web job uses resource related data from Azure SQL to generate the simulated data.
+1.  Historial sample data is loaded from **Azure Blob Stroage** into **Azure SQL Datawarehouse** using Polybase.
 
-2.  The data simulator feeds this simulated data into the **Azure Storage** and writes message in **Storage Queue**, that will be used in the rest of the solution flow.
+2.  Real-time event data will be ingested through Event Hub into **Azure Stream Analytics** and finally into **Azure SQL Datawarehouse**.
 
-3.  Another **Web Job** monitors the storage queue and initiate an Azure Batch job once message in the queue is available.
+3.  The predictions from **Azure ML** webservice are performed in batches using the **Azure Data Factory**. Azure ML webservie takes the data from **Azure SQL Datawarehouse** as input and outputs the prediction results back to **Azure Blob Storage**. 
 
-4.  The **Azure Batch** service together with **Data Science Virtual Machines** is used to optimize the energy supply from a particular resource type given the inputs received.
-
-4.  **Azure SQL Database** is used to store the optimization results received from the **Azure Batch** service. These results are then consumed in the **Power BI** dashboard.
-
-6.  Finally, **Power BI** is used for results visualization.
+4.  Finally, **Power BI** is used for results visualization from **Azure SQL Datawarehouse**
 
 </Guide>
 
