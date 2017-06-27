@@ -43,13 +43,13 @@ The end-to-end solution is implemented in the cloud, using Microsoft Azure. The 
 
 ## Technical details and workflow
 
-1.  Historial sample data is loaded from **Azure Blob Stroage** into **Azure SQL Datawarehouse** using Polybase.
+1.  Historical sample data is loaded from **Azure Blob Storage** into **SQL Data Warehouse** using Polybase.
 
-2.  Real-time event data will be ingested through Event Hub into **Azure Stream Analytics** and finally into **Azure SQL Datawarehouse**.
+2.  Real-time event data will be ingested through Event Hub into **Azure Stream Analytics** and finally into **SQL Data Warehouse**.
 
-3.  The predictions from **Azure ML** webservice are performed in batches using the **Azure Data Factory**. Azure ML webservie takes the data from **Azure SQL Datawarehouse** as input and outputs the prediction results back to **Azure Blob Storage**. 
+3.  The predictions from **Azure Machine Learning** web service are performed in batches using the **Azure Data Factory**. Azure ML web service takes the data from **SQL Data Warehouse** as input and outputs the prediction results back to **Azure Blob Storage**.
 
-4.  Finally, **Power BI** is used for results visualization from **Azure SQL Datawarehouse**
+4.  Finally, **Power BI** is used for results visualization from **SQL Data Warehouse**
 
 </Guide>
 
