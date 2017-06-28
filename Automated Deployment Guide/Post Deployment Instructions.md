@@ -1,6 +1,6 @@
 # [Retail Customer Churn Prediction](https://gallery.cortanaintelligence.com/Solution/c2920246ecae45d28db7adc970d67c9b)
 
-This document is focusing on the post deployment instructions for the [automated deployment](https://gallery.cortanaintelligence.com/Solution/c2920246ecae45d28db7adc970d67c9b) through the Cortana Intelligence Gallery. The source code of the solution as well as manual deployment instructions can be found [here](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide).
+This document is focusing on the post deployment instructions for the [Automated Deployment](https://gallery.cortanaintelligence.com/Solution/c2920246ecae45d28db7adc970d67c9b) through the Cortana Intelligence Gallery. The source code of the solution as well as manual deployment instructions can be found [here](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide).
 
 ## Architecture
 The architecture diagram shows various Azure services that are deployed by [Retail Customer Churn Prediction Solution](https://gallery.cortanaintelligence.com/Solution/c2920246ecae45d28db7adc970d67c9b) using [Cortana Intelligence Solutions](https://gallery.cortanaintelligence.com/solutions), and how they are connected to each other in the end to end solution.
@@ -22,13 +22,8 @@ The architecture diagram shows various Azure services that are deployed by [Reta
 All the resources listed above besides Power BI are already deployed in your subscription. The following instructions will guide you on how to monitor things that you have deployed and create visualizations in Power BI.
 
 ## Post Deployment Instructions
-Once the solution is deployed to the subscription, you can see the services deployed by clicking the resource group name on the final deployment screen in the CIS.
-
-This will show all the resources under this resource groups on [Azure management portal](https://portal.azure.com/).
-
-After successful deployment, the entire solution is automatically started on cloud. You can monitor the progress from the following resources.
-
 ### Monitor progress
+Once the solution is deployed to the subscription, you can see the services deployed by clicking the resource group name on the final deployment screen in the Cortana Intelligence Solutions page. This will show all the resources under this resource groups on [Azure management portal](https://portal.azure.com/). The entire solution should start automatically on cloud. You can monitor the progress of the following resources.
 
 #### Azure Storage
 Azure Storage account is used by the Azure Functions to maintain some required information and is used by the solution to store the historical user data and the prediction of the machine learning model.
@@ -72,7 +67,7 @@ Azure Data Factory is used to apply the machine learning model to the user and a
 ### Visualization
 Power BI is used to create visualizations for monitoring sales and predictions. It can also be used to help detect trends in important factors for predicting churn. The instructions that follow describe how you can use Power BI to visualize your data.
 
-The detailed instructions can be found [here](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide#powerbi-dashboard). **Note:** the _unique string_ mentioned in the instructions is your resource group name - _{Outputs.sqlServerName}_.
+The detailed instructions can be found [here](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide#powerbi-dashboard). **Note:** the _unique string_ mentioned in the instructions is your resource group name.
 
 At this point, you will have a working solution that runs the customer churn prediction. **Note:** In order to visualize the results, you might need to slide the bar in each dashboard to change the range of the date for predictions accordingly.
 
@@ -92,6 +87,5 @@ You can reuse the source code in the [Manual Deployment Guide](https://github.co
 
 ## Stopping the Solution
 To entirely remove the solution:
-
 1. Go to the _resource group_ you created for this solution.
 2. Click **Delete** at the top of the screen.
