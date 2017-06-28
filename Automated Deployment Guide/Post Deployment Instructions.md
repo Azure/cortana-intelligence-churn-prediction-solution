@@ -1,17 +1,17 @@
 # [Retail Customer Churn Prediction](https://gallery.cortanaintelligence.com/Solution/c2920246ecae45d28db7adc970d67c9b)
 
-This document is focusing on the post deployment instructions for the [Automated Deployment](https://gallery.cortanaintelligence.com/Solution/c2920246ecae45d28db7adc970d67c9b) through the Cortana Intelligence Gallery. The source code of the solution as well as manual deployment instructions can be found [here](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide).
+This document provides the post deployment instructions for [Customer Churn Prediction Automated Deployment](https://gallery.cortanaintelligence.com/Solution/c2920246ecae45d28db7adc970d67c9b) using Cortana Intelligence Gallery. The source code of the solution as well as manual deployment instructions can be found [here](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide).
 
 ## Architecture
-The architecture diagram shows various Azure services that are deployed by [Retail Customer Churn Prediction Solution](https://gallery.cortanaintelligence.com/Solution/c2920246ecae45d28db7adc970d67c9b) using [Cortana Intelligence Solutions](https://gallery.cortanaintelligence.com/solutions), and how they are connected to each other in the end to end solution.
+Figure 1 shows the various Azure services deployed by the [Retail Customer Churn Prediction Solution](https://gallery.cortanaintelligence.com/Solution/c2920246ecae45d28db7adc970d67c9b) using [Cortana Intelligence Suite](https://gallery.cortanaintelligence.com/solutions), and how they inter-relate in the end to end solution.
 
-![Solution Diagram](https://user-images.githubusercontent.com/18489406/27402331-4c0e7520-5694-11e7-911b-a6ed2b51eabe.png)
+![Figure 1: Customer Churn Prediction Architechture Diagram](https://user-images.githubusercontent.com/18489406/27402331-4c0e7520-5694-11e7-911b-a6ed2b51eabe.png)
 
 ## Technical details and workflow
 
 1.  Historical sample data is loaded from **Azure Blob Storage** into **SQL Data Warehouse** using Polybase.
 
-2.  Real-time event data will be ingested through **Azure Event Hub** into **Azure Stream Analytics** and finally into **SQL Data Warehouse**.
+2.  Real-time event data is ingested through **Azure Event Hub** into **Azure Stream Analytics** and finally into **SQL Data Warehouse**.
 
 3.  The predictions from **Azure Machine Learning** web service are performed in batches using the **Azure Data Factory**. Azure ML web service takes the data from **SQL Data Warehouse** as input and outputs the prediction results to **Azure Blob Storage**.
 
@@ -19,10 +19,10 @@ The architecture diagram shows various Azure services that are deployed by [Reta
 
 5.  Finally, **Power BI** is used for results visualization from **SQL Data Warehouse**.
 
-All the resources listed above besides Power BI are already deployed in your subscription. The following instructions will guide you on how to monitor things that you have deployed and create visualizations in Power BI.
+Except Power BI, all the resources listed above are already deployed in your subscription. The following instructions will guide you to monitor the workflow and create visualizations in Power BI.
 
 ## Monitor progress
-Once the solution is deployed to the subscription, you can see the services deployed by clicking the resource group name on the final deployment screen in the Cortana Intelligence Solutions page. This will show all the resources under this resource groups on [Azure management portal](https://portal.azure.com/). The entire solution should start automatically on cloud. You can monitor the progress of the following resources.
+Once the solution is deployed in your subscription, you can see the services deployed by clicking the resource group name on the final deployment screen in the Cortana Intelligence Solutions page. This will show all the resources under this resource group on [Azure  portal](https://portal.azure.com/). The entire solution should start automatically in the cloud. You can monitor the progress of the following resources:
 
 #### Azure Storage
 Azure Storage account is used by the Azure Functions to maintain some required information and is used by the solution to store the historical user data and the prediction of the machine learning model.
@@ -34,9 +34,9 @@ Azure Event Hub is used to ingest the data from data generator.
 Azure Stream Analytics is used to process the data from event hub and redirect the data to SQL data warehouse.
 
 #### Azure Functions
-Azure Functions provide the primary mechanism for deploying the solution and simulating the user activity. The functions interact with Azure Storage, Azure Machine Learning, Azure Event Hub, Azure Stream Analytics, Azure Data Factory, and SQL DW to perform all these functions. It also hosts and runs the data generator application. Below is a summary of the functions.
+Azure Functions provide the primary mechanism for deploying the solution and simulating the user activity. The functions interact with Azure Storage, Azure Machine Learning, Azure Event Hub, Azure Stream Analytics, Azure Data Factory, and SQL DW. It also hosts and runs the data generator application. 
 
-Functions used to assist in deployment:
+Below is a summary of the functions used to assist in deployment:
 * GalleryToMlWebSvc: This is used to copy the Scoring Experiment from the Gallery to the workspace and create the webservice endpoints.
 
 * CiqsHelpers: These are helper functions for the automated deployment.
@@ -49,7 +49,7 @@ Functions used to assist in deployment:
 
 * startStreamingJob: Starts Azure Stream Analytics Pipeline.
 
-* UpdateDatabaseInfoInExperiment: The Machine learning experiment that’s copied from gallery reads from a SQL Database, this functions updates the database information in the experiment to the provided values.
+* UpdateDatabaseInfoInExperiment: The Machine learning experiment that’s copied from gallery reads from a SQL Database. This function updates the database information in the experiment to the provided values.
 
 Web job used for data simulation:
 * eventhub_15min: The data generator that emits one day's transaction data every 15 minutes to reduce the wait time for viewing results in this solution.
@@ -71,7 +71,9 @@ The detailed instructions can be found [here](https://github.com/Azure/cortana-i
 At this point, you will have a working solution that runs the customer churn prediction. **Note:** In order to visualize the results, you might need to slide the bar in each dashboard to change the range of the date for predictions accordingly.
 
 ## Retrain the Predictive Model (Optional)
-Customer behavior patterns may change over time; prediction accuracy can then be improved by retraining the model. Two approaches for retraining the web services are described below: updating manually, and updating through a pipeline every 1 hour.
+Customer behavior patterns may change over time; prediction accuracy can then be improved by retraining the model. 
+
+Two approaches for retraining the web services are described below: 1) Manual, and 2) Using a pipeline every 1 hour.
 
 * Retrain the Predictive Model Manually
 
@@ -84,7 +86,7 @@ Customer behavior patterns may change over time; prediction accuracy can then be
 ## Customization
 You can reuse the source code in the [Manual Deployment Guide](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide) to customize the solution for your data and business needs.
 
-## Stopping the Solution
-To entirely remove the solution:
+## Cleaning up the Solution
+To avoid incurring charges, you can entirely remove the solution using these steps:
 1. Go to the _resource group_ you created for this solution.
 2. Click **Delete** at the top of the screen.
