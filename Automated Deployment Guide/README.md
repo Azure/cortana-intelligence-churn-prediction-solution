@@ -32,12 +32,12 @@ Keeping existing customers is five times cheaper than the cost of acquiring new 
 
 Customer Churn Prediction uses Azure Machine Learning to predict churn probability and helps find patterns in existing data associated with the predicted churn rate. This information empowers businesses with actionable intelligence to improve customer retention and profit margins.
 
-The objective of this guide is to demonstrate predictive data pipelines for retailers to predict customer churn. Retailers can utilize these predictions to prevent customer churn by applying their domain knowledge combined with proper marketing strategies to address customers at risk. 
+The objective of this guide is to demonstrate how retailers can use predictive data pipelines to predict customer churn. Based on the predictions and trends, the retailers can prevent customer churn by developing specific marketing strategies to address customers at risk. 
 
 The guide also shows how customer churn models can be retrained leveraging newer datasets as and when they become available.
 
 ## What's Under the Hood
-The end-to-end solution is implemented in the cloud with Microsoft Azure and uses several Azure services to ingest, store and process the customer data. Advanced analytics and visualization provides retailers with actionable insights.  
+The end-to-end solution is implemented in the cloud using several Microsoft Azure services to ingest, store and process the customer data. Advanced analytics and visualization provides retailers with actionable insights.  
 The advanced analytics implemented in Azure Machine Learning Studio allows users to use Python or R language to build data science models (or reuse existing in-house or third-party libraries).  
 
 ## Solution Diagram
