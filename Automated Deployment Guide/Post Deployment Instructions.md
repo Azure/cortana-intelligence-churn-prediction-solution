@@ -21,8 +21,7 @@ The architecture diagram shows various Azure services that are deployed by [Reta
 
 All the resources listed above besides Power BI are already deployed in your subscription. The following instructions will guide you on how to monitor things that you have deployed and create visualizations in Power BI.
 
-## Post Deployment Instructions
-### Monitor progress
+## Monitor progress
 Once the solution is deployed to the subscription, you can see the services deployed by clicking the resource group name on the final deployment screen in the Cortana Intelligence Solutions page. This will show all the resources under this resource groups on [Azure management portal](https://portal.azure.com/). The entire solution should start automatically on cloud. You can monitor the progress of the following resources.
 
 #### Azure Storage
@@ -64,14 +63,14 @@ SQL Data Warehouse is used to store the historical data and forecast the future 
 #### Azure Data Factory
 Azure Data Factory is used to apply the machine learning model to the user and activity data and predict churn results. It is also used to load the prediction results from Azure Blob Storage into SQL Data Warehouse.
 
-### Visualization
+## Visualization
 Power BI is used to create visualizations for monitoring sales and predictions. It can also be used to help detect trends in important factors for predicting churn. The instructions that follow describe how you can use Power BI to visualize your data.
 
 The detailed instructions can be found [here](https://github.com/Azure/cortana-intelligence-churn-prediction-solution/tree/master/Technical%20Deployment%20Guide#powerbi-dashboard). **Note:** the _unique string_ mentioned in the instructions is your resource group name.
 
 At this point, you will have a working solution that runs the customer churn prediction. **Note:** In order to visualize the results, you might need to slide the bar in each dashboard to change the range of the date for predictions accordingly.
 
-### Retrain the Predictive Model (Optional)
+## Retrain the Predictive Model (Optional)
 Customer behavior patterns may change over time; prediction accuracy can then be improved by retraining the model. Two approaches for retraining the web services are described below: updating manually, and updating through a pipeline every 1 hour.
 
 * Retrain the Predictive Model Manually
