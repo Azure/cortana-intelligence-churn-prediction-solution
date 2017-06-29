@@ -42,7 +42,7 @@ The advanced analytics implemented in Azure Machine Learning Studio allows users
 
 ## Solution Diagram
 ![Solution Diagram](https://user-images.githubusercontent.com/18489406/27402331-4c0e7520-5694-11e7-911b-a6ed2b51eabe.png)
-
+Figure 1: Retail Customer Churn Solution Architecture 
 
 ## Technical details and workflow
 
