@@ -6,6 +6,7 @@ This document provides the post deployment instructions for [Customer Churn Pred
 Figure 1 shows the various Azure services deployed by the [Retail Customer Churn Prediction Solution](https://gallery.cortanaintelligence.com/Solution/c2920246ecae45d28db7adc970d67c9b) using [Cortana Intelligence Suite](https://gallery.cortanaintelligence.com/solutions), and how they inter-relate in the end to end solution.
 
 ![Figure 1: Customer Churn Prediction Architechture Diagram](https://user-images.githubusercontent.com/18489406/27402331-4c0e7520-5694-11e7-911b-a6ed2b51eabe.png)
+Figure 1: Retail Customer Churn Solution Architecture 
 
 ## Technical details and workflow
 
