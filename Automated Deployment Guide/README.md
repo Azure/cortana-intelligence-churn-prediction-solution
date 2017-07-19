@@ -22,7 +22,7 @@ This solution requires the following prerequisites:
 5.  A local installation of [Visual Studio with SQL Server Data Tools (SSDT)](https://azure.microsoft.com/en-us/documentation/articles/sql-data-warehouse-install-visual-studio/)
 </Guide>
 
-#### Estimated Provisioning Time: <Guide type="EstimatedTime">30 Minutes</Guide>
+#### Estimated Provisioning Time: <Guide type="EstimatedTime">25 Minutes</Guide>
 
 
 ## Description
