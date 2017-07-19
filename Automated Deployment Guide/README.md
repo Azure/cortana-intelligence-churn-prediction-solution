@@ -1,13 +1,13 @@
-# [Retail Customer Churn Prediction](https://gallery.cortanaintelligence.com/Solution/c2920246ecae45d28db7adc970d67c9b)
+# [Customer Churn Prediction](https://gallery.cortanaintelligence.com/Solution/c2920246ecae45d28db7adc970d67c9b)
 
-This folder contains the deployment instructions for the Retail Customer Churn Prediction solution in the Cortana Intelligence Gallery. To start a new solution deployment, visit the gallery page [here](https://gallery.cortanaintelligence.com/Solution/c2920246ecae45d28db7adc970d67c9b).
+This folder contains the deployment instructions for the Customer Churn Prediction solution in the Cortana Intelligence Gallery. To start a new solution deployment, visit the gallery page [here](https://gallery.cortanaintelligence.com/Solution/c2920246ecae45d28db7adc970d67c9b).
 
 <Guide type="PostDeploymentGuidance" url="https://github.com/Azure/cortana-intelligence-churn-prediction-solution/blob/master/Automated%20Deployment%20Guide/Post%20Deployment%20Instructions.md"/>
 
 
 ## Summary
 <Guide type="Summary">
-Retail Customer Churn Prediction uses Cortana Intelligence Suite components to predict churn probability and helps find patterns in existing data associated with the predicted churn rate.
+Customer Churn Prediction uses Cortana Intelligence Suite components to predict churn probability and helps find patterns in existing data associated with the predicted churn rate.
 </Guide>
 
 
@@ -42,7 +42,7 @@ The advanced analytics implemented in Azure Machine Learning Studio allows users
 
 ## Solution Diagram
 ![Solution Diagram](https://user-images.githubusercontent.com/18489406/27402331-4c0e7520-5694-11e7-911b-a6ed2b51eabe.png)
-Figure 1: Retail Customer Churn Solution Architecture 
+Figure 1: Customer Churn Prediction Solution Architecture 
 
 ## Technical details and workflow
 
